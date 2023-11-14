@@ -1,3 +1,13 @@
 res://Scenes/_Globals/actionable.tscn
 res://Scenes/Game/Draggable/GamePiece.gd
 res://Scenes/Tutorial/Tutorial.gd
+res://Scenes/Tutorial/Tutorial.tscn
+res://Scenes/Game/Game.tscn
+res://Dialogue/balloon.tscn
+res://addons/dialogue_manager/test_scene.tscn
+res://Scenes/Game/Draggable/DropSpot.tscn
+res://Scenes/MainMenu/MainMenu.tscn
+res://Scenes/Game/GameUI.tscn
+res://Scenes/Game/Draggable/GamePiece.tscn
+res://Scenes/MainMenu/BG.tscn
+res://Scenes/_Globals/world_environment.tscn
