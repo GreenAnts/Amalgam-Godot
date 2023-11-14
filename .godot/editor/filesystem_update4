@@ -1,0 +1,3 @@
+res://Scenes/_Globals/actionable.tscn
+res://Scenes/Game/Draggable/GamePiece.gd
+res://Scenes/Tutorial/Tutorial.gd
