@@ -1,4 +1,4 @@
-~ tutorial
+~ tutorial_0
 
 Narrator: Hello, and WELCOME to Amalgam! 
 Narrator: This tutorial will help you understand all the rules to the game. . .so lets get started!
@@ -15,5 +15,19 @@ Narrator: Every piece behaves in this exact same way when it comes to basic move
 
 Narrator: Great! That covers the basics of movementment.
 Narrator: Now, we should learn about the basics of removing opponent's pieces from play. 
+
+=> END
+
+~ tutorial_3
+
+Narrator: Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRALS AND the VOID. 
+Narrator: In this next section we ensure you understand how the PORTALS function in regards to removing other pieces. 
+
+=> END
+
+~ tutorial_4
+
+Narrator: Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRAL AND the VOID. 
+Narrator: In this next section we ensure you understand how the PORTALS function in regards to removing other pieces. 
 
 => END

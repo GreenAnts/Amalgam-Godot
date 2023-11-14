@@ -1,14 +1,16 @@
 [gd_resource type="Resource" script_class="DialogueResource" load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_resource.gd" id="1_klnuv"]
+[ext_resource type="Script" path="res://addons/dialogue_manager/dialogue_resource.gd" id="1_8mhgd"]
 
 [resource]
-script = ExtResource("1_klnuv")
+script = ExtResource("1_8mhgd")
 using_states = PackedStringArray()
 titles = {
-"tutorial": "3",
+"tutorial_0": "3",
 "tutorial_1": "9",
-"tutorial_2": "16"
+"tutorial_2": "16",
+"tutorial_3": "23",
+"tutorial_4": "30"
 }
 character_names = PackedStringArray("Narrator")
 first_title = "3"
@@ -16,7 +18,7 @@ lines = {
 "1": {
 "id": "1",
 "next_id": "3",
-"text": "tutorial",
+"text": "tutorial_0",
 "type": "title"
 },
 "10": {
@@ -70,6 +72,46 @@ lines = {
 "next_id": "end",
 "type": "goto"
 },
+"21": {
+"id": "21",
+"next_id": "23",
+"text": "tutorial_3",
+"type": "title"
+},
+"23": {
+"character": "Narrator",
+"character_replacements": Array[Dictionary]([]),
+"id": "23",
+"next_id": "24",
+"tags": PackedStringArray(),
+"text": "Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRALS AND the VOID.",
+"text_replacements": Array[Dictionary]([]),
+"translation_key": "Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRALS AND the VOID.",
+"type": "dialogue"
+},
+"24": {
+"character": "Narrator",
+"character_replacements": Array[Dictionary]([]),
+"id": "24",
+"next_id": "26",
+"tags": PackedStringArray(),
+"text": "In this next section we ensure you understand how the PORTALS function in regards to removing other pieces.",
+"text_replacements": Array[Dictionary]([]),
+"translation_key": "In this next section we ensure you understand how the PORTALS function in regards to removing other pieces.",
+"type": "dialogue"
+},
+"26": {
+"id": "26",
+"is_snippet": false,
+"next_id": "end",
+"type": "goto"
+},
+"28": {
+"id": "28",
+"next_id": "30",
+"text": "tutorial_4",
+"type": "title"
+},
 "3": {
 "character": "Narrator",
 "character_replacements": Array[Dictionary]([]),
@@ -80,6 +122,34 @@ lines = {
 "text_replacements": Array[Dictionary]([]),
 "translation_key": "Hello, and WELCOME to Amalgam!",
 "type": "dialogue"
+},
+"30": {
+"character": "Narrator",
+"character_replacements": Array[Dictionary]([]),
+"id": "30",
+"next_id": "31",
+"tags": PackedStringArray(),
+"text": "Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRAL AND the VOID.",
+"text_replacements": Array[Dictionary]([]),
+"translation_key": "Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRAL AND the VOID.",
+"type": "dialogue"
+},
+"31": {
+"character": "Narrator",
+"character_replacements": Array[Dictionary]([]),
+"id": "31",
+"next_id": "33",
+"tags": PackedStringArray(),
+"text": "In this next section we ensure you understand how the PORTALS function in regards to removing other pieces.",
+"text_replacements": Array[Dictionary]([]),
+"translation_key": "In this next section we ensure you understand how the PORTALS function in regards to removing other pieces.",
+"type": "dialogue"
+},
+"33": {
+"id": "33",
+"is_snippet": false,
+"next_id": "end",
+"type": "goto"
 },
 "4": {
 "character": "Narrator",

@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://dcsmbin1gbch3"]
+[gd_scene load_steps=15 format=3 uid="uid://dcsmbin1gbch3"]
 
 [ext_resource type="PackedScene" uid="uid://dqhqmxr23bfg5" path="res://Scenes/Game/Game.tscn" id="1_ods5g"]
 [ext_resource type="Script" path="res://Scenes/Tutorial/Tutorial.gd" id="1_xl2tx"]
@@ -6,12 +6,14 @@
 [ext_resource type="Script" path="res://Scenes/Tutorial/Button.gd" id="3_va3ei"]
 [ext_resource type="PackedScene" uid="uid://bxphble7rl6wf" path="res://Scenes/Game/Draggable/GamePiece.tscn" id="4_f30y1"]
 [ext_resource type="Texture2D" uid="uid://bqdxyjmyas06a" path="res://Images/Pieces/Ruby.png" id="5_sg6f7"]
+[ext_resource type="Texture2D" uid="uid://db0xao3glv1hk" path="res://Images/Pieces/WhitePiece.png" id="6_f4i2y"]
 [ext_resource type="Texture2D" uid="uid://l2bmkaa361ye" path="res://Images/Pieces/Portal.png" id="6_jfyap"]
 [ext_resource type="Texture2D" uid="uid://bmhsimqiocksq" path="res://Images/Pieces/Void.png" id="6_o6xme"]
 [ext_resource type="Texture2D" uid="uid://cp1pw5yntefss" path="res://Images/Pieces/Jade.png" id="7_lqxoa"]
 [ext_resource type="Texture2D" uid="uid://btvp03kkty26d" path="res://Images/Pieces/Amalgam.png" id="7_vycsd"]
 [ext_resource type="Texture2D" uid="uid://dsemoi6pmoype" path="res://Images/Pieces/Pearl.png" id="8_uel0v"]
 [ext_resource type="Texture2D" uid="uid://ofsnkg752j6f" path="res://Images/Pieces/Amber.png" id="9_bxwt1"]
+[ext_resource type="Texture2D" uid="uid://ioxy1kgkmdcq" path="res://Images/Pieces/BlackPiece.png" id="12_5fneq"]
 
 [node name="Tutorial" type="Node2D"]
 scale = Vector2(1.00036, 1)
@@ -20,68 +22,131 @@ dialogue_resource = ExtResource("2_7jxsa")
 
 [node name="Game" parent="." instance=ExtResource("1_ods5g")]
 
-[node name="Pieces" type="Node2D" parent="."]
+[node name="BotPieces" type="Node2D" parent="."]
 unique_name_in_owner = true
 
-[node name="Amalgam" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Amalgam" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(960, 780)
 piece_texture = ExtResource("7_vycsd")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Void" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Void" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(960, 1020)
 piece_texture = ExtResource("6_o6xme")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Jade" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Jade" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(1000, 860)
 piece_texture = ExtResource("7_lqxoa")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Jade2" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Jade2" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(1040, 900)
 piece_texture = ExtResource("7_lqxoa")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Pearl" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Pearl" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(1000, 900)
 piece_texture = ExtResource("8_uel0v")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Pearl2" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Pearl2" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(920, 900)
 piece_texture = ExtResource("8_uel0v")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Amber" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Amber" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(920, 940)
 piece_texture = ExtResource("9_bxwt1")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Amber2" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Amber2" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(1000, 940)
 piece_texture = ExtResource("9_bxwt1")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Ruby" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Ruby" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(920, 860)
 piece_texture = ExtResource("5_sg6f7")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Ruby2" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Ruby2" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(880, 900)
 piece_texture = ExtResource("5_sg6f7")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Portal" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
+[node name="Portal" parent="BotPieces" instance=ExtResource("4_f30y1")]
 position = Vector2(1160, 980)
 piece_texture = ExtResource("6_jfyap")
+piece_color = ExtResource("6_f4i2y")
 
-[node name="Portal2" parent="Pieces" instance=ExtResource("4_f30y1")]
-unique_name_in_owner = true
-position = Vector2(760, 980)
+[node name="Portal2" parent="BotPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(599.784, 860)
 piece_texture = ExtResource("6_jfyap")
+piece_color = ExtResource("6_f4i2y")
+
+[node name="TopPieces" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Amalgam" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(1119.6, 820)
+piece_texture = ExtResource("7_vycsd")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Void" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(959.655, 60)
+piece_texture = ExtResource("6_o6xme")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Jade" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(999.64, 180)
+piece_texture = ExtResource("7_lqxoa")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Jade2" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(1039.63, 180)
+piece_texture = ExtResource("7_lqxoa")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Pearl" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(999.64, 220)
+piece_texture = ExtResource("8_uel0v")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Pearl2" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(999.64, 140)
+piece_texture = ExtResource("8_uel0v")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Amber" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(919.669, 140)
+piece_texture = ExtResource("9_bxwt1")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Amber2" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(919.669, 220)
+piece_texture = ExtResource("9_bxwt1")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Ruby" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(879.683, 180)
+piece_texture = ExtResource("5_sg6f7")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Ruby2" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(919.669, 180)
+piece_texture = ExtResource("5_sg6f7")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Portal" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(1159.58, 100)
+piece_texture = ExtResource("6_jfyap")
+piece_color = ExtResource("12_5fneq")
+
+[node name="Portal2" parent="TopPieces" instance=ExtResource("4_f30y1")]
+position = Vector2(479.827, 540)
+piece_texture = ExtResource("6_jfyap")
+piece_color = ExtResource("12_5fneq")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

@@ -10,7 +10,6 @@ var initial_DropSpot
 var clicked_for_spot
 
 func _process(_delta):
-	print(draggable)
 	if State.dialogue_on == false && draggable:
 		if Input.is_action_just_pressed("click"):
 			get_parent().scale = Vector2(1.20, 1.20)
@@ -22,7 +21,6 @@ func _process(_delta):
 			get_parent().global_position = get_global_mouse_position() - offset
 		elif Input.is_action_just_released("click"):
 			global.is_dragging = false
-			print("on released" + str(dropSpot_ref))
 			var tween = get_tree().create_tween()
 			if inside_dropspot:
 				if get_tree().current_scene.gameMode == "tutorial":
@@ -47,7 +45,6 @@ func _on_body_entered(drop_spot):
 		dropSpot_ref = drop_spot
 		inside_dropspot = true
 		drop_spot.visible = true
-		print("on entered" + str(dropSpot_ref))
 
 func _on_body_exited(drop_spot):
 	if drop_spot.is_in_group('dropable'):

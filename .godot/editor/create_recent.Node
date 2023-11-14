@@ -1,3 +1,4 @@
+Sprite2D
 Node2D
 HBoxContainer
 Control
@@ -11,7 +12,6 @@ CollisionShape2D
 Area2D
 CanvasLayer
 Button
-Sprite2D
 TextureRect
 StaticBody2D
 HFlowContainer

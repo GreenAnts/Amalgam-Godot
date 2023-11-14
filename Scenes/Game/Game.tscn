@@ -15,21 +15,6 @@ scale = Vector2(0.32, 0.32)
 texture = ExtResource("2_ombc5")
 metadata/_edit_lock_ = true
 
-[node name="CameraMovement" type="CharacterBody2D" parent="."]
-script = ExtResource("3_eo20i")
-SPEED = 300
-zoomSpeed = Vector2(0.3, 0.3)
-metadata/_edit_lock_ = true
-
-[node name="Camera2D" type="Camera2D" parent="CameraMovement"]
-position = Vector2(960, 540)
-limit_left = 0
-limit_top = 0
-limit_right = 1920
-limit_bottom = 1080
-position_smoothing_enabled = true
-metadata/_edit_lock_ = true
-
 [node name="GameUI" parent="." instance=ExtResource("4_qlhkq")]
 anchors_preset = 0
 anchor_right = 0.0
@@ -1414,3 +1399,17 @@ position = Vector2(880, 580)
 
 [node name="DropSpot154" parent="DropSpots" instance=ExtResource("5_wpbgm")]
 position = Vector2(920, 580)
+
+[node name="CameraMovement" type="CharacterBody2D" parent="."]
+script = ExtResource("3_eo20i")
+SPEED = 300
+zoomSpeed = Vector2(0.3, 0.3)
+metadata/_edit_lock_ = true
+
+[node name="Camera2D" type="Camera2D" parent="CameraMovement"]
+position = Vector2(960, 540)
+limit_left = 0
+limit_top = 0
+limit_right = 1920
+limit_bottom = 1080
+position_smoothing_enabled = true

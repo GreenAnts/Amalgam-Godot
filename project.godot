@@ -25,6 +25,7 @@ State="*res://Scenes/_Globals/state.gd"
 [dialogue_manager]
 
 general/states=["State"]
+general/wrap_lines=true
 
 [display]
 
