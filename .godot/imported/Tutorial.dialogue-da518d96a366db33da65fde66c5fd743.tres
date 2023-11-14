@@ -129,9 +129,9 @@ lines = {
 "id": "30",
 "next_id": "31",
 "tags": PackedStringArray(),
-"text": "Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRAL AND the VOID.",
+"text": "That covers all of the basics! Now lets get to the more interesting points.",
 "text_replacements": Array[Dictionary]([]),
-"translation_key": "Alright! Now yet again, the exception for removing pieces in this way is the Portal. Portals can only be removed by other PORTRAL AND the VOID.",
+"translation_key": "That covers all of the basics! Now lets get to the more interesting points.",
 "type": "dialogue"
 },
 "31": {
@@ -140,9 +140,9 @@ lines = {
 "id": "31",
 "next_id": "33",
 "tags": PackedStringArray(),
-"text": "In this next section we ensure you understand how the PORTALS function in regards to removing other pieces.",
+"text": "Each of your GEMS (which is another name for your RUBY, JADE, PEARL, and AMBER) are able to perform a special function when using two together.",
 "text_replacements": Array[Dictionary]([]),
-"translation_key": "In this next section we ensure you understand how the PORTALS function in regards to removing other pieces.",
+"translation_key": "Each of your GEMS (which is another name for your RUBY, JADE, PEARL, and AMBER) are able to perform a special function when using two together.",
 "type": "dialogue"
 },
 "33": {

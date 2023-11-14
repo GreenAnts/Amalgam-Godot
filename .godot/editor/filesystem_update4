@@ -14,3 +14,5 @@ res://Scenes/_Globals/world_environment.tscn
 res://LabelText/MovePortal.txt
 res://LabelText/RemovePiece.txt
 res://Scenes/_Globals/actionable.gd
+res://LabelText/RemovePortal.txt
+res://LabelText/Ruby00.txt

@@ -51,7 +51,7 @@ piece_texture = ExtResource("8_uel0v")
 piece_color = ExtResource("6_f4i2y")
 
 [node name="Pearl2" parent="BotPieces" instance=ExtResource("4_f30y1")]
-position = Vector2(920, 900)
+position = Vector2(879.683, 940)
 piece_texture = ExtResource("8_uel0v")
 piece_color = ExtResource("6_f4i2y")
 
@@ -66,12 +66,12 @@ piece_texture = ExtResource("9_bxwt1")
 piece_color = ExtResource("6_f4i2y")
 
 [node name="Ruby" parent="BotPieces" instance=ExtResource("4_f30y1")]
-position = Vector2(920, 860)
+position = Vector2(919.669, 900)
 piece_texture = ExtResource("5_sg6f7")
 piece_color = ExtResource("6_f4i2y")
 
 [node name="Ruby2" parent="BotPieces" instance=ExtResource("4_f30y1")]
-position = Vector2(880, 900)
+position = Vector2(919.669, 860)
 piece_texture = ExtResource("5_sg6f7")
 piece_color = ExtResource("6_f4i2y")
 
@@ -109,7 +109,7 @@ piece_texture = ExtResource("7_lqxoa")
 piece_color = ExtResource("12_5fneq")
 
 [node name="Pearl" parent="TopPieces" instance=ExtResource("4_f30y1")]
-position = Vector2(999.64, 220)
+position = Vector2(1159.58, 620)
 piece_texture = ExtResource("8_uel0v")
 piece_color = ExtResource("12_5fneq")
 
@@ -124,7 +124,7 @@ piece_texture = ExtResource("9_bxwt1")
 piece_color = ExtResource("12_5fneq")
 
 [node name="Amber2" parent="TopPieces" instance=ExtResource("4_f30y1")]
-position = Vector2(919.669, 220)
+position = Vector2(1119.6, 660)
 piece_texture = ExtResource("9_bxwt1")
 piece_color = ExtResource("12_5fneq")
 

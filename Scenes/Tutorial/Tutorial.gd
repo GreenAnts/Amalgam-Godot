@@ -51,7 +51,7 @@ func set_scene():
 	elif State.tutorial_step == 1:
 		%TaskPanel.visible = false
 		var tween = get_tree().create_tween()
-		tween.tween_property($Game/CameraMovement/Camera2D, "position", %BotPieces/Portal.position, 1).set_ease(tween.EASE_OUT)
+		tween.tween_property($Game/CameraMovement/Camera2D, "position", %BotPieces/Portal.position, .3).set_ease(tween.EASE_OUT)
 		return
 	# --------------  Ready STEP 2 ---------------#
 	elif State.tutorial_step == 2:
@@ -61,11 +61,21 @@ func set_scene():
 		return
 	# --------------  Ready STEP 3  ---------------#
 	elif State.tutorial_step == 3:
+		%TopPieces/Amalgam.visible = false
 		%TaskPanel.visible = false
 		var tween = get_tree().create_tween()
 		#var tween1 = get_tree().create_tween()
 		tween.tween_property($Game/CameraMovement/Camera2D, "zoom", Vector2(2, 2), .5).set_ease(tween.EASE_OUT)
 		tween.tween_property($Game/CameraMovement/Camera2D, "position", $Game/DropSpots/DropSpot345.position, .5).set_ease(tween.EASE_OUT)
+		return
+		# --------------  Ready STEP 4  ---------------#
+	elif State.tutorial_step == 4:
+		%TopPieces/Portal2.visible = false
+		%TaskPanel.visible = false
+		var tween = get_tree().create_tween()
+		#var tween1 = get_tree().create_tween()
+		tween.tween_property($Game/CameraMovement/Camera2D, "zoom", Vector2(2, 2), .5).set_ease(tween.EASE_OUT)
+		tween.tween_property($Game/CameraMovement/Camera2D, "position", %BotPieces/Ruby.position, .5).set_ease(tween.EASE_OUT)
 		return
 		
 func _on_dialogue_ended(resource: DialogueResource):
@@ -116,11 +126,11 @@ func _on_dialogue_ended(resource: DialogueResource):
 			get_node("Game/DropSpots/" + spot).blue_active(true)
 	# --------------  SHOW STEP 4 TASK	 --------------#
 	if State.tutorial_step == 4:
-		spot_array = ["DropSpot345"]
-		spot_array_taken = ["DropSpot449"]
-		var file = FileAccess.open("res://LabelText/RemovePortal.txt", FileAccess.READ)
+		spot_array = []
+		spot_array_taken = []
+		var file = FileAccess.open("res://LabelText/Ruby00.txt", FileAccess.READ)
 		%Task1.text = file.get_as_text()
-		%Task2.text = "Move your PORTAL to the GREEN circle, therefore removing the opponent's PORTAL from play."
+		%Task2.text = "Move your RUBY to the GREEN circle, therefore removing the opponent's AMBER from play."
 		%TaskPanel.visible = true
 		for spot in spot_array:
 			get_node("Game/DropSpots/" + spot).green_active(true)
