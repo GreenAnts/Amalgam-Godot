@@ -1,0 +1,42 @@
+[gd_scene load_steps=7 format=3 uid="uid://be148gqdt1eoa"]
+
+[ext_resource type="Texture2D" uid="uid://ofsnkg752j6f" path="res://Images/Pieces/Amber.png" id="1_d3qyk"]
+[ext_resource type="Texture2D" uid="uid://cp1pw5yntefss" path="res://Images/Pieces/Jade.png" id="2_3wgps"]
+[ext_resource type="Texture2D" uid="uid://dsemoi6pmoype" path="res://Images/Pieces/Pearl.png" id="3_tk2le"]
+[ext_resource type="Texture2D" uid="uid://l2bmkaa361ye" path="res://Images/Pieces/Portal.png" id="4_s23c8"]
+[ext_resource type="Texture2D" uid="uid://bqdxyjmyas06a" path="res://Images/Pieces/Ruby.png" id="5_3qgtt"]
+[ext_resource type="Texture2D" uid="uid://bmhsimqiocksq" path="res://Images/Pieces/Void.png" id="6_oxljt"]
+
+[node name="BG" type="Node2D"]
+position = Vector2(106, 0)
+metadata/_edit_horizontal_guides_ = []
+
+[node name="Amber" type="Sprite2D" parent="."]
+position = Vector2(250, 521)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_d3qyk")
+
+[node name="Jade" type="Sprite2D" parent="."]
+position = Vector2(544, 190)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_3wgps")
+
+[node name="Pearl" type="Sprite2D" parent="."]
+position = Vector2(960, 236)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_tk2le")
+
+[node name="Portal" type="Sprite2D" parent="."]
+position = Vector2(509, 804)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("4_s23c8")
+
+[node name="Ruby" type="Sprite2D" parent="."]
+position = Vector2(127, 213)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("5_3qgtt")
+
+[node name="Void" type="Sprite2D" parent="."]
+position = Vector2(711, 499)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("6_oxljt")

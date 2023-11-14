@@ -1,0 +1,192 @@
+[gd_scene load_steps=13 format=3 uid="uid://dcsmbin1gbch3"]
+
+[ext_resource type="PackedScene" uid="uid://dqhqmxr23bfg5" path="res://Scenes/Game/Game.tscn" id="1_ods5g"]
+[ext_resource type="Script" path="res://Scenes/Tutorial/Tutorial.gd" id="1_xl2tx"]
+[ext_resource type="Resource" uid="uid://bly4dst25dvhv" path="res://Dialogue/Tutorial.dialogue" id="2_7jxsa"]
+[ext_resource type="Script" path="res://Scenes/Tutorial/Button.gd" id="3_va3ei"]
+[ext_resource type="PackedScene" uid="uid://bxphble7rl6wf" path="res://Scenes/Game/Draggable/GamePiece.tscn" id="4_f30y1"]
+[ext_resource type="Texture2D" uid="uid://bqdxyjmyas06a" path="res://Images/Pieces/Ruby.png" id="5_sg6f7"]
+[ext_resource type="Texture2D" uid="uid://l2bmkaa361ye" path="res://Images/Pieces/Portal.png" id="6_jfyap"]
+[ext_resource type="Texture2D" uid="uid://bmhsimqiocksq" path="res://Images/Pieces/Void.png" id="6_o6xme"]
+[ext_resource type="Texture2D" uid="uid://cp1pw5yntefss" path="res://Images/Pieces/Jade.png" id="7_lqxoa"]
+[ext_resource type="Texture2D" uid="uid://btvp03kkty26d" path="res://Images/Pieces/Amalgam.png" id="7_vycsd"]
+[ext_resource type="Texture2D" uid="uid://dsemoi6pmoype" path="res://Images/Pieces/Pearl.png" id="8_uel0v"]
+[ext_resource type="Texture2D" uid="uid://ofsnkg752j6f" path="res://Images/Pieces/Amber.png" id="9_bxwt1"]
+
+[node name="Tutorial" type="Node2D"]
+scale = Vector2(1.00036, 1)
+script = ExtResource("1_xl2tx")
+dialogue_resource = ExtResource("2_7jxsa")
+
+[node name="Game" parent="." instance=ExtResource("1_ods5g")]
+
+[node name="Pieces" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="Amalgam" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(960, 780)
+piece_texture = ExtResource("7_vycsd")
+
+[node name="Void" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(960, 1020)
+piece_texture = ExtResource("6_o6xme")
+
+[node name="Jade" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(1000, 860)
+piece_texture = ExtResource("7_lqxoa")
+
+[node name="Jade2" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(1040, 900)
+piece_texture = ExtResource("7_lqxoa")
+
+[node name="Pearl" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(1000, 900)
+piece_texture = ExtResource("8_uel0v")
+
+[node name="Pearl2" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(920, 900)
+piece_texture = ExtResource("8_uel0v")
+
+[node name="Amber" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(920, 940)
+piece_texture = ExtResource("9_bxwt1")
+
+[node name="Amber2" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(1000, 940)
+piece_texture = ExtResource("9_bxwt1")
+
+[node name="Ruby" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(920, 860)
+piece_texture = ExtResource("5_sg6f7")
+
+[node name="Ruby2" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(880, 900)
+piece_texture = ExtResource("5_sg6f7")
+
+[node name="Portal" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(1160, 980)
+piece_texture = ExtResource("6_jfyap")
+
+[node name="Portal2" parent="Pieces" instance=ExtResource("4_f30y1")]
+unique_name_in_owner = true
+position = Vector2(760, 980)
+piece_texture = ExtResource("6_jfyap")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="tutorial_btn" type="Button" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 200.0
+offset_top = -59.0
+offset_right = 361.0
+offset_bottom = 59.0
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "Start Tutorial"
+script = ExtResource("3_va3ei")
+
+[node name="TaskPanel" type="PanelContainer" parent="CanvasLayer"]
+unique_name_in_owner = true
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -480.0
+offset_top = 40.0
+offset_right = -40.0
+offset_bottom = 220.0
+grow_horizontal = 0
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/TaskPanel"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 1
+
+[node name="ColorRect3" type="ColorRect" parent="CanvasLayer/TaskPanel/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/TaskPanel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 8.0
+theme_override_constants/separation = 0
+
+[node name="ColorRect3" type="ColorRect" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[node name="Space" type="Control" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.0
+
+[node name="Task1" type="Label" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+text = "Simple movement of pieces:
+Your pieces move from one intersection to any other \"TOUCHING\" intersections as shown by the green circle. The GREEN circles are this piece's valid movements. You may move one piece per turn in this way. "
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Space2" type="Control" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[node name="Space3" type="Control" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Task2" type="Label" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+text = "Move the AMALGAM to a GREEN circle."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Space4" type="Control" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/TaskPanel/HBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[node name="ColorRect4" type="ColorRect" parent="CanvasLayer/TaskPanel/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+color = Color(0.156863, 0.156863, 0.156863, 1)
+
+[connection signal="pressed" from="CanvasLayer/tutorial_btn" to="CanvasLayer/tutorial_btn" method="_on_pressed"]
