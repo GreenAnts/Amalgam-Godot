@@ -14,7 +14,7 @@ func _ready():
 		%Green.visible = true
 		%Blue.visible = false
 	
-func _process(delta):
+func _process(_delta):
 	if global.is_dragging == false && visible == true && spot_active == false:
 		visible = false
 		

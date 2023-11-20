@@ -7,7 +7,7 @@ extends CharacterBody2D
 
 var zoom
 
-func _physics_process(delta):
+func _physics_process(_delta):
 
 	velocity = Input.get_vector("pan_left", "pan_right", "pan_up", "pan_down") * SPEED
 	move_and_slide()

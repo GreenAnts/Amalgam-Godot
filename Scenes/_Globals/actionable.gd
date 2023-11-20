@@ -21,14 +21,14 @@ func _process(_delta):
 			get_parent().global_position = get_global_mouse_position() - offset
 		elif Input.is_action_just_released("click"):
 			global.is_dragging = false
-			var tween = get_tree().create_tween()
 			if inside_dropspot:
 				if get_tree().current_scene.gameMode == "tutorial":
-					if get_parent().get_parent().get_parent().check_logic(get_parent(), dropSpot_ref) == false:
+					if get_owner().get_owner().check_logic(get_parent(), dropSpot_ref) == false:
 						#tween.tween_property(get_parent(), "global_position", initialPos, 0.2).set_ease(tween.EASE_OUT)
 						get_parent().global_position = initialPos
 						draggable = true
 					else:
+						var tween = get_tree().create_tween()
 						tween.tween_property(get_parent(), "position", dropSpot_ref.position, 0.2).set_ease(tween.EASE_OUT)
 						dropSpot_ref.spot_taken = true
 						initial_DropSpot.spot_taken = false
