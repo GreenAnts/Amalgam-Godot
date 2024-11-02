@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://66ltt1xk8t05"
-path="res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"
+uid="uid://br4n22ma02pnm"
+path="res://.godot/imported/Pearl.png-b238b59300dad275e9c3f6d31858b17b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/BoardFinal.png"
-dest_files=["res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"]
+source_file="res://Images/Pearl.png"
+dest_files=["res://.godot/imported/Pearl.png-b238b59300dad275e9c3f6d31858b17b.ctex"]
 
 [params]
 

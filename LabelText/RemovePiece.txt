@@ -1,1 +1,0 @@
-Pieces remove the opponent's pieces from play when they "TOUCH" the opponent's piece. The BLUE circles show your move distance (although some of the spots are taken by your own pieces), however, only the GREEN circle shows the move that would allow you to remove the opponent's piece.

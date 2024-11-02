@@ -1,1 +1,0 @@
-The PORTAL still moves from one intersection to another "TOUCHING" intersection, however, the PORTAL must stay on the golden lines known as the GATE PATH. The "Touching" intersections are a lot farther apart along the outer edge of the board as you can see, the BLUE circles indicate where this portal is allowed to move this turn.

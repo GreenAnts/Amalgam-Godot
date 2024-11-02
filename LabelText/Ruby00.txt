@@ -1,2 +1,0 @@
-When both of your RUBY's are "TOUCHING" they are able to remove the first opponent's piece in a striaght line in the direction of the aligning pieces up to 6 intersections in length. However if a piece that is unable to be removed by the Ruby (such as your own pieces or the opponents portal) is in the way, the Ruby can not pass through to remove the opponents piece.
-REMEMBER: The first piece up to 6 intersections away

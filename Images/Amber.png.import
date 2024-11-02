@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://66ltt1xk8t05"
-path="res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"
+uid="uid://m4ak8mau3sb"
+path="res://.godot/imported/Amber.png-3eade9cdcc8c96236ddb128ee714f2ac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/BoardFinal.png"
-dest_files=["res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"]
+source_file="res://Images/Amber.png"
+dest_files=["res://.godot/imported/Amber.png-3eade9cdcc8c96236ddb128ee714f2ac.ctex"]
 
 [params]
 

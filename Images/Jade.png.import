@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://66ltt1xk8t05"
-path="res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"
+uid="uid://wreqjc1mnxxx"
+path="res://.godot/imported/Jade.png-cb59de8b55253db6c6ecd95e950b261a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/BoardFinal.png"
-dest_files=["res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"]
+source_file="res://Images/Jade.png"
+dest_files=["res://.godot/imported/Jade.png-cb59de8b55253db6c6ecd95e950b261a.ctex"]
 
 [params]
 
