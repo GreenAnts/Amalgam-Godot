@@ -149,22 +149,21 @@ var clicked_slot = Vector2()
 var icon_offset := Vector2(12, 12)
 
 var add_piece = null
+var remove = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	assets.append("res://Images/Amber.png")
-	assets.append("res://Images/Jade.png")
-	assets.append("res://Images/Ruby.png")
-	assets.append("res://Images/Pearl.png")
-	assets.append("res://Images/Void.png")
+	assets.append("res://Images/Jade.png") #0
+	assets.append("res://Images/Pearl.png") #1
+	assets.append("res://Images/Amber.png") #2
+	assets.append("res://Images/Ruby.png") #3
+	assets.append("res://Images/Void.png") #4
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
 	
 func change_pos():
-	print('Clicked PIECE:')
-	print(clicked_piece)
 	if piece_dict.has(clicked_piece):
 		if !piece_dict.has(clicked_slot):
 			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + icon_offset
@@ -173,7 +172,6 @@ func change_pos():
 			piece_dict.erase(clicked_piece)
 		clicked_piece = clicked_slot
 		#clicked_piece = null
-		
 
 func slot_is_empty():
 	if !piece_dict.has(clicked_slot):

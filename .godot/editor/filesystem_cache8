@@ -1,6 +1,6 @@
 ea4bc82a6ad023ab7ee23ee620429895
-::res://::1730532598
-DataHandler.gd::GDScript::-1::1730532062::0::1::::<>Node<>::
+::res://::1730534369
+DataHandler.gd::GDScript::-1::1730532794::0::1::::<>Node<>::
 icon.svg::CompressedTexture2D::3251978104153283461::1730187674::1730187680::1::::<><>::
 SignalBus.gd::GDScript::-1::1730473723::0::1::::<>Node<>::
 ::res://Images/::1730532470
@@ -11,13 +11,13 @@ Pearl.png::CompressedTexture2D::3640336954451375594::1730197374::1730197375::1::
 RedCircle.png::CompressedTexture2D::3749736474165659139::1730189922::1730190830::1::::<><>::
 Ruby.png::CompressedTexture2D::5501287079130723308::1730197374::1730197375::1::::<><>::
 Void.png::CompressedTexture2D::2999504233964054724::1730197374::1730197375::1::::<><>::
-::res://Scenes/::1730532524
+::res://Scenes/::1730534295
 gui.gd::GDScript::-1::1730532019::0::1::::<>Control<>::
-GUI.tscn::PackedScene::4575042720067241766::1730532524::0::1::::<><>::res://Scenes/gui.gd<>uid://66ltt1xk8t05::::res://Images/BoardFinal.png
+GUI.tscn::PackedScene::4575042720067241766::1730534295::0::1::::<><>::res://Scenes/gui.gd<>uid://66ltt1xk8t05::::res://Images/BoardFinal.png<>uid://wreqjc1mnxxx::::res://Images/Jade.png<>uid://br4n22ma02pnm::::res://Images/Pearl.png<>uid://m4ak8mau3sb::::res://Images/Amber.png<>uid://ckm4nn8jkc1oy::::res://Images/Ruby.png<>uid://biy8nqmbw3kym::::res://Images/Void.png
 icon.gd::GDScript::-1::1730479016::0::1::::<>Sprite2D<>::
 main.gd::GDScript::-1::1730292878::0::1::::<>Control<>::
-main.tscn::PackedScene::3165847004592069725::1730532524::0::1::::<><>::res://Scenes/main.gd<>uid://b6ggjxwu3ebra::::res://Scenes/GUI.tscn
+main.tscn::PackedScene::3165847004592069725::1730534295::0::1::::<><>::res://Scenes/main.gd<>uid://b6ggjxwu3ebra::::res://Scenes/GUI.tscn
 piece.gd::GDScript::-1::1730478324::0::1::::<>Node2D<>::
-piece.tscn::PackedScene::8429491740915329044::1730532524::0::1::::<><>::res://Scenes/piece.gd<>uid://br4n22ma02pnm::::res://Images/Pearl.png<>res://Scenes/icon.gd
+piece.tscn::PackedScene::8429491740915329044::1730534295::0::1::::<><>::res://Scenes/piece.gd<>uid://br4n22ma02pnm::::res://Images/Pearl.png<>res://Scenes/icon.gd
 slot.gd::GDScript::-1::1730531705::0::1::::<>Control<>::
-slot.tscn::PackedScene::8822296328355023456::1730532524::0::1::::<><>::res://Scenes/slot.gd
+slot.tscn::PackedScene::8822296328355023456::1730534295::0::1::::<><>::res://Scenes/slot.gd

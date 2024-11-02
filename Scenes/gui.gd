@@ -19,10 +19,16 @@ func _ready() -> void:
 				DataHandler.board_dict[grid_array[-1].slot_ID] = grid_array[-1]
 			xcor += 1
 		ycor -= 1
-
+	add_piece.call_deferred(4, Vector2(0,12))
+	add_piece.call_deferred(4, Vector2(0,-12))
+	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
+
+func board_setup():
+	add_piece(4, Vector2(0,12))
+	add_piece(4, Vector2(0,-12))
 
 func create_slot():
 	var new_slot = slot_scene.instantiate()
@@ -38,11 +44,34 @@ func add_piece(piece_type, location)->void:
 		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
-		DataHandler.clicked_piece = null 
-		$TestButton.button_pressed = false
+		DataHandler.clicked_piece = null
 	else:
 		SignalBus.toggle_add_piece.emit(piece_type)
 		print('slot taken')
-
-func _on_test_button_pressed() -> void:
+	
+func _on_jade_pressed() -> void:
+	SignalBus.toggle_add_piece.emit(0)
+	
+func _on_pearl_pressed() -> void:
 	SignalBus.toggle_add_piece.emit(1)
+
+func _on_amber_pressed() -> void:
+	SignalBus.toggle_add_piece.emit(2)
+
+func _on_ruby_pressed() -> void:
+	SignalBus.toggle_add_piece.emit(3)
+
+func _on_amalgam_pressed() -> void:
+	pass
+
+func _on_portal_pressed() -> void:
+	pass # Replace with function body.
+
+func _on_void_pressed() -> void:
+	SignalBus.toggle_add_piece.emit(4)
+
+func _on_remove_piece_pressed() -> void:
+	DataHandler.remove = true
+
+func _on_setup_pressed() -> void:
+	board_setup()
