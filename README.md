@@ -2,7 +2,7 @@
 
 A two player (competitive) abstract strategy game that requires you to tactically utilize your pieces  in conjunction with one another to either eliminate the opponents pieces or carefully get a valuable piece to the other side of the board.
 
-Currently playtesting is being done via screentop.gg and our discord server. The end goal is to create a online multiplayer platform to allow players to make an account and get matched with other players. Eventually we would love to add ranked play, rules/mechanics enforcement, and etc. This repository is a (slow) work in progress to make that happen.
+>Currently playtesting is being done via screentop.gg and our discord server. The end goal is to create a online multiplayer platform to allow players to make an account and get matched with other players. Eventually we would love to add ranked play, rules/>mechanics enforcement, and etc. This repository is a (slow) work in progress to make that happen.
 
 | Link | Details |
 | -------- | --------- |
