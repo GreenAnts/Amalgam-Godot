@@ -1,7 +1,10 @@
 # Amalgam
 
 A two player (competitive) abstract strategy game that requires you to tactically utilize your pieces  in conjunction with one another to either eliminate the opponents pieces or carefully get a valuable piece to the other side of the board.
-| Name | Contributions |
+
+Currently playtesting is being done via screentop.gg and our discord server. The end goal is to create a online multiplayer platform to allow players to make an account and get matched with other players. Eventually we would love to add ranked play, rules/mechanics enforcement, and etc. This repository is a (slow) work in progress to make that happen.
+
+| Link | Details |
 | -------- | --------- |
 | [Join Our Discord](https://discord.gg/gKHjJNBWAd) | We hope to build a playtesting community to refine our game. Due to the very technical nature of the game, we believe we need as much playtesting as we can get in order to create balanced rules thatare also enjoyable to play. Additionally, the community will hopefully act as a way to find other players and share strategies. |
 | [Rules Document](https://imgur.com/a/amalgam-board-game-rules-0lTmlgR) | As we iterate on the game and make changes to the rules, the newest version of the rules document can be found here.|
