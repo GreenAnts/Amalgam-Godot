@@ -146,23 +146,34 @@ var piece_dict := {}
 
 var clicked_piece = Vector2()
 var clicked_slot = Vector2()
-var icon_offset := Vector2(12, 12)
+var icon_offset := Vector2(20, 20)
 
 var add_piece = null
 var remove = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	assets.append("res://Images/Jade.png") #0
-	assets.append("res://Images/Pearl.png") #1
-	assets.append("res://Images/Amber.png") #2
-	assets.append("res://Images/Ruby.png") #3
-	assets.append("res://Images/Void.png") #4
-
+	#Black
+	assets.append("res://Images/Ruby-B.png") #0
+	assets.append("res://Images/Pearl-B.png") #1
+	assets.append("res://Images/Amber-B.png") #2
+	assets.append("res://Images/Jade-B.png") #3
+	assets.append("res://Images/Amalgam-B.png") #4
+	assets.append("res://Images/Portal-B.png") #5
+	assets.append("res://Images/Void-B.png") #6
+	#White
+	assets.append("res://Images/Ruby-W.png") #7
+	assets.append("res://Images/Pearl-W.png") #8
+	assets.append("res://Images/Amber-W.png") #9
+	assets.append("res://Images/Jade-W.png") #10
+	assets.append("res://Images/Amalgam-W.png") #11
+	assets.append("res://Images/Portal-W.png") #12
+	assets.append("res://Images/Void-W.png") #13
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-	
+
+#func _process(delta: float) -> void:
+#	pass
+
 func change_pos():
 	if piece_dict.has(clicked_piece):
 		if !piece_dict.has(clicked_slot):

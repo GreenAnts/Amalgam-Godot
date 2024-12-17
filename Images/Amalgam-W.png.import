@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://66ltt1xk8t05"
-path="res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"
+uid="uid://sv0to3bnavv6"
+path="res://.godot/imported/Amalgam-W.png-0a707b7e7948a594e2a0bc7a6831121b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/BoardFinal.png"
-dest_files=["res://.godot/imported/BoardFinal.png-91f9462a1d2c6bab3142be61db0706c4.ctex"]
+source_file="res://Images/Amalgam-W.png"
+dest_files=["res://.godot/imported/Amalgam-W.png-0a707b7e7948a594e2a0bc7a6831121b.ctex"]
 
 [params]
 
