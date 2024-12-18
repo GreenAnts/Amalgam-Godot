@@ -153,22 +153,22 @@ var remove = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	#Black
-	assets.append("res://Images/Ruby-B.png") #0
-	assets.append("res://Images/Pearl-B.png") #1
-	assets.append("res://Images/Amber-B.png") #2
-	assets.append("res://Images/Jade-B.png") #3
-	assets.append("res://Images/Amalgam-B.png") #4
-	assets.append("res://Images/Portal-B.png") #5
-	assets.append("res://Images/Void-B.png") #6
-	#White
-	assets.append("res://Images/Ruby-W.png") #7
-	assets.append("res://Images/Pearl-W.png") #8
-	assets.append("res://Images/Amber-W.png") #9
-	assets.append("res://Images/Jade-W.png") #10
-	assets.append("res://Images/Amalgam-W.png") #11
-	assets.append("res://Images/Portal-W.png") #12
-	assets.append("res://Images/Void-W.png") #13
+	#Circle
+	assets.append("res://Images/Pieces/Ruby_Circle.png") #0
+	assets.append("res://Images/Pieces/Pearl_Circle.png") #1
+	assets.append("res://Images/Pieces/Amber_Circle.png") #2
+	assets.append("res://Images/Pieces/Jade_Circle.png") #3
+	assets.append("res://Images/Pieces/Amalgam_Circle.png") #4
+	assets.append("res://Images/Portal_Circle.png") #5
+	assets.append("res://Images/Pieces/Void_Circle.png") #6
+	#Square
+	assets.append("res://Images/Pieces/Ruby_Square.png") #7
+	assets.append("res://Images/Pieces/Pearl_Square.png") #8
+	assets.append("res://Images/Pieces/Amber_Square.png") #9
+	assets.append("res://Images/Pieces/Jade_Square.png") #10
+	assets.append("res://Images/Pieces/Amalgam_Square.png") #11
+	assets.append("res://Images/Portal_Square.png") #12
+	assets.append("res://Images/Pieces/Void_Square.png") #13
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 #func _process(delta: float) -> void:

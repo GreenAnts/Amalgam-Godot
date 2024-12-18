@@ -1,14 +1,14 @@
 [gd_scene load_steps=10 format=3 uid="uid://b6ggjxwu3ebra"]
 
 [ext_resource type="Script" path="res://Scenes/gui.gd" id="1_5w5l0"]
-[ext_resource type="Texture2D" uid="uid://fy7pylwwkxnc" path="res://Images/Ruby-B.png" id="2_5g2nc"]
-[ext_resource type="Texture2D" uid="uid://hooc4wns0vjh" path="res://Images/Pearl-B.png" id="3_enbeq"]
-[ext_resource type="Texture2D" uid="uid://cb0td7tg0bnon" path="res://Images/Amber-B.png" id="4_7o3wd"]
-[ext_resource type="Texture2D" uid="uid://bkcgq4lh8rub3" path="res://Images/Jade-B.png" id="5_b6hnr"]
-[ext_resource type="Texture2D" uid="uid://cbi1vqsdmrbvl" path="res://Images/Amalgam-B.png" id="6_o0tqt"]
+[ext_resource type="Texture2D" uid="uid://3lqv5wiwuk83" path="res://Images/Pieces/Amalgam_Circle.png" id="2_tetl0"]
+[ext_resource type="Texture2D" uid="uid://brmo41u4b8fdm" path="res://Images/Pieces/Ruby_Circle.png" id="2_x5vtr"]
+[ext_resource type="Texture2D" uid="uid://dcsai3m18t5jm" path="res://Images/Pieces/Pearl_Circle.png" id="3_dde0g"]
+[ext_resource type="Texture2D" uid="uid://b2popagxjo37w" path="res://Images/Pieces/Amber_Circle.png" id="4_i42jv"]
+[ext_resource type="Texture2D" uid="uid://b30q7mptwdccs" path="res://Images/Pieces/Jade_Circle.png" id="5_6lco6"]
+[ext_resource type="Texture2D" uid="uid://k8ms8wdq3r3p" path="res://Images/Pieces/Void_Circle.png" id="7_0lp68"]
+[ext_resource type="Texture2D" uid="uid://ye3ok6brheph" path="res://Images/Portal_Circle.png" id="7_assrg"]
 [ext_resource type="Texture2D" uid="uid://c6ablo4fme5fu" path="res://Images/Board_Only.png" id="7_k5qdy"]
-[ext_resource type="Texture2D" uid="uid://nmf58ej1t3oq" path="res://Images/Portal-B.png" id="7_kjaam"]
-[ext_resource type="Texture2D" uid="uid://2car6ilnoxkq" path="res://Images/Void-B.png" id="8_qu8ve"]
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -40,7 +40,7 @@ layout_mode = 2
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("2_5g2nc")
+icon = ExtResource("2_x5vtr")
 flat = true
 icon_alignment = 1
 
@@ -48,7 +48,7 @@ icon_alignment = 1
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("3_enbeq")
+icon = ExtResource("3_dde0g")
 flat = true
 icon_alignment = 1
 
@@ -56,7 +56,7 @@ icon_alignment = 1
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("4_7o3wd")
+icon = ExtResource("4_i42jv")
 flat = true
 icon_alignment = 1
 
@@ -64,7 +64,7 @@ icon_alignment = 1
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("5_b6hnr")
+icon = ExtResource("5_6lco6")
 flat = true
 icon_alignment = 1
 
@@ -79,7 +79,7 @@ layout_mode = 2
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("6_o0tqt")
+icon = ExtResource("2_tetl0")
 flat = true
 icon_alignment = 1
 
@@ -87,7 +87,7 @@ icon_alignment = 1
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("7_kjaam")
+icon = ExtResource("7_assrg")
 flat = true
 icon_alignment = 1
 
@@ -95,7 +95,7 @@ icon_alignment = 1
 layout_mode = 2
 tooltip_text = "Jade"
 toggle_mode = true
-icon = ExtResource("8_qu8ve")
+icon = ExtResource("7_0lp68")
 flat = true
 icon_alignment = 1
 
@@ -105,18 +105,18 @@ layout_mode = 2
 
 [node name="RemovePiece" type="Button" parent="Background"]
 layout_mode = 2
-offset_left = 1199.0
-offset_top = 158.0
-offset_right = 1315.0
-offset_bottom = 189.0
+offset_left = 1223.0
+offset_top = 190.0
+offset_right = 1339.0
+offset_bottom = 221.0
 text = "Remove Piece"
 
 [node name="Setup" type="Button" parent="Background"]
 layout_mode = 2
-offset_left = 1204.0
-offset_top = 939.0
-offset_right = 1320.0
-offset_bottom = 970.0
+offset_left = 1226.0
+offset_top = 235.0
+offset_right = 1342.0
+offset_bottom = 266.0
 text = "Setup Board"
 
 [node name="Board" type="ColorRect" parent="."]
