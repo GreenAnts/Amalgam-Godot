@@ -8,7 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://b30q7mptwdccs" path="res://Images/Pieces/Jade_Circle.png" id="5_6lco6"]
 [ext_resource type="Texture2D" uid="uid://k8ms8wdq3r3p" path="res://Images/Pieces/Void_Circle.png" id="7_0lp68"]
 [ext_resource type="Texture2D" uid="uid://ye3ok6brheph" path="res://Images/Portal_Circle.png" id="7_assrg"]
-[ext_resource type="Texture2D" uid="uid://c6ablo4fme5fu" path="res://Images/Board_Only.png" id="7_k5qdy"]
+[ext_resource type="Texture2D" uid="uid://c7iobwqgte3dt" path="res://Images/V2_Board_Only.png" id="9_fdjkt"]
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -126,19 +126,20 @@ offset_bottom = 1040.0
 color = Color(0.517184, 0.517184, 0.517184, 1)
 
 [node name="BoardBackground" type="TextureRect" parent="Board"]
-custom_minimum_size = Vector2(1040, 1040)
 layout_mode = 1
-offset_right = 1000.0
-offset_bottom = 1000.0
-texture = ExtResource("7_k5qdy")
+offset_left = 35.0
+offset_top = 35.0
+offset_right = 1005.0
+offset_bottom = 1005.0
+texture = ExtResource("9_fdjkt")
 expand_mode = 1
 
 [node name="BoardGrid" type="GridContainer" parent="Board"]
 layout_mode = 1
 offset_left = 20.0
 offset_top = 20.0
-offset_right = 1020.0
-offset_bottom = 1020.0
+offset_right = 1000.0
+offset_bottom = 1000.0
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 25
