@@ -140,6 +140,78 @@ var board_dict := {
 	Vector2(11,-1): true, Vector2(11,-2): true, Vector2(11,-3): true, Vector2(11,-4): true,
 	Vector2(11,-5): true
 }
+var golden_lines_dict := {
+	#Outer Ring
+	Vector2(-12,0): { Vector2(-11,5): true, Vector2(-11,-5): true, Vector2(-8,3): true, Vector2(-8,-3): true },
+	Vector2(-11,5): { Vector2(-12,0): true, Vector2(-9,8): true },
+	Vector2(-9,8): { Vector2(-11,5): true, Vector2(-8,3): true, Vector2(-6,6): true, Vector2(-8,9): true },
+	Vector2(-8,9): { Vector2(-9,8): true, Vector2(-5,11): true, Vector2(-6,6): true },
+	Vector2(-5,11): { Vector2(-8,9): true, Vector2(0,12): true },
+	Vector2(0,12): { Vector2(-5,11): true, Vector2(5,11): true },
+	Vector2(5,11): { Vector2(0,12): true, Vector2(8,9): true },
+	Vector2(8,9): { Vector2(5,11): true, Vector2(9,8): true, Vector2(6,6): true },
+	Vector2(9,8): { Vector2(11,5): true, Vector2(8,3): true, Vector2(6,6): true, Vector2(8,9): true },
+	Vector2(11,5): { Vector2(12,0): true, Vector2(9,8): true },
+	Vector2(12,0): { Vector2(11,5): true, Vector2(11,-5): true, Vector2(8,3): true, Vector2(8,-3): true,},
+	Vector2(11,-5): { Vector2(12,0): true, Vector2(9,-8): true },
+	Vector2(9,-8): { Vector2(11,-5): true, Vector2(8,-3): true, Vector2(6,-6): true, Vector2(8,-9): true },
+	Vector2(8,-9): { Vector2(9,-8): true, Vector2(5,-11): true, Vector2(6,-6): true },
+	Vector2(5,-11): { Vector2(8,-9): true, Vector2(0,-12): true },
+	Vector2(0,-12): { Vector2(5,-11): true, Vector2(-5,-11): true },
+	Vector2(-5,-11): { Vector2(0,12): true, Vector2(-8,-9): true },
+	Vector2(-8,-9): { Vector2(-5,-11): true, Vector2(-9,-8): true, Vector2(-6,-6): true},
+	Vector2(-9,-8): { Vector2(-11,-5): true, Vector2(-8,-3): true, Vector2(-6,-6): true, Vector2(-8,-9): true },
+	Vector2(-11,-5): { Vector2(-12,0): true, Vector2(-9,-8): true },
+	#Square Corners
+	Vector2(6,6): { Vector2(8,9): true, Vector2(9,8): true },
+	Vector2(6,-6): { Vector2(8,-9): true, Vector2(9,-8): true },
+	Vector2(-6,-6): { Vector2(-8,-9): true, Vector2(-9,-8): true },
+	Vector2(-6,6): { Vector2(-8,9): true, Vector2(-9,8): true },
+	#Square Center Edge
+	Vector2(6,0): { Vector2(8,3): true, Vector2(8,-3): true },
+	Vector2(-6,0): { Vector2(-8,3): true, Vector2(-8,-3): true },
+	#Outer Diamonds
+	Vector2(-8,3): { Vector2(-6,0): true, Vector2(-12,0): true, Vector2(-9,8): true },
+	Vector2(-8,-3): { Vector2(-6,0): true, Vector2(-12,0): true, Vector2(-9,-8): true },
+	Vector2(8,3): { Vector2(6,0): true, Vector2(12,0): true, Vector2(9,8): true },
+	Vector2(8,-3): { Vector2(6,0): true, Vector2(12,0): true, Vector2(9,-8): true },
+	#Inner Lines ... *Sigh* - I'm not looking forward to typing these all out
+	#Large Square
+	Vector2(0,6): true, Vector2(1,6): true, Vector2(2,6): true, Vector2(3,6): true, Vector2(4,6): true, Vector2(5,6): true,
+	Vector2(0,-6): true, Vector2(1,-6): true, Vector2(2,-6): true, Vector2(3,-6): true, Vector2(4,-6): true, Vector2(5,-6): true,
+	Vector2(-1,6): true, Vector2(-2,6): true, Vector2(-3,6): true, Vector2(-4,6): true, Vector2(-5,6): true,
+	Vector2(-1,-6): true, Vector2(-2,-6): true, Vector2(-3,-6): true, Vector2(-4,-6): true, Vector2(-5,-6): true,
+	Vector2(6,1): true, Vector2(6,2): true, Vector2(6,3): true, Vector2(6,4): true, Vector2(6,5): true,
+	Vector2(6,-1): true, Vector2(6,-2): true, Vector2(6,-3): true, Vector2(6,-4): true, Vector2(6,-5): true,
+	Vector2(-6,1): true, Vector2(-6,2): true, Vector2(-6,3): true, Vector2(-6,4): true, Vector2(-6,5): true,
+	Vector2(-6,-1): true, Vector2(-6,-2): true, Vector2(-6,-3): true, Vector2(-6,-4): true, Vector2(-6,-5): true,
+	#Inner Rotated Square
+	Vector2(1,5): true, Vector2(2,4): true, Vector2(3,3): true, Vector2(4,2): true, Vector2(5,1): true,
+	Vector2(-1,5): true, Vector2(-2,4): true, Vector2(-3,3): true, Vector2(-4,2): true, Vector2(-5,1): true,
+	Vector2(1,-5): true, Vector2(2,-4): true, Vector2(3,-3): true, Vector2(4,-2): true, Vector2(5,-1): true,
+	Vector2(-1,-5): true, Vector2(-2,-4): true, Vector2(-3,-3): true, Vector2(-4,-2): true, Vector2(-5,-1): true,
+	#Inner "X"
+	Vector2(1,1): true, Vector2(2,2): true, Vector2(4,4): true, Vector2(5,5): true,
+	Vector2(1,-1): true, Vector2(2,-2): true, Vector2(4,-4): true, Vector2(5,-5): true,
+	Vector2(-1,1): true, Vector2(-2,2): true, Vector2(-4,4): true, Vector2(-5,5): true,
+	Vector2(-1,-1): true, Vector2(-2,-2): true, Vector2(-4,-4): true, Vector2(-5,-5): true,
+	#Horizontal Line
+	Vector2(0,0): true, Vector2(1,0): true, Vector2(2,0): true, Vector2(3,0): true, Vector2(4,0): true, Vector2(5,0): true,
+	Vector2(-1,0): true, Vector2(-2,0): true, Vector2(-3,0): true, Vector2(-4,0): true, Vector2(-5,0): true,
+	Vector2(7,0): true, Vector2(8,0): true, Vector2(9,0): true, Vector2(10,0): true, Vector2(11,0): true,
+	Vector2(-7,0): true, Vector2(-8,0): true, Vector2(-9,0): true, Vector2(-10,0): true, Vector2(-11,0): true,
+	#Vertical Line
+	Vector2(0,1): true, Vector2(0,2): true, Vector2(0,3): true, Vector2(0,4): true, Vector2(0,5): true,
+	Vector2(0,-1): true, Vector2(0,-2): true, Vector2(0,-3): true, Vector2(0,-4): true, Vector2(0,-5): true,
+	Vector2(0,7): true, Vector2(0,8): true, Vector2(0,9): true, Vector2(0,10): true, Vector2(0,11): true,
+	Vector2(0,-7): true, Vector2(0,-8): true, Vector2(0,-9): true, Vector2(0,-10): true, Vector2(0,-11): true,
+	#Upper Triangle
+	Vector2(1,7): true, Vector2(2,8): true, Vector2(3,9): true, Vector2(4,10): true,
+	Vector2(-1,7): true, Vector2(-2,8): true, Vector2(-3,9): true, Vector2(-4,10): true,
+	#Lower Triangle
+	Vector2(1,-7): true, Vector2(2,-8): true, Vector2(3,-9): true, Vector2(4,-10): true,
+	Vector2(-1,-7): true, Vector2(-2,-8): true, Vector2(-3,-9): true, Vector2(-4,-10): true,
+}
 var assets := []
 #enum PieceNames {WHITE_AMBER, WHITE_JADE, WHITE_RUBY, WHITE_PEARL, WHITE_VOID}
 var piece_dict := {}
@@ -176,7 +248,7 @@ func _ready() -> void:
 
 func change_pos():
 	if piece_dict.has(clicked_piece):
-		if !piece_dict.has(clicked_slot):
+		if !piece_dict.has(clicked_slot) && GameLogic.move_is_valid(clicked_piece, clicked_slot):
 			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + icon_offset
 			SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
 			piece_dict[clicked_slot] = piece_dict[clicked_piece]

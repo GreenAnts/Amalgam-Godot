@@ -105,17 +105,17 @@ layout_mode = 2
 
 [node name="RemovePiece" type="Button" parent="Background"]
 layout_mode = 2
-offset_left = 1223.0
+offset_left = 1199.0
 offset_top = 190.0
-offset_right = 1339.0
+offset_right = 1315.0
 offset_bottom = 221.0
 text = "Remove Piece"
 
 [node name="Setup" type="Button" parent="Background"]
 layout_mode = 2
-offset_left = 1226.0
+offset_left = 1202.0
 offset_top = 235.0
-offset_right = 1342.0
+offset_right = 1318.0
 offset_bottom = 266.0
 text = "Setup Board"
 
