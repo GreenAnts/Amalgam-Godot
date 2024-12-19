@@ -26,37 +26,38 @@ func _process(delta: float) -> void:
 	pass
 
 func board_setup():
+	#C:CIRCLES #S:SQUARES
 	#Void
-	add_piece(6, Vector2(0,12)) #Void-B
-	add_piece(13, Vector2(0,-12)) #Void-W
+	add_piece(6, Vector2(0,12)) #Void-C
+	add_piece(13, Vector2(0,-12)) #Void-S
 	#Amalgam
-	add_piece(4, Vector2(0,6)) #Amalgam-B
-	add_piece(11, Vector2(0,-6)) #Amalgam-W
+	add_piece(4, Vector2(0,6)) #Amalgam-C
+	add_piece(11, Vector2(0,-6)) #Amalgam-S
 	#Portal
-	add_piece(5, Vector2(6,6)) #Portal-B1
-	add_piece(12, Vector2(6,-6)) #Portal-W1
-	add_piece(5, Vector2(-6,6)) #Portal-B2
-	add_piece(12, Vector2(-6,-6)) #Portal-W2
+	add_piece(5, Vector2(6,6)) #Portal-C1
+	add_piece(12, Vector2(6,-6)) #Portal-S1
+	add_piece(5, Vector2(-6,6)) #Portal-C2
+	add_piece(12, Vector2(-6,-6)) #Portal-S2
 	#Ruby
-	add_piece(0, Vector2(1,10)) #Ruby-B1
-	add_piece(7, Vector2(1,-10)) #Ruby-W1
-	add_piece(0, Vector2(1,11)) #Ruby-B2
-	add_piece(7, Vector2(1,-11)) #Ruby-W2
+	add_piece(0, Vector2(1,10)) #Ruby-C1
+	add_piece(7, Vector2(1,-10)) #Ruby-S1
+	add_piece(0, Vector2(1,11)) #Ruby-C2
+	add_piece(7, Vector2(1,-11)) #Ruby-S2
 	#Pearl
-	add_piece(1, Vector2(2,10)) #Pearl-B1
-	add_piece(8, Vector2(2,-10)) #Pearl-W1
-	add_piece(1, Vector2(2,11)) #Pearl-B2
-	add_piece(8, Vector2(2,-11)) #Pearl-W2
+	add_piece(1, Vector2(2,10)) #Pearl-C1
+	add_piece(8, Vector2(2,-10)) #Pearl-S1
+	add_piece(1, Vector2(2,11)) #Pearl-C2
+	add_piece(8, Vector2(2,-11)) #Pearl-S2
 	#Amber
-	add_piece(2, Vector2(3,10)) #Amber-B1
-	add_piece(9, Vector2(3,-10)) #Amber-W1
-	add_piece(2, Vector2(3,11)) #Amber-B2
-	add_piece(9, Vector2(3,-11)) #Amber-W2
+	add_piece(2, Vector2(3,10)) #Amber-C1
+	add_piece(9, Vector2(3,-10)) #Amber-S1
+	add_piece(2, Vector2(3,11)) #Amber-C2
+	add_piece(9, Vector2(3,-11)) #Amber-S2
 	#Jade
-	add_piece(3, Vector2(1,8)) #Jade-B1
-	add_piece(10, Vector2(1,-8)) #Jade-W1
-	add_piece(3, Vector2(1,9)) #Jade-B2
-	add_piece(10, Vector2(1,-9)) #Jade-W2
+	add_piece(3, Vector2(1,8)) #Jade-C1
+	add_piece(10, Vector2(1,-8)) #Jade-S1
+	add_piece(3, Vector2(1,9)) #Jade-C2
+	add_piece(10, Vector2(1,-9)) #Jade-S2
 	
 func create_slot():
 	var new_slot = slot_scene.instantiate()
