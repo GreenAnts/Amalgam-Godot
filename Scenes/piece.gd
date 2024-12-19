@@ -16,4 +16,6 @@ func load_icon(piece_name) -> void:
 	icon_path.texture = load(DataHandler.assets[piece_name])
 
 func change_ID(piece, coordinates):
-	slot_ID = coordinates
+	#slot_ID = coordinates
+	if self == piece:
+		slot_ID = coordinates

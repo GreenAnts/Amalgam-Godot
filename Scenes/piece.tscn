@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dsdkq6afgb2qa"]
 
 [ext_resource type="Script" path="res://Scenes/piece.gd" id="1_wl78l"]
-[ext_resource type="Texture2D" uid="uid://br4n22ma02pnm" path="res://Images/Pearl.png" id="2_m5o61"]
+[ext_resource type="Texture2D" uid="uid://3lqv5wiwuk83" path="res://Images/Pieces/Amalgam_Circle.png" id="2_q1t21"]
 [ext_resource type="Script" path="res://Scenes/icon.gd" id="3_7gqut"]
 
 [node name="Piece" type="Node2D"]
@@ -9,5 +9,5 @@ script = ExtResource("1_wl78l")
 
 [node name="Icon" type="Sprite2D" parent="."]
 scale = Vector2(0.03, 0.03)
-texture = ExtResource("2_m5o61")
+texture = ExtResource("2_q1t21")
 script = ExtResource("3_7gqut")

@@ -9,11 +9,7 @@ func _input(event):
 					DataHandler.remove = false
 					DataHandler.piece_dict.erase(get_parent().slot_ID)
 					get_parent().queue_free()
-					pass
-				print(DataHandler.piece_dict)
-				print("Slot ID: ")
-				print(self.get_parent().slot_ID)
-				
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass

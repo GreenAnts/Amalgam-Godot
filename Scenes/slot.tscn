@@ -13,6 +13,6 @@ script = ExtResource("1_bdwvs")
 layout_mode = 1
 offset_right = 40.0
 offset_bottom = 40.0
-color = Color(0.52549, 0.219608, 0.207843, 0)
+color = Color(0.4, 0.313726, 0.188235, 0)
 
 [connection signal="gui_input" from="ColorRect" to="." method="_on_color_rect_gui_input"]
