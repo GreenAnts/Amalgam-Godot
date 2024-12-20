@@ -27,11 +27,13 @@ func get_direction(coord, direction):
 func move_is_valid(start_pos, end_pos):
 	#If the Piece is a Non Portal
 	if DataHandler.piece_dict[start_pos].type not in [5, 12]:
-		if standard_movement(start_pos, end_pos) || nexus_movement(start_pos, end_pos):
-			return true
+		#if standard_movement(start_pos, end_pos) || nexus_movement(start_pos, end_pos):
+			for i in nexus_movement(start_pos):
+				if i == end_pos:
+					return true
 	#If the Piece is a Portal
 	else:
-		if DataHandler.golden_lines_dict.has(end_pos) && (nexus_movement(start_pos, end_pos) || standard_movement(start_pos, end_pos)):
+		if DataHandler.golden_lines_dict.has(end_pos) && (nexus_movement(start_pos) || standard_movement(start_pos, end_pos)):
 			return true
 		elif portal_movement(start_pos, end_pos):
 			return true
@@ -40,25 +42,38 @@ func standard_movement(start_pos, end_pos):
 	if abs(start_pos.x - end_pos.x) <= 1 && abs(start_pos.y - end_pos.y) <= 1 && start_pos != end_pos:
 		return true
 
-func nexus_movement(start_pos, end_pos):
-	#return false
-	var arr = [Vector2(1,0), Vector2(1,1), Vector2(0,1), Vector2(-1,1), Vector2(-1,0), Vector2(-1,-1), Vector2(0,-1), Vector2(1,-1)]
-	for i in arr:
-		if DataHandler.piece_dict.has(i+start_pos):
-			if DataHandler.piece_dict[(i+start_pos)].type in [2, 9, 4, 11]: #Amber or Amalgam
-				for n in arr:
-					if DataHandler.piece_dict.has(n+(i+start_pos)):
-						if DataHandler.piece_dict[(n+(i+start_pos))].type in [1, 8, 4, 11]: #Pearl or Amalgam
-							for t in arr:
-								if t+(n+(i+start_pos)) == end_pos:
-									return true
-			if DataHandler.piece_dict[(i+start_pos)].type in [1, 8, 4, 11]: #Pearl or Amalgam
-				for n in arr:
-					if DataHandler.piece_dict.has(n+(i+start_pos)):
-						if DataHandler.piece_dict[(n+(i+start_pos))].type in [2, 9, 4, 11]: #Amber or Amalgam
-							for t in arr:
-								if t+(n+(i+start_pos)) == end_pos:
-									return true
+func nexus_movement(start_pos):
+	var coord_arr = [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1)]
+	var available_moves = []
+	var nexus_positions = []
+	
+	# Step 1: Find all Nexus formations
+	for coord1 in coord_arr:  # Check adjacent positions
+		var first_pos = start_pos + coord1
+		if DataHandler.piece_dict.has(first_pos):
+			var first_type = DataHandler.piece_dict[first_pos].type
+			if first_type in [1, 8, 2, 9, 4, 11]:  # Valid first piece
+				for coord2 in coord_arr:  # Check for a second piece
+					var second_pos = first_pos + coord2
+					if DataHandler.piece_dict.has(second_pos) and second_pos != start_pos:
+						var second_type = DataHandler.piece_dict[second_pos].type
+						if second_type in [1, 8, 2, 9, 4, 11] and first_type != second_type:  # Valid Nexus
+							if first_pos not in nexus_positions:
+								nexus_positions.append(first_pos)
+							if second_pos not in nexus_positions:
+								nexus_positions.append(second_pos)
+	
+	# Step 2: Collect all valid moves adjacent to all Nexus formations
+	if nexus_positions:
+		var seen_moves = {}
+		for nexus_pos in nexus_positions:
+			for coord in coord_arr:
+				var move_pos = nexus_pos + coord
+				if move_pos != start_pos and not seen_moves.has(move_pos):
+					available_moves.append(move_pos)
+					seen_moves[move_pos] = true  # Mark this move as seen to prevent duplicates
+
+	return available_moves
 
 func portal_movement(start_pos, end_pos):
 	if DataHandler.golden_lines_dict.has(end_pos) && typeof(DataHandler.golden_lines_dict[start_pos]) != 1:
