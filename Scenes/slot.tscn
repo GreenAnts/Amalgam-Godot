@@ -7,6 +7,7 @@
 custom_minimum_size = Vector2(40, 40)
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 1
 color = Color(0, 1, 0, 0)
 script = ExtResource("1_bdwvs")
 
@@ -14,6 +15,7 @@ script = ExtResource("1_bdwvs")
 layout_mode = 1
 offset_right = 40.0
 offset_bottom = 40.0
+mouse_filter = 1
 color = Color(0.4, 0.313726, 0.188235, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

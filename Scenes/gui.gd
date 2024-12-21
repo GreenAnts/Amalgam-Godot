@@ -2,8 +2,8 @@ extends Control
 
 @onready var slot_scene = preload("res://Scenes/slot.tscn")
 @onready var board_grid = $Board/BoardGrid
-@onready var board = $Board
 @onready var piece_scene = preload("res://Scenes/piece.tscn")
+
 var grid_array := []
 var movement_indicators = []
 # Called when the node enters the scene tree for the first time.
@@ -67,9 +67,18 @@ func create_slot():
 	grid_array.append(new_slot)
 
 func add_piece(piece_type, location)->void:
-	if DataHandler.slot_is_empty():
+	if DataHandler.slot_is_empty() && piece_type not in [5,12]:
 		var new_piece = piece_scene.instantiate()
-		board.add_child(new_piece)
+		get_node("../Gameplay").add_child(new_piece)
+		new_piece.type = piece_type
+		new_piece.load_icon(piece_type)
+		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset
+		new_piece.slot_ID = location
+		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
+		DataHandler.clicked_piece = null
+	elif DataHandler.slot_is_empty() && piece_type in [5,12] && DataHandler.golden_lines_dict.has(location):
+		var new_piece = piece_scene.instantiate()
+		get_node("../Gameplay").add_child(new_piece)
 		new_piece.type = piece_type
 		new_piece.load_icon(piece_type)
 		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset

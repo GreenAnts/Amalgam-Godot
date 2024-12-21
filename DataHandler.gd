@@ -259,8 +259,9 @@ func change_pos():
 			SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
 			piece_dict[clicked_slot] = piece_dict[clicked_piece]
 			piece_dict.erase(clicked_piece)
+			SignalBus.reset_movement_options.emit()
+			indicators_active = false
 		clicked_piece = clicked_slot
-		#clicked_piece = null
 
 func slot_is_empty():
 	if !piece_dict.has(clicked_slot):

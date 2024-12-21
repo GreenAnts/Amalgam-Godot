@@ -17,12 +17,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("1_5w5l0")
 
 [node name="Background" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 1500.0
 offset_bottom = 1040.0
+mouse_filter = 2
 color = Color(0.201527, 0.201527, 0.201527, 1)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Background"]
@@ -123,12 +125,14 @@ text = "Setup Board"
 layout_mode = 0
 offset_right = 1040.0
 offset_bottom = 1040.0
+mouse_filter = 2
 color = Color(0.517184, 0.517184, 0.517184, 1)
 
 [node name="BoardBackground" type="TextureRect" parent="Board"]
 layout_mode = 1
 offset_right = 1040.0
 offset_bottom = 1040.0
+mouse_filter = 2
 texture = ExtResource("9_fdjkt")
 expand_mode = 1
 
@@ -138,6 +142,7 @@ offset_left = 20.0
 offset_top = 20.0
 offset_right = 1020.0
 offset_bottom = 1020.0
+mouse_filter = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 25

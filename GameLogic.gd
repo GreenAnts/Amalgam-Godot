@@ -29,6 +29,9 @@ func move_is_valid(start_pos, end_pos):
 	for i in standard_movement(start_pos):
 		if i == end_pos:
 			return true
+	for i in portal_phase(start_pos):
+		if i == end_pos:
+			return true
 	#If the Piece is a Non Portal
 	if DataHandler.piece_dict[start_pos].type not in [5, 12]:
 		for i in nexus_movement(start_pos):
@@ -64,7 +67,6 @@ func standard_movement(start_pos):
 func nexus_movement(start_pos):
 	var available_moves = []
 	var nexus_positions = []
-	
 	# Step 1: Find all Nexus formations
 	for coord1 in coord_arr:  # Check adjacent positions
 		var first_pos = start_pos + coord1
@@ -80,7 +82,6 @@ func nexus_movement(start_pos):
 								nexus_positions.append(first_pos)
 							if second_pos not in nexus_positions:
 								nexus_positions.append(second_pos)
-	
 	# Step 2: Collect all valid moves adjacent to all Nexus formations
 	if nexus_positions:
 		var seen_moves = {}
@@ -90,7 +91,6 @@ func nexus_movement(start_pos):
 				if move_pos != start_pos and not seen_moves.has(move_pos) && DataHandler.board_dict.has(move_pos):
 					available_moves.append(move_pos)
 					seen_moves[move_pos] = true  # Mark this move as seen to prevent duplicates
-
 	return available_moves
 
 func portal_movement(start_pos):
@@ -100,5 +100,28 @@ func portal_movement(start_pos):
 			available_moves.append(i)
 		return available_moves
 	return []
-	#if DataHandler.golden_lines_dict.has(end_pos) && typeof(DataHandler.golden_lines_dict[start_pos]) != 1:
-		#if DataHandler.golden_lines_dict[start_pos].has(end_pos):
+	
+func portal_phase(start_pos):
+	var available_moves = []
+	var phase_found = false
+	#NonPortal phasing through Portal
+	if DataHandler.piece_dict[start_pos].type not in [5,12]:
+		for i in coord_arr:
+			phase_found = false
+			var temp_pos = start_pos
+			while DataHandler.piece_dict.has(temp_pos + i) && DataHandler.piece_dict[(temp_pos + i)].type in [5,12]:
+				temp_pos = (temp_pos + i)
+				phase_found = true
+			if phase_found == true && DataHandler.board_dict.has(temp_pos + i) && DataHandler.piece_dict.has(temp_pos + i) == false:
+				available_moves.append(temp_pos + i)
+	#Portal phasing through everything
+	if DataHandler.piece_dict[start_pos].type in [5,12]:
+		for i in coord_arr:
+			phase_found = false
+			var temp_pos = start_pos
+			while DataHandler.piece_dict.has(temp_pos + i):
+				temp_pos = (temp_pos + i)
+				phase_found = true
+			if phase_found == true && DataHandler.golden_lines_dict.has(temp_pos + i) && DataHandler.piece_dict.has(temp_pos + i) == false:
+				available_moves.append(temp_pos + i)
+	return available_moves
