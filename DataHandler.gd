@@ -141,40 +141,42 @@ var board_dict := {
 	Vector2(11,-5): true
 }
 var golden_lines_dict := {
-	#Outer Ring
-	Vector2(-12,0): { Vector2(-11,5): true, Vector2(-11,-5): true, Vector2(-8,3): true, Vector2(-8,-3): true },
-	Vector2(-11,5): { Vector2(-12,0): true, Vector2(-9,8): true },
-	Vector2(-9,8): { Vector2(-11,5): true, Vector2(-8,3): true, Vector2(-6,6): true, Vector2(-8,9): true },
-	Vector2(-8,9): { Vector2(-9,8): true, Vector2(-5,11): true, Vector2(-6,6): true },
-	Vector2(-5,11): { Vector2(-8,9): true, Vector2(0,12): true },
-	Vector2(0,12): { Vector2(-5,11): true, Vector2(5,11): true },
-	Vector2(5,11): { Vector2(0,12): true, Vector2(8,9): true },
-	Vector2(8,9): { Vector2(5,11): true, Vector2(9,8): true, Vector2(6,6): true },
-	Vector2(9,8): { Vector2(11,5): true, Vector2(8,3): true, Vector2(6,6): true, Vector2(8,9): true },
-	Vector2(11,5): { Vector2(12,0): true, Vector2(9,8): true },
-	Vector2(12,0): { Vector2(11,5): true, Vector2(11,-5): true, Vector2(8,3): true, Vector2(8,-3): true,},
-	Vector2(11,-5): { Vector2(12,0): true, Vector2(9,-8): true },
-	Vector2(9,-8): { Vector2(11,-5): true, Vector2(8,-3): true, Vector2(6,-6): true, Vector2(8,-9): true },
-	Vector2(8,-9): { Vector2(9,-8): true, Vector2(5,-11): true, Vector2(6,-6): true },
-	Vector2(5,-11): { Vector2(8,-9): true, Vector2(0,-12): true },
-	Vector2(0,-12): { Vector2(5,-11): true, Vector2(-5,-11): true },
-	Vector2(-5,-11): { Vector2(0,12): true, Vector2(-8,-9): true },
-	Vector2(-8,-9): { Vector2(-5,-11): true, Vector2(-9,-8): true, Vector2(-6,-6): true},
-	Vector2(-9,-8): { Vector2(-11,-5): true, Vector2(-8,-3): true, Vector2(-6,-6): true, Vector2(-8,-9): true },
-	Vector2(-11,-5): { Vector2(-12,0): true, Vector2(-9,-8): true },
-	#Square Corners
-	Vector2(6,6): { Vector2(8,9): true, Vector2(9,8): true },
-	Vector2(6,-6): { Vector2(8,-9): true, Vector2(9,-8): true },
-	Vector2(-6,-6): { Vector2(-8,-9): true, Vector2(-9,-8): true },
-	Vector2(-6,6): { Vector2(-8,9): true, Vector2(-9,8): true },
-	#Square Center Edge
-	Vector2(6,0): { Vector2(8,3): true, Vector2(8,-3): true },
-	Vector2(-6,0): { Vector2(-8,3): true, Vector2(-8,-3): true },
-	#Outer Diamonds
-	Vector2(-8,3): { Vector2(-6,0): true, Vector2(-12,0): true, Vector2(-9,8): true },
-	Vector2(-8,-3): { Vector2(-6,0): true, Vector2(-12,0): true, Vector2(-9,-8): true },
-	Vector2(8,3): { Vector2(6,0): true, Vector2(12,0): true, Vector2(9,8): true },
-	Vector2(8,-3): { Vector2(6,0): true, Vector2(12,0): true, Vector2(9,-8): true },
+	Vector2(-12, 0): [Vector2(-11, 5), Vector2(-11, -5), Vector2(-8, 3), Vector2(-8, -3)],
+	Vector2(-11, 5): [Vector2(-12, 0), Vector2(-9, 8)],
+	Vector2(-9, 8): [Vector2(-11, 5), Vector2(-8, 3), Vector2(-6, 6), Vector2(-8, 9)],
+	Vector2(-8, 9): [Vector2(-9, 8), Vector2(-5, 11), Vector2(-6, 6)],
+	Vector2(-5, 11): [Vector2(-8, 9), Vector2(0, 12)],
+	Vector2(0, 12): [Vector2(-5, 11), Vector2(5, 11)],
+	Vector2(5, 11): [Vector2(0, 12), Vector2(8, 9)],
+	Vector2(8, 9): [Vector2(5, 11), Vector2(9, 8), Vector2(6, 6)],
+	Vector2(9, 8): [Vector2(11, 5), Vector2(8, 3), Vector2(6, 6), Vector2(8, 9)],
+	Vector2(11, 5): [Vector2(12, 0), Vector2(9, 8)],
+	Vector2(12, 0): [Vector2(11, 5), Vector2(11, -5), Vector2(8, 3), Vector2(8, -3)],
+	Vector2(11, -5): [Vector2(12, 0), Vector2(9, -8)],
+	Vector2(9, -8): [Vector2(11, -5), Vector2(8, -3), Vector2(6, -6), Vector2(8, -9)],
+	Vector2(8, -9): [Vector2(9, -8), Vector2(5, -11), Vector2(6, -6)],
+	Vector2(5, -11): [Vector2(8, -9), Vector2(0, -12)],
+	Vector2(0, -12): [Vector2(5, -11), Vector2(-5, -11)],
+	Vector2(-5, -11): [Vector2(0, -12), Vector2(-8, -9)],
+	Vector2(-8, -9): [Vector2(-5, -11), Vector2(-9, -8), Vector2(-6, -6)],
+	Vector2(-9, -8): [Vector2(-11, -5), Vector2(-8, -3), Vector2(-6, -6), Vector2(-8, -9)],
+	Vector2(-11, -5): [Vector2(-12, 0), Vector2(-9, -8)],
+	
+	# Square Corners
+	Vector2(6, 6): [Vector2(8, 9), Vector2(9, 8)],
+	Vector2(6, -6): [Vector2(8, -9), Vector2(9, -8)],
+	Vector2(-6, -6): [Vector2(-8, -9), Vector2(-9, -8)],
+	Vector2(-6, 6): [Vector2(-8, 9), Vector2(-9, 8)],
+	
+	# Square Center Edge
+	Vector2(6, 0): [Vector2(8, 3), Vector2(8, -3)],
+	Vector2(-6, 0): [Vector2(-8, 3), Vector2(-8, -3)],
+	
+	# Outer Diamonds
+	Vector2(-8, 3): [Vector2(-6, 0), Vector2(-12, 0), Vector2(-9, 8)],
+	Vector2(-8, -3): [Vector2(-6, 0), Vector2(-12, 0), Vector2(-9, -8)],
+	Vector2(8, 3): [Vector2(6, 0), Vector2(12, 0), Vector2(9, 8)],
+	Vector2(8, -3): [Vector2(6, 0), Vector2(12, 0), Vector2(9, -8)],
 	#Inner Lines ... *Sigh* - I'm not looking forward to typing these all out
 	#Large Square
 	Vector2(0,6): true, Vector2(1,6): true, Vector2(2,6): true, Vector2(3,6): true, Vector2(4,6): true, Vector2(5,6): true,
@@ -212,6 +214,8 @@ var golden_lines_dict := {
 	Vector2(1,-7): true, Vector2(2,-8): true, Vector2(3,-9): true, Vector2(4,-10): true,
 	Vector2(-1,-7): true, Vector2(-2,-8): true, Vector2(-3,-9): true, Vector2(-4,-10): true,
 }
+
+
 var assets := []
 #enum PieceNames {WHITE_AMBER, WHITE_JADE, WHITE_RUBY, WHITE_PEARL, WHITE_VOID}
 var piece_dict := {}
@@ -219,6 +223,8 @@ var piece_dict := {}
 var clicked_piece = Vector2()
 var clicked_slot = Vector2()
 var icon_offset := Vector2(20, 20)
+
+var indicators_active = false
 
 var add_piece = null
 var remove = false

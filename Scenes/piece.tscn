@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://dsdkq6afgb2qa"]
+[gd_scene load_steps=5 format=3 uid="uid://dsdkq6afgb2qa"]
 
 [ext_resource type="Script" path="res://Scenes/piece.gd" id="1_wl78l"]
 [ext_resource type="Texture2D" uid="uid://3lqv5wiwuk83" path="res://Images/Pieces/Amalgam_Circle.png" id="2_q1t21"]
 [ext_resource type="Script" path="res://Scenes/icon.gd" id="3_7gqut"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tbiq0"]
 
 [node name="Piece" type="Node2D"]
 script = ExtResource("1_wl78l")
@@ -11,3 +13,12 @@ script = ExtResource("1_wl78l")
 scale = Vector2(0.03, 0.03)
 texture = ExtResource("2_q1t21")
 script = ExtResource("3_7gqut")
+
+[node name="Area2D" type="Area2D" parent="Icon"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Icon/Area2D"]
+scale = Vector2(50, 50)
+shape = SubResource("CircleShape2D_tbiq0")
+
+[connection signal="mouse_entered" from="Icon/Area2D" to="Icon" method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Icon/Area2D" to="Icon" method="_on_area_2d_mouse_exited"]

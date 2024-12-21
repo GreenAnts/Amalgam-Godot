@@ -1,5 +1,6 @@
 extends Node
 
+var coord_arr = [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1)]
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -25,25 +26,42 @@ func get_direction(coord, direction):
 		return coord + Vector2(-1,1)
 
 func move_is_valid(start_pos, end_pos):
+	for i in standard_movement(start_pos):
+		if i == end_pos:
+			return true
 	#If the Piece is a Non Portal
 	if DataHandler.piece_dict[start_pos].type not in [5, 12]:
-		#if standard_movement(start_pos, end_pos) || nexus_movement(start_pos, end_pos):
-			for i in nexus_movement(start_pos):
-				if i == end_pos:
-					return true
+		for i in nexus_movement(start_pos):
+			if i == end_pos:
+				return true
 	#If the Piece is a Portal
 	else:
-		if DataHandler.golden_lines_dict.has(end_pos) && (nexus_movement(start_pos) || standard_movement(start_pos, end_pos)):
-			return true
-		elif portal_movement(start_pos, end_pos):
-			return true
+		for i in standard_movement(start_pos):
+			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos):
+				return true
+		for i in nexus_movement(start_pos):
+			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos):
+				return true
+		for i in portal_movement(start_pos):
+			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos):
+				return true
 
-func standard_movement(start_pos, end_pos):
-	if abs(start_pos.x - end_pos.x) <= 1 && abs(start_pos.y - end_pos.y) <= 1 && start_pos != end_pos:
-		return true
+func standard_movement(start_pos):
+	var available_moves = []
+	#Non-Portal
+	if DataHandler.piece_dict[start_pos].type not in [5,12]:
+		for i in coord_arr:
+			if DataHandler.board_dict.has(start_pos + i):
+				available_moves.append(start_pos + i)
+		return available_moves
+	#Portal
+	else:
+		for i in coord_arr:
+			if DataHandler.golden_lines_dict.has(start_pos + i):
+				available_moves.append(start_pos + i)
+		return available_moves
 
 func nexus_movement(start_pos):
-	var coord_arr = [Vector2(1, 0), Vector2(1, 1), Vector2(0, 1), Vector2(-1, 1), Vector2(-1, 0), Vector2(-1, -1), Vector2(0, -1), Vector2(1, -1)]
 	var available_moves = []
 	var nexus_positions = []
 	
@@ -69,13 +87,18 @@ func nexus_movement(start_pos):
 		for nexus_pos in nexus_positions:
 			for coord in coord_arr:
 				var move_pos = nexus_pos + coord
-				if move_pos != start_pos and not seen_moves.has(move_pos):
+				if move_pos != start_pos and not seen_moves.has(move_pos) && DataHandler.board_dict.has(move_pos):
 					available_moves.append(move_pos)
 					seen_moves[move_pos] = true  # Mark this move as seen to prevent duplicates
 
 	return available_moves
 
-func portal_movement(start_pos, end_pos):
-	if DataHandler.golden_lines_dict.has(end_pos) && typeof(DataHandler.golden_lines_dict[start_pos]) != 1:
-		if DataHandler.golden_lines_dict[start_pos].has(end_pos):
-			return true
+func portal_movement(start_pos):
+	var available_moves = []
+	if typeof(DataHandler.golden_lines_dict[start_pos]) != 1:
+		for i in DataHandler.golden_lines_dict[start_pos]:
+			available_moves.append(i)
+		return available_moves
+	return []
+	#if DataHandler.golden_lines_dict.has(end_pos) && typeof(DataHandler.golden_lines_dict[start_pos]) != 1:
+		#if DataHandler.golden_lines_dict[start_pos].has(end_pos):

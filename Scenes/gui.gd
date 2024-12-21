@@ -114,7 +114,7 @@ func _on_setup_pressed() -> void:
 func show_movement_indicators(coord_arr):
 	for i in coord_arr:
 		for child in $Board/BoardGrid.get_children():
-			if child.slot_ID == i and DataHandler.board_dict.has(i):
+			if child.slot_ID == i:
 				movement_indicators.append(child)
 				child.get_node("Sprite2D").visible = true
 
