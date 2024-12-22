@@ -12,7 +12,7 @@ func _process(delta: float) -> void:
 
 func adding_piece(piece):
 	DataHandler.add_piece = piece
-	
+
 func _on_color_rect_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and DataHandler.board_dict.has(slot_ID):
@@ -20,5 +20,7 @@ func _on_color_rect_gui_input(event: InputEvent) -> void:
 			if DataHandler.add_piece != null:
 				SignalBus.ready_to_add_piece.emit(DataHandler.add_piece, slot_ID)
 				DataHandler.add_piece = null
+			elif DataHandler.swap_ready != null:
+				DataHandler.swap_pos()
 			else:
 				DataHandler.change_pos()

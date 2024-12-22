@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://sv0to3bnavv6"
-path="res://.godot/imported/Amalgam-W.png-0a707b7e7948a594e2a0bc7a6831121b.ctex"
+uid="uid://bfx13c0og1okw"
+path="res://.godot/imported/Portal_Square.png-0d126fd6860022ccd2185f697d383ad5.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Amalgam-W.png"
-dest_files=["res://.godot/imported/Amalgam-W.png-0a707b7e7948a594e2a0bc7a6831121b.ctex"]
+source_file="res://Images/Pieces/Portal_Square.png"
+dest_files=["res://.godot/imported/Portal_Square.png-0d126fd6860022ccd2185f697d383ad5.ctex"]
 
 [params]
 

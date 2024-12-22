@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ctikyu532o00n"
-path="res://.godot/imported/Void-W.png-ddacd7f5d5dee88bdb4ac0a526abfade.ctex"
+uid="uid://btonu2ltq2wm2"
+path="res://.godot/imported/RedCircle.png-3990b63cc6350feb6c397b88aa5af29f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Void-W.png"
-dest_files=["res://.godot/imported/Void-W.png-ddacd7f5d5dee88bdb4ac0a526abfade.ctex"]
+source_file="res://Images/Misc/RedCircle.png"
+dest_files=["res://.godot/imported/RedCircle.png-3990b63cc6350feb6c397b88aa5af29f.ctex"]
 
 [params]
 

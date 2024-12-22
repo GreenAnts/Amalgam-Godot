@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biy8nqmbw3kym"
-path="res://.godot/imported/Void.png-f8b51b4b6121a6c3f228e721cb6ab5e7.ctex"
+uid="uid://dqb3blkedow0y"
+path="res://.godot/imported/Purple_Indicator.png-655a730185e93b71fd4aa9b304ef1f82.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Void.png"
-dest_files=["res://.godot/imported/Void.png-f8b51b4b6121a6c3f228e721cb6ab5e7.ctex"]
+source_file="res://Images/Misc/Purple_Indicator.png"
+dest_files=["res://.godot/imported/Purple_Indicator.png-655a730185e93b71fd4aa9b304ef1f82.ctex"]
 
 [params]
 

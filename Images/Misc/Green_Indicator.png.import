@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0eqt6p1ta5g"
-path="res://.godot/imported/Pearl-W.png-520fb3f7cb62f512eb73e1e9cc52a438.ctex"
+uid="uid://cf6efaad0qx7h"
+path="res://.godot/imported/Green_Indicator.png-8cdf574b69d0b996a49ce1c1fc8ad675.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pearl-W.png"
-dest_files=["res://.godot/imported/Pearl-W.png-520fb3f7cb62f512eb73e1e9cc52a438.ctex"]
+source_file="res://Images/Misc/Green_Indicator.png"
+dest_files=["res://.godot/imported/Green_Indicator.png-8cdf574b69d0b996a49ce1c1fc8ad675.ctex"]
 
 [params]
 

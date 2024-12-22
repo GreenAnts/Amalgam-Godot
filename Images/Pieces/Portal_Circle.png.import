@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://nmf58ej1t3oq"
-path="res://.godot/imported/Portal-B.png-68dcb8ddea192312c8b965f8af8c9115.ctex"
+uid="uid://ye3ok6brheph"
+path="res://.godot/imported/Portal_Circle.png-9fd26697992db58a1d32ff1fbcfe60cc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Portal-B.png"
-dest_files=["res://.godot/imported/Portal-B.png-68dcb8ddea192312c8b965f8af8c9115.ctex"]
+source_file="res://Images/Pieces/Portal_Circle.png"
+dest_files=["res://.godot/imported/Portal_Circle.png-9fd26697992db58a1d32ff1fbcfe60cc.ctex"]
 
 [params]
 

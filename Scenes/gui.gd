@@ -9,6 +9,7 @@ var movement_indicators = []
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SignalBus.ready_to_add_piece.connect(add_piece)
+	SignalBus.show_correct_icons.connect(show_correct_icons)
 	SignalBus.movement_options.connect(show_movement_indicators)
 	SignalBus.reset_movement_options.connect(reset_movement_indicators)
 	var ycor = 12
@@ -113,6 +114,17 @@ func _on_void_pressed() -> void:
 func _on_remove_piece_pressed() -> void:
 	DataHandler.remove = true
 
+#Portal Swap
+func _on_portal_swap_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		DataHandler.swap_ready = DataHandler.clicked_piece
+		$Background/PortalSwap.button_pressed = true
+		print(DataHandler.swap_ready)
+	else:
+		$Background/PortalSwap.button_pressed = false
+		DataHandler.swap_ready = null
+		print(DataHandler.swap_ready)
+
 func _on_setup_pressed() -> void:
 	for n in $Board.get_children():
 		if n != $Board/BoardGrid and n != $Board/BoardBackground:
@@ -131,3 +143,15 @@ func reset_movement_indicators():
 	for i in DataHandler.board_dict:
 		for slot in movement_indicators:
 			slot.get_node("Sprite2D").visible = false
+
+func show_correct_icons(piece):
+	if  piece.type in [5,12]:
+		$Background/PortalSwap.visible = true
+		$Background/PortalSwap.button_pressed = false
+		DataHandler.swap_ready = null
+	else:
+		$Background/PortalSwap.visible = false
+		
+func reset_portal_button():
+	$Background/PortalSwap.button_pressed = false
+	DataHandler.swap_ready = null

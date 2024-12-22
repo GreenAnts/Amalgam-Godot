@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dsdkq6afgb2qa"]
 
 [ext_resource type="Script" path="res://Scenes/piece.gd" id="1_wl78l"]
-[ext_resource type="Texture2D" uid="uid://ye3ok6brheph" path="res://Images/Portal_Circle.png" id="2_6h0u3"]
+[ext_resource type="Texture2D" uid="uid://ye3ok6brheph" path="res://Images/Pieces/Portal_Circle.png" id="2_6h0u3"]
 [ext_resource type="Script" path="res://Scenes/icon.gd" id="3_7gqut"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_tbiq0"]

@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dxxt6w5unb1ey"]
 
 [ext_resource type="Script" path="res://Scenes/slot.gd" id="1_bdwvs"]
-[ext_resource type="Texture2D" uid="uid://btonu2ltq2wm2" path="res://Images/RedCircle.png" id="2_1kikk"]
+[ext_resource type="Texture2D" uid="uid://cf6efaad0qx7h" path="res://Images/Misc/Green_Indicator.png" id="2_v86qh"]
 
 [node name="Slot" type="ColorRect"]
 custom_minimum_size = Vector2(40, 40)
@@ -21,7 +21,7 @@ color = Color(0.4, 0.313726, 0.188235, 0)
 [node name="Sprite2D" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(20, 20)
-scale = Vector2(0.15, 0.15)
-texture = ExtResource("2_1kikk")
+scale = Vector2(0.35, 0.35)
+texture = ExtResource("2_v86qh")
 
 [connection signal="gui_input" from="ColorRect" to="." method="_on_color_rect_gui_input"]

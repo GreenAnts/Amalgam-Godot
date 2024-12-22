@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b6ggjxwu3ebra"]
+[gd_scene load_steps=12 format=3 uid="uid://b6ggjxwu3ebra"]
 
 [ext_resource type="Script" path="res://Scenes/gui.gd" id="1_5w5l0"]
 [ext_resource type="Texture2D" uid="uid://3lqv5wiwuk83" path="res://Images/Pieces/Amalgam_Circle.png" id="2_tetl0"]
@@ -7,8 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://b2popagxjo37w" path="res://Images/Pieces/Amber_Circle.png" id="4_i42jv"]
 [ext_resource type="Texture2D" uid="uid://b30q7mptwdccs" path="res://Images/Pieces/Jade_Circle.png" id="5_6lco6"]
 [ext_resource type="Texture2D" uid="uid://k8ms8wdq3r3p" path="res://Images/Pieces/Void_Circle.png" id="7_0lp68"]
-[ext_resource type="Texture2D" uid="uid://ye3ok6brheph" path="res://Images/Portal_Circle.png" id="7_assrg"]
+[ext_resource type="Texture2D" uid="uid://ye3ok6brheph" path="res://Images/Pieces/Portal_Circle.png" id="7_assrg"]
 [ext_resource type="Texture2D" uid="uid://bgovcmnj78ims" path="res://Images/V2_Board_Only.png" id="9_fdjkt"]
+[ext_resource type="Texture2D" uid="uid://c0x0ljxs5uriu" path="res://Images/Icons/Portal_Swap.png" id="9_vtqq6"]
+[ext_resource type="Texture2D" uid="uid://bir4w8lhj60sb" path="res://Images/Icons/Portal_Swap_Toggle.png" id="10_lu7gx"]
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -121,6 +123,16 @@ offset_right = 1318.0
 offset_bottom = 266.0
 text = "Setup Board"
 
+[node name="PortalSwap" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 475.0
+offset_right = 1140.0
+offset_bottom = 515.0
+toggle_mode = true
+texture_normal = ExtResource("9_vtqq6")
+texture_pressed = ExtResource("10_lu7gx")
+
 [node name="Board" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 1040.0
@@ -156,3 +168,4 @@ columns = 25
 [connection signal="pressed" from="Background/VBoxContainer/HBoxContainer2/Void" to="." method="_on_void_pressed"]
 [connection signal="pressed" from="Background/RemovePiece" to="." method="_on_remove_piece_pressed"]
 [connection signal="pressed" from="Background/Setup" to="." method="_on_setup_pressed"]
+[connection signal="toggled" from="Background/PortalSwap" to="." method="_on_portal_swap_toggled"]

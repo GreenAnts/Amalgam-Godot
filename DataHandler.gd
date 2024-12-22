@@ -215,6 +215,9 @@ var golden_lines_dict := {
 	Vector2(-1,-7): true, Vector2(-2,-8): true, Vector2(-3,-9): true, Vector2(-4,-10): true,
 }
 
+#For DEBUG
+var use_indicators = false
+#End DEBUG
 
 var assets := []
 #enum PieceNames {WHITE_AMBER, WHITE_JADE, WHITE_RUBY, WHITE_PEARL, WHITE_VOID}
@@ -226,6 +229,7 @@ var icon_offset := Vector2(20, 20)
 
 var indicators_active = false
 
+var swap_ready = null
 var add_piece = null
 var remove = false
 
@@ -237,7 +241,7 @@ func _ready() -> void:
 	assets.append("res://Images/Pieces/Amber_Circle.png") #2
 	assets.append("res://Images/Pieces/Jade_Circle.png") #3
 	assets.append("res://Images/Pieces/Amalgam_Circle.png") #4
-	assets.append("res://Images/Portal_Circle.png") #5
+	assets.append("res://Images/Pieces/Portal_Circle.png") #5
 	assets.append("res://Images/Pieces/Void_Circle.png") #6
 	#Square
 	assets.append("res://Images/Pieces/Ruby_Square.png") #7
@@ -245,12 +249,36 @@ func _ready() -> void:
 	assets.append("res://Images/Pieces/Amber_Square.png") #9
 	assets.append("res://Images/Pieces/Jade_Square.png") #10
 	assets.append("res://Images/Pieces/Amalgam_Square.png") #11
-	assets.append("res://Images/Portal_Square.png") #12
+	assets.append("res://Images/Pieces/Portal_Square.png") #12
 	assets.append("res://Images/Pieces/Void_Square.png") #13
+	#Misc
+	assets.append("res://Images/Icons/Portal_Swap.png") #14
+	assets.append("res://Images/Icons/Portal_Swap_Toggle.png") #15
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 #func _process(delta: float) -> void:
 #	pass
+func swap_pos():
+	if piece_dict.has(clicked_slot) && piece_dict.has(clicked_piece) && piece_dict[swap_ready].type in [5,12]:
+		if GameLogic.move_is_valid(swap_ready, clicked_slot):
+			#Change Pieces positions'
+			piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + icon_offset
+			piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + icon_offset
+			#Update piece.slot_ID
+			SignalBus.changed_piece.emit(piece_dict[swap_ready], clicked_slot)
+			SignalBus.changed_piece.emit(piece_dict[clicked_slot], swap_ready)
+			#update piece_dict
+			var temp_piece_node = piece_dict[clicked_slot]
+			piece_dict[clicked_slot] = piece_dict[swap_ready]
+			piece_dict[swap_ready] = temp_piece_node
+			#Remove old entries into piece_dict
+			SignalBus.reset_movement_options.emit()
+			indicators_active = false
+			clicked_piece = clicked_slot
+			print(clicked_piece)
+			DataHandler.swap_ready = null
+			SignalBus.show_correct_icons.emit(piece_dict[clicked_piece])
+		
 
 func change_pos():
 	if piece_dict.has(clicked_piece):
