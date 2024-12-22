@@ -11,15 +11,15 @@ func _input(event):
 					SignalBus.reset_movement_options.emit()
 				DataHandler.indicators_active = true
 				DataHandler.clicked_piece = self.get_parent().slot_ID
+				#Emit Correct Icons for Pieces
 				SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.clicked_piece])
 				# Emit movement options based on the clicked piece
-				if DataHandler.use_indicators == false:
-					SignalBus.movement_options.emit(GameLogic.get_all_valid_moves_for_piece(self.get_parent().slot_ID))
+				SignalBus.movement_options.emit(GameLogic.get_all_valid_moves_for_piece(self.get_parent().slot_ID))
 				if DataHandler.remove == true:
 					DataHandler.remove = false
-					if DataHandler.use_indicators == true:
-						DataHandler.piece_dict.erase(get_parent().slot_ID)
+					DataHandler.piece_dict.erase(get_parent().slot_ID)
 					get_parent().queue_free()
+					SignalBus.reset_movement_options.emit()
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			SignalBus.reset_movement_options.emit()
 			DataHandler.indicators_active = false

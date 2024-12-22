@@ -274,10 +274,10 @@ func swap_pos():
 			#Remove old entries into piece_dict
 			SignalBus.reset_movement_options.emit()
 			indicators_active = false
-			clicked_piece = clicked_slot
+			clicked_piece = null
 			print(clicked_piece)
 			DataHandler.swap_ready = null
-			SignalBus.show_correct_icons.emit(piece_dict[clicked_piece])
+			SignalBus.show_correct_icons.emit(null)
 		
 
 func change_pos():
@@ -289,7 +289,9 @@ func change_pos():
 			piece_dict.erase(clicked_piece)
 			SignalBus.reset_movement_options.emit()
 			indicators_active = false
-		clicked_piece = clicked_slot
+			GameLogic.attack(clicked_slot)
+		#clicked_piece = clicked_slot
+		
 
 func slot_is_empty():
 	if !piece_dict.has(clicked_slot):

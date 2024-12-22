@@ -7,24 +7,6 @@ func _ready() -> void:
 	print("Game Logic: Ready")
 	#print(move_is_valid(Vector2(1,2),Vector2(1,1)))
 
-func get_direction(coord, direction):
-	if direction == "North":
-		return coord + Vector2(0,1)
-	if direction == "NorthEast":
-		return coord + Vector2(1,1)
-	if direction == "East":
-		return coord + Vector2(1,0)
-	if direction == "SouthEast":
-		return coord + Vector2(1,-1)
-	if direction == "South":
-		return coord + Vector2(0,-1)
-	if direction == "SouthWest":
-		return coord + Vector2(-1,-1)
-	if direction == "West":
-		return coord + Vector2(-1,0)
-	if direction == "NorthWest":
-		return coord + Vector2(-1,1)
-
 func move_is_valid(start_pos, end_pos):
 	for i in standard_movement(start_pos):
 		if i == end_pos && DataHandler.piece_dict.has(end_pos) == false:
@@ -158,9 +140,47 @@ func portal_phase(start_pos):
 	return available_moves
 
 func portal_swap(start_pos):
+	var player = check_player_of_piece(start_pos)
 	var available_moves = []
 	for i in DataHandler.piece_dict:
-		#Circle
-		if DataHandler.piece_dict[i].type in [0,1,2,3,4,6] && DataHandler.golden_lines_dict.has(DataHandler.piece_dict[i].slot_ID):
+		print(i)
+		if DataHandler.piece_dict[i].type not in [5,12] && player == check_player_of_piece(i) && DataHandler.golden_lines_dict.has(DataHandler.piece_dict[i].slot_ID):
 			available_moves.append(DataHandler.piece_dict[i].slot_ID)
 	return available_moves
+
+func attack(coord):
+	var player = check_player_of_piece(coord)
+	#Void Attack
+	if DataHandler.piece_dict[coord].type in [6,13]:
+			for i in coord_arr:
+				if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && player != check_player_of_piece(coord +i):
+					DataHandler.piece_dict[coord + i].queue_free()
+					DataHandler.piece_dict.erase(coord + i)
+	#Portal Attack
+	elif DataHandler.piece_dict[coord].type in [5,12]:
+		print("portal")
+		for i in coord_arr:
+			#Standard Distance
+			if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && DataHandler.piece_dict[coord + i].type in [5,12] && player != check_player_of_piece(coord +i):
+				DataHandler.piece_dict[coord + i].queue_free()
+				DataHandler.piece_dict.erase(coord + i)
+			#Portal Distance
+			if typeof(DataHandler.golden_lines_dict[coord]) != 1:
+				for n in DataHandler.golden_lines_dict[coord]:
+					if DataHandler.piece_dict.has(n) == true && DataHandler.piece_dict[n].type in [5,12] && player != check_player_of_piece(n):
+						DataHandler.piece_dict[n].queue_free()
+						DataHandler.piece_dict.erase(n)
+	#Non-Portal Attack
+	else:
+		for i in coord_arr:
+			if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && DataHandler.piece_dict[coord + i].type not in [5,12] && player != check_player_of_piece(coord +i):
+				DataHandler.piece_dict[coord + i].queue_free()
+				DataHandler.piece_dict.erase(coord + i)
+
+func check_player_of_piece(piece_pos):
+	if DataHandler.piece_dict[piece_pos].type in [0,1,2,3,4,5,6]:
+		# true = Circle
+		return true
+	else:
+		# false = Square
+		return false

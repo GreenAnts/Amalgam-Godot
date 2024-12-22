@@ -23,6 +23,8 @@ func _ready() -> void:
 			xcor += 1
 		ycor -= 1
 	board_setup.call_deferred()
+	#Hide Icons
+	$Background/PortalSwap.visible = false
 	
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -145,13 +147,10 @@ func reset_movement_indicators():
 			slot.get_node("Sprite2D").visible = false
 
 func show_correct_icons(piece):
-	if  piece.type in [5,12]:
-		$Background/PortalSwap.visible = true
-		$Background/PortalSwap.button_pressed = false
-		DataHandler.swap_ready = null
-	else:
-		$Background/PortalSwap.visible = false
-		
-func reset_portal_button():
-	$Background/PortalSwap.button_pressed = false
-	DataHandler.swap_ready = null
+	if piece != null:
+		if  piece.type in [5,12]:
+			$Background/PortalSwap.visible = true
+			$Background/PortalSwap.button_pressed = false
+			DataHandler.swap_ready = null
+		else:
+			$Background/PortalSwap.visible = false
