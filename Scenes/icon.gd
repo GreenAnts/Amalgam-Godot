@@ -12,7 +12,12 @@ func _input(event):
 				DataHandler.indicators_active = true
 				DataHandler.clicked_piece = self.get_parent().slot_ID
 				#Emit Correct Icons for Pieces
-				SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.clicked_piece])
+				if DataHandler.piece_dict[DataHandler.clicked_piece].type in [5,12]:
+					SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.clicked_piece])
+				elif DataHandler.fireball_ready == true:
+					return
+				else:
+					SignalBus.show_correct_icons.emit(null)
 				# Emit movement options based on the clicked piece
 				SignalBus.movement_options.emit(GameLogic.get_all_valid_moves_for_piece(self.get_parent().slot_ID))
 				if DataHandler.remove == true:
@@ -20,6 +25,7 @@ func _input(event):
 					DataHandler.piece_dict.erase(get_parent().slot_ID)
 					get_parent().queue_free()
 					SignalBus.reset_movement_options.emit()
+					DataHandler.clicked_piece = null
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			SignalBus.reset_movement_options.emit()
 			DataHandler.indicators_active = false

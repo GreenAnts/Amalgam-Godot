@@ -25,7 +25,8 @@ func _ready() -> void:
 	board_setup.call_deferred()
 	#Hide Icons
 	$Background/PortalSwap.visible = false
-	
+	$Background/Fireball.visible = false
+
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -78,7 +79,6 @@ func add_piece(piece_type, location)->void:
 		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
-		DataHandler.clicked_piece = null
 	elif DataHandler.slot_is_empty() && piece_type in [5,12] && DataHandler.golden_lines_dict.has(location):
 		var new_piece = piece_scene.instantiate()
 		get_node("../Gameplay").add_child(new_piece)
@@ -87,10 +87,9 @@ func add_piece(piece_type, location)->void:
 		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
-		DataHandler.clicked_piece = null
 	else:
 		SignalBus.toggle_add_piece.emit(piece_type)
-		print('slot taken')
+	DataHandler.clicked_piece = null
 		
 func _on_ruby_pressed() -> void:
 	SignalBus.toggle_add_piece.emit(0)
@@ -127,10 +126,20 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 		DataHandler.swap_ready = null
 		print(DataHandler.swap_ready)
 
+#Fireball
+func _on_fireball_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		DataHandler.fireball_ready = true
+		$Background/Fireball.button_pressed = true
+		print(DataHandler.fireball_ready)
+	else:
+		$Background/Fireball.button_pressed = false
+		DataHandler.fireball_ready = false
+		print(DataHandler.fireball_ready)
+
 func _on_setup_pressed() -> void:
-	for n in $Board.get_children():
-		if n != $Board/BoardGrid and n != $Board/BoardBackground:
-			$Board.remove_child(n)
+	for n in get_node("../Gameplay").get_children():
+			n.queue_free()
 	DataHandler.piece_dict = {}
 	board_setup()
 	
@@ -152,5 +161,12 @@ func show_correct_icons(piece):
 			$Background/PortalSwap.visible = true
 			$Background/PortalSwap.button_pressed = false
 			DataHandler.swap_ready = null
-		else:
+			$Background/Fireball.visible = false
+		elif  piece.type in [0,7]:
+			$Background/Fireball.visible = true
+			$Background/Fireball.button_pressed = false
+			DataHandler.fireball_ready = false
 			$Background/PortalSwap.visible = false
+	else:
+		$Background/PortalSwap.visible = false
+		$Background/Fireball.visible = false
