@@ -26,6 +26,9 @@ func _ready() -> void:
 	#Hide Icons
 	$Background/PortalSwap.visible = false
 	$Background/Fireball.visible = false
+	$Background/TidalWave.visible = false
+	$Background/Sap.visible = false
+	$Background/Launch.visible = false
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:

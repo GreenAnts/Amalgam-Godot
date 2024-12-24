@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b6ggjxwu3ebra"]
+[gd_scene load_steps=20 format=3 uid="uid://b6ggjxwu3ebra"]
 
 [ext_resource type="Script" path="res://Scenes/gui.gd" id="1_5w5l0"]
 [ext_resource type="Texture2D" uid="uid://3lqv5wiwuk83" path="res://Images/Pieces/Amalgam_Circle.png" id="2_tetl0"]
@@ -13,6 +13,12 @@
 [ext_resource type="Texture2D" uid="uid://bir4w8lhj60sb" path="res://Images/Icons/Portal_Swap_Toggle.png" id="10_lu7gx"]
 [ext_resource type="Texture2D" uid="uid://mmpgl0baf4q5" path="res://Images/Icons/Fireball.png" id="11_etvwt"]
 [ext_resource type="Texture2D" uid="uid://b11664ej8ljl5" path="res://Images/Icons/Fireball_Toggle.png" id="12_oguqw"]
+[ext_resource type="Texture2D" uid="uid://dd4hxr5mauc4o" path="res://Images/Icons/TidalWave.png" id="13_3la7a"]
+[ext_resource type="Texture2D" uid="uid://cyq5gjme8pu8m" path="res://Images/Icons/TidalWave_Toggle.png" id="14_oymgb"]
+[ext_resource type="Texture2D" uid="uid://cc2k8fdt2fyuc" path="res://Images/Icons/Sap.png" id="15_jp4nh"]
+[ext_resource type="Texture2D" uid="uid://c0as66xf1tmms" path="res://Images/Icons/Sap_Toggle.png" id="16_rn627"]
+[ext_resource type="Texture2D" uid="uid://0kfthrudr4xk" path="res://Images/Icons/Launch.png" id="17_qvf40"]
+[ext_resource type="Texture2D" uid="uid://btp7w5ug5d77l" path="res://Images/Icons/Launch_Toggle.png" id="18_em35q"]
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -144,6 +150,36 @@ offset_bottom = 812.0
 toggle_mode = true
 texture_normal = ExtResource("11_etvwt")
 texture_pressed = ExtResource("12_oguqw")
+
+[node name="TidalWave" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 1212.0
+offset_top = 707.0
+offset_right = 1317.0
+offset_bottom = 812.0
+toggle_mode = true
+texture_normal = ExtResource("13_3la7a")
+texture_pressed = ExtResource("14_oymgb")
+
+[node name="Sap" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 1100.0
+offset_top = 819.0
+offset_right = 1205.0
+offset_bottom = 924.0
+toggle_mode = true
+texture_normal = ExtResource("15_jp4nh")
+texture_pressed = ExtResource("16_rn627")
+
+[node name="Launch" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 1212.0
+offset_top = 819.0
+offset_right = 1317.0
+offset_bottom = 924.0
+toggle_mode = true
+texture_normal = ExtResource("17_qvf40")
+texture_pressed = ExtResource("18_em35q")
 
 [node name="Board" type="ColorRect" parent="."]
 layout_mode = 0

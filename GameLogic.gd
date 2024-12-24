@@ -14,6 +14,10 @@ func check_player_of_piece(piece_pos):
 		# false = Square
 		return false
 
+# Function to check if two positions are adjacent (horizontally, vertically, or diagonally)
+func is_adjacent(pos1: Vector2, pos2: Vector2) -> bool:
+	return abs(pos1.x - pos2.x) <= 1 and abs(pos1.y - pos2.y) <= 1
+
 func move_is_valid(start_pos, end_pos):
 	for i in standard_movement(start_pos):
 		if i == end_pos && DataHandler.piece_dict.has(end_pos) == false:
@@ -182,10 +186,6 @@ func attack(coord):
 				DataHandler.piece_dict[coord + i].queue_free()
 				DataHandler.piece_dict.erase(coord + i)
 
-# Function to check if two positions are adjacent (horizontally, vertically, or diagonally)
-func is_adjacent(pos1: Vector2, pos2: Vector2) -> bool:
-	return abs(pos1.x - pos2.x) <= 1 and abs(pos1.y - pos2.y) <= 1
-
 func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2) -> Array:
 	# Ensure the two Ruby pieces are adjacent (horizontally, vertically, or diagonally)
 	if not is_adjacent(ruby_pos1, ruby_pos2):
@@ -234,3 +234,104 @@ func get_fireball_targets(start_pos: Vector2, direction: Vector2) -> Array:
 		if !DataHandler.piece_dict.has(target_pos):
 			continue
 	return targets
+
+func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2)  -> Array:
+	# Ensure the two Pearl pieces are adjacent (horizontally, vertically, or diagonally)
+	if not is_adjacent(pearl_pos1, pearl_pos2):
+		return []  # Return an empty array if Pearls are not adjacent
+	
+	# Determine the direction of the Tidalwave based on the alignment of the two Rubies
+	var direction = pearl_pos2 - pearl_pos1
+	
+	# Check if the Pearls are aligned (horizontally, vertically, or diagonally)
+	if direction.x == 0 or direction.y == 0 or abs(direction.x) == abs(direction.y):
+		# Initialize an array to store Tidalwave moves in both directions
+		var tidalwave_targets = []
+		
+		# Forward direction (from pearl_pos2 outward)
+		tidalwave_targets.append_array(get_tidalwave_targets(pearl_pos2, direction))
+		# Backward direction (from pearl_pos1 outward in reverse direction)
+		tidalwave_targets.append_array(get_tidalwave_targets(pearl_pos1, -direction))
+		# Return all possible target positions
+		return tidalwave_targets
+	else:
+		print("Tidalwave: The two Pearls are not aligned properly!")
+		return []  # Return an empty array if Pearls are not properly aligned
+
+
+func get_tidalwave_targets(start_pos: Vector2, direction: Vector2) -> Array:
+	var targets = []
+
+	# Normalize the direction to ensure correct grid-based movement
+	if direction.x != 0:
+		direction.x = direction.x / abs(direction.x)  # Ensure x is -1, 0, or 1
+	if direction.y != 0:
+		direction.y = direction.y / abs(direction.y)  # Ensure y is -1, 0, or 1
+
+	# Define the forward vector
+	var forward = direction
+	# Define the sideways offset to ensure the width of 5
+	var sideways = Vector2(-forward.y, forward.x)  # Perpendicular to the forward direction
+
+	# A set to track unique positions
+	var seen_positions = {}
+
+	# Loop through the 4x5 Tidalwave area
+	for x in range(1, 5):  # 4 steps forward
+		for y_offset in range(-2, 3):  # 2 steps left and right (5-wide)
+			# Calculate the target position for each y_offset
+			var offset_vector = sideways * y_offset
+			var target_pos = start_pos + forward * x + offset_vector
+			print(target_pos)
+			# Check if it's a valid target
+			if _validate_target(start_pos, target_pos) and not seen_positions.has(target_pos):
+				# Mark it as processed
+				seen_positions[target_pos] = true
+
+				# Add the target to the list and remove the piece if needed
+				DataHandler.piece_dict[target_pos].queue_free()
+				DataHandler.piece_dict.erase(target_pos)
+				
+				targets.append(target_pos)
+				
+
+			# Check for intermediate diagonal positions (only for diagonal movement)
+			if abs(direction.x) == 1 and abs(direction.y) == 1:  # Diagonal directions
+				# Calculate the intermediate cells between diagonals
+				var additional_pos_1 = start_pos + forward * x + offset_vector + sideways
+				var additional_pos_2 = start_pos + forward * x + offset_vector - sideways
+				print(additional_pos_1)
+				print(additional_pos_2)
+				# Add intermediate positions if valid and not already processed
+				if _validate_target(start_pos, additional_pos_1) and not seen_positions.has(additional_pos_1):
+					seen_positions[additional_pos_1] = true
+					DataHandler.piece_dict[additional_pos_1].queue_free()
+					DataHandler.piece_dict.erase(additional_pos_1)
+					targets.append(additional_pos_1)
+
+				if _validate_target(start_pos, additional_pos_2) and not seen_positions.has(additional_pos_2):
+					seen_positions[additional_pos_2] = true
+					DataHandler.piece_dict[additional_pos_2].queue_free()
+					DataHandler.piece_dict.erase(additional_pos_2)
+					targets.append(additional_pos_2)
+
+	return targets
+
+# Helper function to validate a target position
+func _validate_target(start_pos: Vector2, target_pos: Vector2) -> bool:
+	# Check if the target position is on the board
+	if !DataHandler.board_dict.has(target_pos):
+		return false  # Out of bounds
+
+	# Check if the position is occupied by a Portal piece
+	if DataHandler.piece_dict.has(target_pos) and DataHandler.piece_dict[target_pos].type in [5, 12]:
+		return false  # Skip Portal pieces
+
+	# Check if the position is occupied by an opponent's piece (non-Portal)
+	if DataHandler.piece_dict.has(target_pos) and GameLogic.check_player_of_piece(target_pos) != GameLogic.check_player_of_piece(start_pos):
+		return true  # Valid opponent target
+
+	return false  # Not valid if empty or not an opponent
+
+#DataHandler.piece_dict[target_pos].queue_free()
+#DataHandler.piece_dict.erase(target_pos)

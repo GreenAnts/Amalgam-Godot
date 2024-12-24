@@ -232,9 +232,11 @@ var indicators_active = false
 #icons
 var swap_ready = null
 var fireball_ready = false
+var tidalwave_ready = false
 
 #Abilities
 var ruby_targets = []
+var tidalwave_targets = []
 var piece_using_ability = Vector2()
 
 var add_piece = null
@@ -306,7 +308,22 @@ func change_pos():
 			
 			# Abilities
 			var player = GameLogic.check_player_of_piece(clicked_slot)
-			check_fireball(player, clicked_slot)
+			check_ability(player, clicked_slot)
+
+func check_ability(player: bool, moved_piece: Vector2):
+	var piece = DataHandler.piece_dict[moved_piece]
+	if not piece:
+		print("Error: No piece found at moved position.")
+		return
+
+	# Check based on the piece type
+	if piece.type in [0, 7]:  # Ruby types (Circle and Square)
+		check_fireball(player, moved_piece)
+	elif piece.type in [1, 8]:  # Pearl types (Circle and Square)
+		check_tidalwave(player, moved_piece)
+	elif piece.type in [4, 11]:  # Amalgam types (Circle and Square)
+		check_fireball(player, moved_piece)
+		check_tidalwave(player, moved_piece)
 
 func check_fireball(player: bool, moved_piece: Vector2):
 	# Clear previous ruby targets and fireball state
@@ -348,6 +365,38 @@ func check_fireball(player: bool, moved_piece: Vector2):
 		DataHandler.fireball_ready = true
 		# Highlight the first valid Ruby piece
 		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.ruby_targets[0]["primary"]])
+
+func check_tidalwave(player: bool, moved_piece: Vector2):
+	# Clear previous targets and ready state
+	DataHandler.tidalwave_targets.clear()
+	DataHandler.tidalwave_ready = false
+
+	var pearls = []
+
+	# Collect Pearls
+	for piece_pos in DataHandler.piece_dict:
+		var piece = DataHandler.piece_dict[piece_pos]
+		if player:
+			if piece.type == 1: pearls.append(piece_pos)  # Pearl (Circle)
+		else:
+			if piece.type == 8: pearls.append(piece_pos)  # Pearl (Square)
+
+	# Check combinations for valid Tidalwave targets
+	for pearl_pos in pearls:
+		for secondary_piece in pearls:
+			if pearl_pos != secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece):
+				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece)
+				if targets.size() > 0:
+					DataHandler.tidalwave_targets.append({ 
+						"primary": pearl_pos, 
+						"secondary": secondary_piece, 
+						"targets": targets 
+					})
+
+	# Update ready state and show indicator if targets exist
+	if DataHandler.tidalwave_targets.size() > 0:
+		DataHandler.tidalwave_ready = true
+		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.tidalwave_targets[0]["primary"]])
 
 func fireball(target_pos: Vector2):
 	# Validate the target exists before removing it
