@@ -121,8 +121,8 @@ func _on_remove_piece_pressed() -> void:
 #Portal Swap
 func _on_portal_swap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
-		DataHandler.swap_ready = DataHandler.clicked_piece
 		$Background/PortalSwap.button_pressed = true
+		DataHandler.swap_ready = DataHandler.clicked_piece
 		print(DataHandler.swap_ready)
 	else:
 		$Background/PortalSwap.button_pressed = false
@@ -132,14 +132,47 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 #Fireball
 func _on_fireball_toggled(toggled_on: bool) -> void:
 	if toggled_on:
-		DataHandler.fireball_ready = true
 		$Background/Fireball.button_pressed = true
+		DataHandler.fireball_ready = true
 		print(DataHandler.fireball_ready)
 	else:
 		$Background/Fireball.button_pressed = false
 		DataHandler.fireball_ready = false
 		print(DataHandler.fireball_ready)
 
+#Tidalwave
+func _on_tidal_wave_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$Background/TidalWave.button_pressed = true
+		DataHandler.tidalwave_ready = true
+		print(DataHandler.tidalwave_ready)
+	else:
+		$Background/TidalWave.button_pressed = false
+		DataHandler.tidalwave_ready = false
+		print(DataHandler.tidalwave_ready)
+
+#Sap
+func _on_sap_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$Background/Sap.button_pressed = true
+		DataHandler.sap_ready = true
+		print(DataHandler.sap_ready)
+	else:
+		$Background/Sap.button_pressed = false
+		DataHandler.sap_ready = false
+		print(DataHandler.sap_ready)
+
+#Launch
+func _on_launch_toggled(toggled_on: bool) -> void:
+	if toggled_on:
+		$Background/Launch.button_pressed = true
+		DataHandler.launch_ready = true
+		print(DataHandler.launch_ready)
+	else:
+		$Background/Launch.button_pressed = false
+		DataHandler.launch_ready = false
+		print(DataHandler.launch_ready)
+	
 func _on_setup_pressed() -> void:
 	for n in get_node("../Gameplay").get_children():
 			n.queue_free()
@@ -164,12 +197,24 @@ func show_correct_icons(piece):
 			$Background/PortalSwap.visible = true
 			$Background/PortalSwap.button_pressed = false
 			DataHandler.swap_ready = null
-			$Background/Fireball.visible = false
 		elif  piece.type in [0,7]:
 			$Background/Fireball.visible = true
 			$Background/Fireball.button_pressed = false
 			DataHandler.fireball_ready = false
-			$Background/PortalSwap.visible = false
+		elif  piece.type in [1,8]:
+			$Background/TidalWave.visible = true
+			$Background/TidalWave.button_pressed = false
+			DataHandler.tidalwave_ready = false
+		elif  piece.type in [2,9]:
+			$Background/Sap.visible = true
+			$Background/Sap.button_pressed = false
+			DataHandler.sap_ready = false
+		elif  piece.type in [2,9]:
+			$Background/Launch.visible = true
+			$Background/Launch.button_pressed = false
+			DataHandler.launch_ready = false
 	else:
 		$Background/PortalSwap.visible = false
 		$Background/Fireball.visible = false
+		$Background/TidalWave.visible = false
+		$Background/Sap.visible = false

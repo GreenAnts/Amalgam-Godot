@@ -218,3 +218,6 @@ columns = 25
 [connection signal="pressed" from="Background/Setup" to="." method="_on_setup_pressed"]
 [connection signal="toggled" from="Background/PortalSwap" to="." method="_on_portal_swap_toggled"]
 [connection signal="toggled" from="Background/Fireball" to="." method="_on_fireball_toggled"]
+[connection signal="toggled" from="Background/TidalWave" to="." method="_on_tidal_wave_toggled"]
+[connection signal="toggled" from="Background/Sap" to="." method="_on_sap_toggled"]
+[connection signal="toggled" from="Background/Launch" to="." method="_on_launch_toggled"]

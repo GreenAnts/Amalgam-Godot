@@ -233,10 +233,15 @@ var indicators_active = false
 var swap_ready = null
 var fireball_ready = false
 var tidalwave_ready = false
+var sap_ready = false
+var launch_ready = false
 
 #Abilities
 var ruby_targets = []
-var tidalwave_targets = []
+var pearl_targets = []
+var amber_targets = []
+var jade_targets = []
+
 var piece_using_ability = Vector2()
 
 var add_piece = null
@@ -312,6 +317,7 @@ func change_pos():
 
 func check_ability(player: bool, moved_piece: Vector2):
 	var piece = DataHandler.piece_dict[moved_piece]
+	var debug_remove_pieces = []
 	if not piece:
 		print("Error: No piece found at moved position.")
 		return
@@ -321,9 +327,19 @@ func check_ability(player: bool, moved_piece: Vector2):
 		check_fireball(player, moved_piece)
 	elif piece.type in [1, 8]:  # Pearl types (Circle and Square)
 		check_tidalwave(player, moved_piece)
+	elif piece.type in [2, 9]:  # Amber types (Circle and Square)
+		check_sap(player, moved_piece)
 	elif piece.type in [4, 11]:  # Amalgam types (Circle and Square)
 		check_fireball(player, moved_piece)
 		check_tidalwave(player, moved_piece)
+		check_sap(player, moved_piece)
+	
+	#DEBUG
+	debug_remove_pieces.append(ruby_targets)
+	debug_remove_pieces.append(pearl_targets)
+	debug_remove_pieces.append(amber_targets)
+	debug_remove(debug_remove_pieces)
+	#END DEBUG
 
 func check_fireball(player: bool, moved_piece: Vector2):
 	# Clear previous ruby targets and fireball state
@@ -331,72 +347,96 @@ func check_fireball(player: bool, moved_piece: Vector2):
 	DataHandler.fireball_ready = false
 
 	var rubies = []
-	var amalgams = []
 	
 	# Collect Rubies and Amalgams based on the player's type (Circle or Square)
 	for piece_pos in DataHandler.piece_dict:
 		var piece = DataHandler.piece_dict[piece_pos]
 		if player:  # Circle player
-			if piece.type == 0:  # Ruby
+			if piece.type == 0 || piece.type == 4:  # Ruby or Amalgam
 				rubies.append(piece_pos)
-			elif piece.type == 4:  # Amalgam
-				amalgams.append(piece_pos)
 		else:  # Square player
-			if piece.type == 7:  # Ruby
+			if piece.type == 7 || piece.type == 11:  # Ruby or Amalgam
 				rubies.append(piece_pos)
-			elif piece.type == 11:  # Amalgam
-				amalgams.append(piece_pos)
 
 	# Check all combinations of Rubies and Amalgams for Fireball alignment
 	for ruby_pos in rubies:
-		for secondary_piece in rubies + amalgams:
-			if ruby_pos != secondary_piece && (moved_piece == ruby_pos || moved_piece == secondary_piece):
+		for secondary_piece in rubies:
+			if ruby_pos < secondary_piece && (moved_piece == ruby_pos || moved_piece == secondary_piece):
 				var targets = GameLogic.ruby_fireball(ruby_pos, secondary_piece)
 				if targets.size() > 0:
 					# Store the valid targets and involved pieces
-					DataHandler.ruby_targets.append({ 
-						"primary": ruby_pos, 
-						"secondary": secondary_piece, 
-						"targets": targets 
-					})
+					DataHandler.ruby_targets.append_array(targets)
 
 	# If valid targets exist, mark Fireball as ready and show indicator
 	if DataHandler.ruby_targets.size() > 0:
-		DataHandler.fireball_ready = true
+		print(ruby_targets)
+		DataHandler.fireball_ready = false
 		# Highlight the first valid Ruby piece
-		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.ruby_targets[0]["primary"]])
+		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[moved_piece]) # Needs to be updated to catch amalgam movement. but still send ruby
 
 func check_tidalwave(player: bool, moved_piece: Vector2):
 	# Clear previous targets and ready state
-	DataHandler.tidalwave_targets.clear()
+	DataHandler.pearl_targets.clear()
 	DataHandler.tidalwave_ready = false
 
 	var pearls = []
-
-	# Collect Pearls
+	var amalgam = []
+	# Collect Pearls and Amalgams based on the player's type (Circle or Square)
 	for piece_pos in DataHandler.piece_dict:
 		var piece = DataHandler.piece_dict[piece_pos]
-		if player:
-			if piece.type == 1: pearls.append(piece_pos)  # Pearl (Circle)
-		else:
-			if piece.type == 8: pearls.append(piece_pos)  # Pearl (Square)
+		if player:  # Circle player
+			if piece.type == 1 || piece.type == 4:  # Pearl or Amalgam
+				pearls.append(piece_pos)
+		else:  # Square player
+			if piece.type == 8 || piece.type == 11:  # Pearl or Amalgam
+				pearls.append(piece_pos)
 
 	# Check combinations for valid Tidalwave targets
 	for pearl_pos in pearls:
-		for secondary_piece in pearls:
-			if pearl_pos != secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece):
+		for secondary_piece in pearls + amalgam:
+			if pearl_pos < secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece):
 				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece)
 				if targets.size() > 0:
-					DataHandler.tidalwave_targets.append({ 
-						"primary": pearl_pos, 
-						"secondary": secondary_piece, 
-						"targets": targets 
-					})
+					DataHandler.pearl_targets.append_array(targets)
+
 
 	# Update ready state and show indicator if targets exist
-	if DataHandler.tidalwave_targets.size() > 0:
-		DataHandler.tidalwave_ready = true
-		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[DataHandler.tidalwave_targets[0]["primary"]])
+	if DataHandler.pearl_targets.size() > 0:
+		print(pearl_targets)
+		DataHandler.tidalwave_ready = false
+		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[moved_piece])
+
+func check_sap(player: bool, moved_piece: Vector2):
+	# Clear previous targets and ready state
+	DataHandler.amber_targets.clear()
+	DataHandler.sap_ready = false
+
+	var ambers = []
+	var amalgams = []
+
+	# Collect Amber and Amalgam pieces based on the player's type (Circle or Square)
+	for piece_pos in DataHandler.piece_dict:
+		var piece = DataHandler.piece_dict[piece_pos]
+		if player:  # Circle player
+			if piece.type == 2 || piece.type == 4:  # Amber or Amalgam
+				ambers.append(piece_pos)
+		else:  # Square player
+			if piece.type == 9 || piece.type == 11:  # Amber or Amalgam
+				ambers.append(piece_pos)
+
+	# Check combinations for valid Sap targets
+	for amber_pos in ambers:
+		for secondary_piece in ambers + amalgams:
+			if amber_pos < secondary_piece and (moved_piece == amber_pos or moved_piece == secondary_piece):
+				var targets = GameLogic.amber_sap(amber_pos, secondary_piece)
+				if targets.size() > 0:
+					DataHandler.amber_targets.append_array(targets)
+
+	# Update ready state and show indicator if targets exist
+	if DataHandler.amber_targets.size() > 0:
+		print(amber_targets)
+		DataHandler.sap_ready = false
+		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[moved_piece])
 
 func fireball(target_pos: Vector2):
 	# Validate the target exists before removing it
@@ -405,3 +445,43 @@ func fireball(target_pos: Vector2):
 		DataHandler.piece_dict.erase(target_pos)
 	else:
 		print("Error: Attempted to fireball a piece that doesn't exist.")
+
+func tidalwave(target_pos: Vector2):
+	# Validate the target exists before removing it
+	print(pearl_targets)
+	if DataHandler.piece_dict.has(target_pos):
+		DataHandler.piece_dict[target_pos].queue_free()
+		DataHandler.piece_dict.erase(target_pos)
+	else:
+		print("Error: Attempted to tidalwave a piece that doesn't exist.")
+
+# Function to execute the Sap ability
+func sap(target_pos: Vector2):
+	# Validate the target exists before removing it
+	if DataHandler.piece_dict.has(target_pos):
+		DataHandler.piece_dict[target_pos].queue_free()
+		DataHandler.piece_dict.erase(target_pos)
+	else:
+		print("Error: Attempted to sap a piece that doesn't exist.")
+
+func debug_remove(target_array):
+	print(target_array)
+	if typeof(target_array) == 5 && piece_dict.has(target_array):
+		piece_dict[target_array].queue_free()
+		piece_dict.erase(target_array)
+	for i in target_array:
+		print(typeof(i))
+		print(i)
+		if typeof(i) == 28:
+			for n in i:
+				if typeof(n) == 5 && piece_dict.has(n):
+					piece_dict[n].queue_free()
+					piece_dict.erase(n)
+				else:
+					for u in n:
+						if typeof(u) != 28 && piece_dict.has(u):
+							piece_dict[u].queue_free()
+							piece_dict.erase(u)
+		elif typeof(i) == 5 && piece_dict.has(i):
+			piece_dict[i].queue_free()
+			piece_dict.erase(i)

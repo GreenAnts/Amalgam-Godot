@@ -20,26 +20,26 @@ func is_adjacent(pos1: Vector2, pos2: Vector2) -> bool:
 
 func move_is_valid(start_pos, end_pos):
 	for i in standard_movement(start_pos):
-		if i == end_pos && DataHandler.piece_dict.has(end_pos) == false:
+		if i == end_pos && not DataHandler.piece_dict.has(end_pos):
 			return true
 	for i in portal_phase(start_pos):
 		if i == end_pos:
 			return true
-	#If the Piece is a Non Portal
+	# If the Piece is a Non Portal
 	if DataHandler.piece_dict[start_pos].type not in [5, 12]:
 		for i in nexus_movement(start_pos):
-			if i == end_pos && DataHandler.piece_dict.has(end_pos) == false:
+			if i == end_pos && not DataHandler.piece_dict.has(end_pos):
 				return true
-	#If the Piece is a Portal
+	# If the Piece is a Portal
 	else:
 		for i in standard_movement(start_pos):
-			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos) && DataHandler.piece_dict.has(end_pos) == false:
+			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos) && not DataHandler.piece_dict.has(end_pos):
 				return true
 		for i in nexus_movement(start_pos):
-			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos) && DataHandler.piece_dict.has(end_pos) == false:
+			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos) && not DataHandler.piece_dict.has(end_pos):
 				return true
 		for i in portal_movement(start_pos):
-			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos) && DataHandler.piece_dict.has(end_pos) == false:
+			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos) && not DataHandler.piece_dict.has(end_pos):
 				return true
 		for i in portal_swap(start_pos):
 			if i == end_pos && DataHandler.golden_lines_dict.has(end_pos):
@@ -52,34 +52,34 @@ func get_all_valid_moves_for_piece(start_pos):
 	for i in portal_phase(start_pos):
 		available_moves.append(i)
 
-	#If the Piece is a Non Portal
+	# If the Piece is a Non Portal
 	if DataHandler.piece_dict[start_pos].type not in [5, 12]:
 		for i in nexus_movement(start_pos):
 			available_moves.append(i)
-	#If the Piece is a Portal
+	# If the Piece is a Portal
 	else:
 		for i in standard_movement(start_pos):
-				available_moves.append(i)
+			available_moves.append(i)
 		for i in nexus_movement(start_pos):
-				available_moves.append(i)
+			available_moves.append(i)
 		for i in portal_movement(start_pos):
-				available_moves.append(i)
+			available_moves.append(i)
 		for i in portal_swap(start_pos):
-				available_moves.append(i)
+			available_moves.append(i)
 	return available_moves
 	
 func standard_movement(start_pos):
 	var available_moves = []
-	#Non-Portal
+	# Non-Portal
 	if DataHandler.piece_dict[start_pos].type not in [5,12]:
 		for i in coord_arr:
-			if DataHandler.board_dict.has(start_pos + i) && DataHandler.piece_dict.has(start_pos + i) == false:
+			if DataHandler.board_dict.has(start_pos + i) && not DataHandler.piece_dict.has(start_pos + i):
 				available_moves.append(start_pos + i)
 		return available_moves
-	#Portal
+	# Portal
 	else:
 		for i in coord_arr:
-			if DataHandler.golden_lines_dict.has(start_pos + i) && DataHandler.piece_dict.has(start_pos + i) == false:
+			if DataHandler.golden_lines_dict.has(start_pos + i) && not DataHandler.piece_dict.has(start_pos + i):
 				available_moves.append(start_pos + i)
 		return available_moves
 
@@ -107,7 +107,7 @@ func nexus_movement(start_pos):
 		for nexus_pos in nexus_positions:
 			for coord in coord_arr:
 				var move_pos = nexus_pos + coord
-				if move_pos != start_pos and not seen_moves.has(move_pos) && DataHandler.board_dict.has(move_pos) && DataHandler.piece_dict.has(move_pos) == false:
+				if move_pos != start_pos and not seen_moves.has(move_pos) && DataHandler.board_dict.has(move_pos) && not DataHandler.piece_dict.has(move_pos):
 					if DataHandler.piece_dict[start_pos].type not in [5,12]:
 						available_moves.append(move_pos)
 						seen_moves[move_pos] = true  # Mark this move as seen to prevent duplicates
@@ -120,7 +120,7 @@ func portal_movement(start_pos):
 	var available_moves = []
 	if typeof(DataHandler.golden_lines_dict[start_pos]) != 1:
 		for i in DataHandler.golden_lines_dict[start_pos]:
-			if DataHandler.piece_dict.has(i) == false:
+			if not DataHandler.piece_dict.has(i):
 				available_moves.append(i)
 		return available_moves
 	return []
@@ -128,7 +128,7 @@ func portal_movement(start_pos):
 func portal_phase(start_pos):
 	var available_moves = []
 	var phase_found = false
-	#NonPortal phasing through Portal
+	# NonPortal phasing through Portal
 	if DataHandler.piece_dict[start_pos].type not in [5,12]:
 		for i in coord_arr:
 			phase_found = false
@@ -136,9 +136,9 @@ func portal_phase(start_pos):
 			while DataHandler.piece_dict.has(temp_pos + i) && DataHandler.piece_dict[(temp_pos + i)].type in [5,12]:
 				temp_pos = (temp_pos + i)
 				phase_found = true
-			if phase_found == true && DataHandler.board_dict.has(temp_pos + i) && DataHandler.piece_dict.has(temp_pos + i) == false:
+			if phase_found == true && DataHandler.board_dict.has(temp_pos + i) && not DataHandler.piece_dict.has(temp_pos + i):
 				available_moves.append(temp_pos + i)
-	#Portal phasing through everything
+	# Portal phasing through everything
 	if DataHandler.piece_dict[start_pos].type in [5,12]:
 		for i in coord_arr:
 			phase_found = false
@@ -146,7 +146,7 @@ func portal_phase(start_pos):
 			while DataHandler.piece_dict.has(temp_pos + i):
 				temp_pos = (temp_pos + i)
 				phase_found = true
-			if phase_found == true && DataHandler.golden_lines_dict.has(temp_pos + i) && DataHandler.piece_dict.has(temp_pos + i) == false:
+			if phase_found == true && DataHandler.golden_lines_dict.has(temp_pos + i) && not DataHandler.piece_dict.has(temp_pos + i):
 				available_moves.append(temp_pos + i)
 	return available_moves
 
@@ -160,26 +160,26 @@ func portal_swap(start_pos):
 
 func attack(coord):
 	var player = check_player_of_piece(coord)
-	#Void Attack
+	# Void Attack
 	if DataHandler.piece_dict[coord].type in [6,13]:
-			for i in coord_arr:
-				if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && player != check_player_of_piece(coord +i):
-					DataHandler.piece_dict[coord + i].queue_free()
-					DataHandler.piece_dict.erase(coord + i)
-	#Portal Attack
+		for i in coord_arr:
+			if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && player != check_player_of_piece(coord +i):
+				DataHandler.piece_dict[coord + i].queue_free()
+				DataHandler.piece_dict.erase(coord + i)
+	# Portal Attack
 	elif DataHandler.piece_dict[coord].type in [5,12]:
 		for i in coord_arr:
-			#Standard Distance
+			# Standard Distance
 			if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && DataHandler.piece_dict[coord + i].type in [5,12] && player != check_player_of_piece(coord +i):
 				DataHandler.piece_dict[coord + i].queue_free()
 				DataHandler.piece_dict.erase(coord + i)
-			#Portal Distance
+			# Portal Distance
 			if typeof(DataHandler.golden_lines_dict[coord]) != 1:
 				for n in DataHandler.golden_lines_dict[coord]:
 					if DataHandler.piece_dict.has(n) == true && DataHandler.piece_dict[n].type in [5,12] && player != check_player_of_piece(n):
 						DataHandler.piece_dict[n].queue_free()
 						DataHandler.piece_dict.erase(n)
-	#Non-Portal Attack
+	# Non-Portal Attack
 	else:
 		for i in coord_arr:
 			if DataHandler.board_dict.has(coord + i) && DataHandler.piece_dict.has(coord + i) == true && DataHandler.piece_dict[coord + i].type not in [5,12] && player != check_player_of_piece(coord +i):
@@ -221,21 +221,21 @@ func get_fireball_targets(start_pos: Vector2, direction: Vector2) -> Array:
 		# Calculate target position by adding steps in the x and y direction separately
 		var target_pos = start_pos + Vector2(step_x * step, step_y * step)
 		# Check if the target position is on the board
-		if !DataHandler.board_dict.has(target_pos):
+		if not DataHandler.board_dict.has(target_pos):
 			break  # Stop checking further if out of bounds
-		# Check if the position is occupied by a Portal piece
-		if DataHandler.piece_dict.has(target_pos) and DataHandler.piece_dict[target_pos].type in [5, 12]:
-			break  # Fireball stops at Portal pieces
 		# Check if the position is occupied by an opponent's piece (non-Portal)
 		if DataHandler.piece_dict.has(target_pos) and check_player_of_piece(target_pos) != check_player_of_piece(start_pos):
+			# Check if the position is occupied by a Portal piece
+			if DataHandler.piece_dict[target_pos].type in [5, 12]:
+				break  # Fireball stops at Portal pieces
 			targets.append(target_pos)  # Add the opponent's piece as a valid target
 			break  # Stop after the first opponent piece
 		# If the position is empty, skip it (Fireball continues)
-		if !DataHandler.piece_dict.has(target_pos):
+		if not DataHandler.piece_dict.has(target_pos):
 			continue
 	return targets
 
-func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2)  -> Array:
+func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2) -> Array:
 	# Ensure the two Pearl pieces are adjacent (horizontally, vertically, or diagonally)
 	if not is_adjacent(pearl_pos1, pearl_pos2):
 		return []  # Return an empty array if Pearls are not adjacent
@@ -246,18 +246,17 @@ func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2)  -> Array:
 	# Check if the Pearls are aligned (horizontally, vertically, or diagonally)
 	if direction.x == 0 or direction.y == 0 or abs(direction.x) == abs(direction.y):
 		# Initialize an array to store Tidalwave moves in both directions
-		var tidalwave_targets = []
-		
+		var tidalwave_targets_1 = []
+		var tidalwave_targets_2 = []
 		# Forward direction (from pearl_pos2 outward)
-		tidalwave_targets.append_array(get_tidalwave_targets(pearl_pos2, direction))
+		tidalwave_targets_1.append_array(get_tidalwave_targets(pearl_pos2, direction))
 		# Backward direction (from pearl_pos1 outward in reverse direction)
-		tidalwave_targets.append_array(get_tidalwave_targets(pearl_pos1, -direction))
+		tidalwave_targets_2.append_array(get_tidalwave_targets(pearl_pos1, -direction))
 		# Return all possible target positions
-		return tidalwave_targets
+		return [tidalwave_targets_1, tidalwave_targets_2]
 	else:
 		print("Tidalwave: The two Pearls are not aligned properly!")
 		return []  # Return an empty array if Pearls are not properly aligned
-
 
 func get_tidalwave_targets(start_pos: Vector2, direction: Vector2) -> Array:
 	var targets = []
@@ -268,59 +267,150 @@ func get_tidalwave_targets(start_pos: Vector2, direction: Vector2) -> Array:
 	if direction.y != 0:
 		direction.y = direction.y / abs(direction.y)  # Ensure y is -1, 0, or 1
 
-	# Define the forward vector
-	var forward = direction
-	# Define the sideways offset to ensure the width of 5
-	var sideways = Vector2(-forward.y, forward.x)  # Perpendicular to the forward direction
+	# Determine if the direction is diagonal
+	var is_diagonal: bool = direction.x != 0 and direction.y != 0
+	var dir_right := Vector2(-direction.y, direction.x)  # Perpendicular vector to direction
+
+	# Forward and sideways distances for the tidal wave
+	var forward_dist = 4  # Extends 4 cells forward
+	var sideways_dist = 2  # 2 cells to either side
 
 	# A set to track unique positions
 	var seen_positions = {}
 
-	# Loop through the 4x5 Tidalwave area
-	for x in range(1, 5):  # 4 steps forward
-		for y_offset in range(-2, 3):  # 2 steps left and right (5-wide)
-			# Calculate the target position for each y_offset
-			var offset_vector = sideways * y_offset
-			var target_pos = start_pos + forward * x + offset_vector
-			print(target_pos)
-			# Check if it's a valid target
-			if _validate_target(start_pos, target_pos) and not seen_positions.has(target_pos):
-				# Mark it as processed
-				seen_positions[target_pos] = true
+	# Loop through forward distances
+	for i in range(1, forward_dist + 1):
+		# Calculate the leftmost position in the row
+		var leftmost_in_row: Vector2 = start_pos + i * direction - sideways_dist * dir_right
 
-				# Add the target to the list and remove the piece if needed
-				DataHandler.piece_dict[target_pos].queue_free()
-				DataHandler.piece_dict.erase(target_pos)
-				
-				targets.append(target_pos)
-				
+		# Loop through sideways distances for this row
+		for j in range(sideways_dist * 2 + 1):
+			var coords: Vector2 = leftmost_in_row + j * dir_right
 
-			# Check for intermediate diagonal positions (only for diagonal movement)
-			if abs(direction.x) == 1 and abs(direction.y) == 1:  # Diagonal directions
-				# Calculate the intermediate cells between diagonals
-				var additional_pos_1 = start_pos + forward * x + offset_vector + sideways
-				var additional_pos_2 = start_pos + forward * x + offset_vector - sideways
-				print(additional_pos_1)
-				print(additional_pos_2)
-				# Add intermediate positions if valid and not already processed
-				if _validate_target(start_pos, additional_pos_1) and not seen_positions.has(additional_pos_1):
-					seen_positions[additional_pos_1] = true
-					DataHandler.piece_dict[additional_pos_1].queue_free()
-					DataHandler.piece_dict.erase(additional_pos_1)
-					targets.append(additional_pos_1)
+			# Add to targets if valid and not already seen
+			if _validate_target(start_pos, coords) and not seen_positions.has(coords):
+				seen_positions[coords] = true
+				targets.append(coords)
 
-				if _validate_target(start_pos, additional_pos_2) and not seen_positions.has(additional_pos_2):
-					seen_positions[additional_pos_2] = true
-					DataHandler.piece_dict[additional_pos_2].queue_free()
-					DataHandler.piece_dict.erase(additional_pos_2)
-					targets.append(additional_pos_2)
+		# Handle intermediate cells for diagonals
+		if is_diagonal and i < forward_dist:
+			var leftmost_in_subrow: Vector2 = leftmost_in_row + (direction + dir_right) / 2
+
+			# Loop through intermediate cells
+			for j in range(sideways_dist * 2):
+				var coords: Vector2 = leftmost_in_subrow + j * dir_right
+
+				# Add to targets if valid and not already seen
+				if _validate_target(start_pos, coords) and not seen_positions.has(coords):
+					seen_positions[coords] = true
+					targets.append(coords)
 
 	return targets
+
+func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
+	# Ensure the two Amber pieces are aligned (horizontally, vertically, or diagonally)
+	if amber_pos1.x == amber_pos2.x or amber_pos1.y == amber_pos2.y or abs(amber_pos1.x - amber_pos2.x) == abs(amber_pos1.y - amber_pos2.y):
+		# Initialize an array to store valid target positions
+		var targets = []
+
+		# Determine the line between the two Amber pieces
+		var line_points = get_points_on_line(amber_pos1.x, amber_pos1.y, amber_pos2.x, amber_pos2.y)
+
+		# Iterate through the points on the line and process valid targets
+		for point in line_points:
+			if !DataHandler.board_dict.has(point):
+				continue  # Skip if out of bounds
+
+			if DataHandler.piece_dict.has(point):
+				var piece = DataHandler.piece_dict[point]
+
+				# Stop at Portal pieces
+				if piece.type in [5, 12]:
+					break  # Stop processing further along the line
+				
+				# Add opponent pieces to the targets
+				if GameLogic.check_player_of_piece(point) != GameLogic.check_player_of_piece(amber_pos1):
+					targets.append(point)
+		
+		# Return all valid targets
+		return targets
+	else:
+		print("Amber Sap: The two pieces are not aligned!")
+		return []  # Return an empty array if not aligned
+
+func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2) -> Array:
+	# Ensure the two Ruby pieces are adjacent (horizontally, vertically, or diagonally)
+	if not is_adjacent(jade_pos1, jade_pos2):
+		return []  # Return an empty array if Rubies are not adjacent
+
+	# Determine the direction of the Fireball based on the alignment of the two Rubies
+	var direction = jade_pos2 - jade_pos1
+
+	# Check if the Rubies are aligned (horizontally, vertically, or diagonally)
+	if direction.x == 0 or direction.y == 0 or abs(direction.x) == abs(direction.y):
+		# Initialize an array to store Fireball moves in both directions
+		var launch_targets_1 = []
+		var launch_targets_2 = []
+		
+		# Forward direction (from ruby_pos2 outward)
+		launch_targets_1.append_array(get_launch_targets(jade_pos2, direction))
+		# Backward direction (from ruby_pos1 outward in reverse direction)
+		launch_targets_2.append_array(get_launch_targets(jade_pos1, -direction))
+		# Return all possible target positions
+		return [launch_targets_1, launch_targets_2]
+	else:
+		return []  # Return an empty array if Rubies are not properly aligned
+
+func get_launch_targets(start_pos: Vector2, direction: Vector2) -> Array:
+	var launch_targets = []
+	
+	# Determine step direction for both x and y axes separately
+	var step_x = sign(direction.x)
+	var step_y = sign(direction.y)
+
+	for step in range(1, 5):  # Launch can move up to 4 spaces
+		# Calculate target position by adding steps in the x and y direction separately
+		var target_pos = start_pos + Vector2(step_x * step, step_y * step)
+		# Check if the target position is on the board
+		if not DataHandler.board_dict.has(target_pos):
+			break  # Stop checking further if out of bounds
+		# Check if the position is occupied by a Portal piece
+		if DataHandler.piece_dict.has(target_pos) and DataHandler.piece_dict[target_pos].type in [5, 12]:
+			break  # Fireball stops at Portal pieces
+		# Check if the position is occupied by an opponent's piece (non-Portal)
+		if DataHandler.piece_dict.has(target_pos) and check_player_of_piece(target_pos) != check_player_of_piece(start_pos):
+			launch_targets.append(target_pos)  # Add the opponent's piece as a valid target
+			break  # Stop after the first opponent piece
+		# If the position is empty, skip it (Fireball continues)
+		if not DataHandler.piece_dict.has(target_pos):
+			continue
+	return launch_targets
+
+# Helper function to get points on a line between two coordinates
+func get_points_on_line(x1: int, y1: int, x2: int, y2: int) -> Array:
+	var points = []
+	# Vertical line
+	if x1 == x2:
+		var step = 1 if y2 > y1 else -1
+		for y in range(y1 + step, y2, step):
+			points.append(Vector2(x1, y))
+	# Horizontal line
+	elif y1 == y2:
+		var step = 1 if x2 > x1 else -1
+		for x in range(x1 + step, x2, step):
+			points.append(Vector2(x, y1))
+	# Diagonal line
+	elif abs(x2 - x1) == abs(y2 - y1):
+		var x_step = 1 if x2 > x1 else -1
+		var y_step = 1 if y2 > y1 else -1
+		for i in range(1, abs(x2 - x1)):
+			points.append(Vector2(x1 + i * x_step, y1 + i * y_step))
+	return points
 
 # Helper function to validate a target position
 func _validate_target(start_pos: Vector2, target_pos: Vector2) -> bool:
 	# Check if the target position is on the board
-	if !DataHandler.board_dict.has(target_pos):
+	if not DataHandler.board_dict.has(target_pos):
 		return false  # Out of bounds
 
 	# Check if the position is occupied by a Portal piece
@@ -332,6 +422,3 @@ func _validate_target(start_pos: Vector2, target_pos: Vector2) -> bool:
 		return true  # Valid opponent target
 
 	return false  # Not valid if empty or not an opponent
-
-#DataHandler.piece_dict[target_pos].queue_free()
-#DataHandler.piece_dict.erase(target_pos)
