@@ -3,6 +3,8 @@ extends Control
 @onready var slot_scene = preload("res://Scenes/slot.tscn")
 @onready var board_grid = $Board/BoardGrid
 @onready var piece_scene = preload("res://Scenes/piece.tscn")
+@onready var arrow_scene = preload("res://Scenes/arrows.tscn")
+@onready var indicator_scene = preload("res://Scenes/indicators.tscn")
 
 var grid_array := []
 var movement_indicators = []
@@ -12,6 +14,7 @@ func _ready() -> void:
 	SignalBus.show_correct_icons.connect(show_correct_icons)
 	SignalBus.movement_options.connect(show_movement_indicators)
 	SignalBus.reset_movement_options.connect(reset_movement_indicators)
+	SignalBus.reset_ability_indicators.connect(reset_arrows)
 	var ycor = 12
 	for i in range(25):
 		var xcor = -12
@@ -79,7 +82,7 @@ func add_piece(piece_type, location)->void:
 		get_node("../Gameplay").add_child(new_piece)
 		new_piece.type = piece_type
 		new_piece.load_icon(piece_type)
-		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset
+		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.piece_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
 	elif DataHandler.slot_is_empty() && piece_type in [5,12] && DataHandler.golden_lines_dict.has(location):
@@ -87,7 +90,7 @@ func add_piece(piece_type, location)->void:
 		get_node("../Gameplay").add_child(new_piece)
 		new_piece.type = piece_type
 		new_piece.load_icon(piece_type)
-		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.icon_offset
+		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.piece_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
 	else:
@@ -123,55 +126,87 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/PortalSwap.button_pressed = true
 		DataHandler.swap_ready = DataHandler.clicked_piece
-		print(DataHandler.swap_ready)
 	else:
 		$Background/PortalSwap.button_pressed = false
 		DataHandler.swap_ready = null
-		print(DataHandler.swap_ready)
 
 #Fireball
 func _on_fireball_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/Fireball.button_pressed = true
 		DataHandler.fireball_ready = true
-		print(DataHandler.fireball_ready)
+		if DataHandler.ruby_indicator_coord != null:
+			for i in DataHandler.ruby_targets.size():
+				if DataHandler.ruby_targets[i] != []:
+					var arrow = arrow_scene.instantiate()
+					get_node("../Indicators").add_child(arrow)
+					arrow.global_position = DataHandler.board_dict[DataHandler.ruby_indicator_coord[i][0]].global_position + DataHandler.arrow_offset
+					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(DataHandler.ruby_indicator_coord[i][1])
+					#Set Data for instance
+					arrow.pos = DataHandler.ruby_indicator_coord[i][0]
+					arrow.targets = DataHandler.ruby_targets[i]
+				
 	else:
 		$Background/Fireball.button_pressed = false
 		DataHandler.fireball_ready = false
-		print(DataHandler.fireball_ready)
+		reset_arrows()
 
 #Tidalwave
 func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/TidalWave.button_pressed = true
 		DataHandler.tidalwave_ready = true
-		print(DataHandler.tidalwave_ready)
+		if DataHandler.pearl_indicator_coord != null:
+			for i in DataHandler.pearl_targets.size():
+				if DataHandler.pearl_targets[i] != []:
+					var arrow = arrow_scene.instantiate()
+					get_node("../Indicators").add_child(arrow)
+					arrow.global_position = DataHandler.board_dict[DataHandler.pearl_indicator_coord[i][0]].global_position + DataHandler.arrow_offset
+					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(DataHandler.pearl_indicator_coord[i][1])
+					#Set Data for instance
+					arrow.pos = DataHandler.pearl_indicator_coord[i][0]
+					arrow.targets = DataHandler.pearl_targets[i]
 	else:
 		$Background/TidalWave.button_pressed = false
 		DataHandler.tidalwave_ready = false
-		print(DataHandler.tidalwave_ready)
-
+		reset_arrows()
 #Sap
 func _on_sap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/Sap.button_pressed = true
 		DataHandler.sap_ready = true
-		print(DataHandler.sap_ready)
+		if DataHandler.amber_indicator_coord != null:
+			for i in DataHandler.amber_targets.size():
+				for amber_data in DataHandler.amber_indicator_coord[i]:
+					var arrow = arrow_scene.instantiate()
+					get_node("../Indicators").add_child(arrow)
+					arrow.global_position = DataHandler.board_dict[amber_data[0]].global_position + DataHandler.arrow_offset
+					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(amber_data[1])
+					#Set Data for instance
+					arrow.pos = amber_data[0]
+					arrow.targets = DataHandler.amber_targets[i]
 	else:
 		$Background/Sap.button_pressed = false
 		DataHandler.sap_ready = false
-		print(DataHandler.sap_ready)
+		reset_arrows()
 
 #Launch
 func _on_launch_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/Launch.button_pressed = true
 		DataHandler.launch_ready = true
-		print(DataHandler.launch_ready)
+		for i in DataHandler.jade_targets.size():
+			for n in DataHandler.jade_targets[i]:
+				var indicator = indicator_scene.instantiate()
+				get_node("../Indicators").add_child(indicator)
+				indicator.global_position = DataHandler.board_dict[n].global_position + DataHandler.arrow_offset
+				#Set Data for instance
+				indicator.pos = n
+				indicator.targets = DataHandler.jade_targets[i]
 	else:
 		$Background/Launch.button_pressed = false
 		DataHandler.launch_ready = false
-		print(DataHandler.launch_ready)
+		reset_arrows()
 	
 func _on_setup_pressed() -> void:
 	for n in get_node("../Gameplay").get_children():
@@ -193,23 +228,23 @@ func reset_movement_indicators():
 
 func show_correct_icons(piece):
 	if piece != null:
-		if  piece.type in [5,12]:
+		if  piece == "Portal":
 			$Background/PortalSwap.visible = true
 			$Background/PortalSwap.button_pressed = false
 			DataHandler.swap_ready = null
-		elif  piece.type in [0,7]:
+		if  piece == "Ruby":
 			$Background/Fireball.visible = true
 			$Background/Fireball.button_pressed = false
 			DataHandler.fireball_ready = false
-		elif  piece.type in [1,8]:
+		if  piece == "Pearl":
 			$Background/TidalWave.visible = true
 			$Background/TidalWave.button_pressed = false
 			DataHandler.tidalwave_ready = false
-		elif  piece.type in [2,9]:
+		if  piece == "Amber":
 			$Background/Sap.visible = true
 			$Background/Sap.button_pressed = false
 			DataHandler.sap_ready = false
-		elif  piece.type in [2,9]:
+		if  piece == "Jade":
 			$Background/Launch.visible = true
 			$Background/Launch.button_pressed = false
 			DataHandler.launch_ready = false
@@ -218,3 +253,8 @@ func show_correct_icons(piece):
 		$Background/Fireball.visible = false
 		$Background/TidalWave.visible = false
 		$Background/Sap.visible = false
+		$Background/Launch.visible = false
+
+func reset_arrows():
+	for n in get_node("../Indicators").get_children():
+			n.queue_free()

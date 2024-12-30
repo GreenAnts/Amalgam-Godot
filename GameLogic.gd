@@ -197,14 +197,15 @@ func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2) -> Array:
 	# Check if the Rubies are aligned (horizontally, vertically, or diagonally)
 	if direction.x == 0 or direction.y == 0 or abs(direction.x) == abs(direction.y):
 		# Initialize an array to store Fireball moves in both directions
-		var fireball_moves = []
-		
+		var fireball_targets_1 = []
+		var fireball_targets_2 = []
 		# Forward direction (from ruby_pos2 outward)
-		fireball_moves.append_array(get_fireball_targets(ruby_pos2, direction))
+		fireball_targets_1.append_array(get_fireball_targets(ruby_pos2, direction))
 		# Backward direction (from ruby_pos1 outward in reverse direction)
-		fireball_moves.append_array(get_fireball_targets(ruby_pos1, -direction))
+		fireball_targets_2.append_array(get_fireball_targets(ruby_pos1, -direction))
 		# Return all possible target positions
-		return fireball_moves
+		DataHandler.ruby_indicator_coord = [[ruby_pos2, direction],[ruby_pos1, -direction]]
+		return [fireball_targets_1, fireball_targets_2]
 	else:
 		print("Fireball: The two Rubies are not aligned properly!")
 		return []  # Return an empty array if Rubies are not properly aligned
@@ -212,7 +213,7 @@ func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2) -> Array:
 # Function to calculate the potential fireball target positions
 func get_fireball_targets(start_pos: Vector2, direction: Vector2) -> Array:
 	var targets = []
-	
+	DataHandler.ruby_indicator_coord = []
 	# Determine step direction for both x and y axes separately
 	var step_x = sign(direction.x)
 	var step_y = sign(direction.y)
@@ -240,7 +241,7 @@ func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2) -> Array:
 	if not is_adjacent(pearl_pos1, pearl_pos2):
 		return []  # Return an empty array if Pearls are not adjacent
 	
-	# Determine the direction of the Tidalwave based on the alignment of the two Rubies
+	# Determine the direction of the Tidalwave based on the alignment of the two Pearls
 	var direction = pearl_pos2 - pearl_pos1
 	
 	# Check if the Pearls are aligned (horizontally, vertically, or diagonally)
@@ -253,6 +254,7 @@ func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2) -> Array:
 		# Backward direction (from pearl_pos1 outward in reverse direction)
 		tidalwave_targets_2.append_array(get_tidalwave_targets(pearl_pos1, -direction))
 		# Return all possible target positions
+		DataHandler.pearl_indicator_coord = [[pearl_pos2, direction],[pearl_pos1, -direction]]
 		return [tidalwave_targets_1, tidalwave_targets_2]
 	else:
 		print("Tidalwave: The two Pearls are not aligned properly!")
@@ -260,7 +262,8 @@ func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2) -> Array:
 
 func get_tidalwave_targets(start_pos: Vector2, direction: Vector2) -> Array:
 	var targets = []
-
+	DataHandler.pearl_indicator_coord = []
+	
 	# Normalize the direction to ensure correct grid-based movement
 	if direction.x != 0:
 		direction.x = direction.x / abs(direction.x)  # Ensure x is -1, 0, or 1
@@ -304,7 +307,8 @@ func get_tidalwave_targets(start_pos: Vector2, direction: Vector2) -> Array:
 				if _validate_target(start_pos, coords) and not seen_positions.has(coords):
 					seen_positions[coords] = true
 					targets.append(coords)
-
+	if targets != []:
+		DataHandler.pearl_indicator_coord.append([start_pos, direction])
 	return targets
 
 func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
@@ -339,30 +343,36 @@ func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
 		return []  # Return an empty array if not aligned
 
 func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2) -> Array:
-	# Ensure the two Ruby pieces are adjacent (horizontally, vertically, or diagonally)
+	# Ensure the two Jade pieces are adjacent (horizontally, vertically, or diagonally)
 	if not is_adjacent(jade_pos1, jade_pos2):
-		return []  # Return an empty array if Rubies are not adjacent
-
-	# Determine the direction of the Fireball based on the alignment of the two Rubies
+		return []  # Return an empty array if Jades are not adjacent
+	
+	# Determine the direction of the Launch based on the alignment of the two Jades
 	var direction = jade_pos2 - jade_pos1
-
-	# Check if the Rubies are aligned (horizontally, vertically, or diagonally)
+	
+	# Check if the Jades are aligned (horizontally, vertically, or diagonally)
 	if direction.x == 0 or direction.y == 0 or abs(direction.x) == abs(direction.y):
-		# Initialize an array to store Fireball moves in both directions
-		var launch_targets_1 = []
-		var launch_targets_2 = []
-		
-		# Forward direction (from ruby_pos2 outward)
-		launch_targets_1.append_array(get_launch_targets(jade_pos2, direction))
-		# Backward direction (from ruby_pos1 outward in reverse direction)
-		launch_targets_2.append_array(get_launch_targets(jade_pos1, -direction))
+		# Initialize a Vector2 to store Launch piece in both directions
+		var launch_piece_1 = null
+		var launch_piece_2 = null
+		# Forward direction (from jade_pos2 outward)
+		if DataHandler.piece_dict.has(jade_pos2 + direction):
+			launch_piece_1 = { "Piece": (jade_pos2 + direction),
+								"launch": get_launch_targets(jade_pos1, -direction)
+				}
+		# Backward direction (from jade_pos1 outward in reverse direction)
+		if DataHandler.piece_dict.has(jade_pos1 - direction):
+			launch_piece_2 = { "Piece": (jade_pos1 - direction),
+								"launch": get_launch_targets(jade_pos2, direction)
+				}
 		# Return all possible target positions
-		return [launch_targets_1, launch_targets_2]
+		return [launch_piece_1, launch_piece_2]
 	else:
-		return []  # Return an empty array if Rubies are not properly aligned
+		print("Launch: The two Jades are not aligned properly!")
+		return []  # Return an empty array if Jades are not properly aligned
 
 func get_launch_targets(start_pos: Vector2, direction: Vector2) -> Array:
-	var launch_targets = []
+	var targets = []
 	
 	# Determine step direction for both x and y axes separately
 	var step_x = sign(direction.x)
@@ -374,18 +384,12 @@ func get_launch_targets(start_pos: Vector2, direction: Vector2) -> Array:
 		# Check if the target position is on the board
 		if not DataHandler.board_dict.has(target_pos):
 			break  # Stop checking further if out of bounds
-		# Check if the position is occupied by a Portal piece
-		if DataHandler.piece_dict.has(target_pos) and DataHandler.piece_dict[target_pos].type in [5, 12]:
-			break  # Fireball stops at Portal pieces
-		# Check if the position is occupied by an opponent's piece (non-Portal)
-		if DataHandler.piece_dict.has(target_pos) and check_player_of_piece(target_pos) != check_player_of_piece(start_pos):
-			launch_targets.append(target_pos)  # Add the opponent's piece as a valid target
-			break  # Stop after the first opponent piece
-		# If the position is empty, skip it (Fireball continues)
-		if not DataHandler.piece_dict.has(target_pos):
-			continue
-	return launch_targets
-
+		# Check if the position is occupied by your own piece
+		if DataHandler.piece_dict.has(target_pos) and check_player_of_piece(target_pos) == check_player_of_piece(start_pos):
+			continue  # Launch cannot land on your own piece
+		targets.append(target_pos)  # Add the intersection as a valid launch
+	return targets
+	
 # Helper function to get points on a line between two coordinates
 func get_points_on_line(x1: int, y1: int, x2: int, y2: int) -> Array:
 	var points = []

@@ -5,13 +5,32 @@ var slot_ID := Vector2(0, 0)
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SignalBus.toggle_add_piece.connect(adding_piece)
+	SignalBus.bypass_piece_to_slot.connect(bypass)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
 
 func adding_piece(piece):
 	DataHandler.add_piece = piece
+
+func bypass(passed_slot_id):
+	if passed_slot_id == self.slot_ID:
+		DataHandler.clicked_slot = slot_ID
+		if DataHandler.launch_ready_step_2 == true:
+			print("LAUNCH Step 2 Ready")
+			# Loop through sap_targets to check if the current slot is one of the targets
+			for movement_info in DataHandler.selected_launch_targets:
+				# Check if the current slot is in any of the target lists
+				if self.slot_ID == movement_info:
+					# Execute sap on this target
+					SignalBus.reset_movement_options.emit()
+					DataHandler.launch(self.slot_ID)
+					# Reset the sap ability and clear targets
+					SignalBus.show_correct_icons.emit(null)
+					DataHandler.launch_ready_step_2 = false
+					break  # Exit loop once sap is used
+				else:
+					DataHandler.launch_ready_step_2 = true
+		else:
+			DataHandler.change_pos()
 
 func _on_color_rect_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
@@ -23,59 +42,28 @@ func _on_color_rect_gui_input(event: InputEvent) -> void:
 			#SWAP
 			elif DataHandler.swap_ready != null:
 				DataHandler.swap_pos()
-			#FIREBALL
+			#When an ability is toggled on, don't register clicks.
 			elif DataHandler.fireball_ready == true:
-				print("FB Ready")
-				if DataHandler.piece_dict.has(self.slot_ID):
-					var player = GameLogic.check_player_of_piece(self.slot_ID)
-				# Loop through ruby_targets to check if the current slot is one of the targets
-				for target_info in DataHandler.ruby_targets:
-					# Check if the current slot is in any of the target lists
-					if self.slot_ID in target_info:
-						# Execute fireball on this target
-						DataHandler.fireball(self.slot_ID)
-						# Reset the fireball ability and clear targets
-						SignalBus.show_correct_icons.emit(null)
-						DataHandler.fireball_ready = false
-						SignalBus.reset_movement_options.emit()
-						break  # Exit loop once fireball is used
-					else:
-						DataHandler.fireball_ready = true
-			#TIDALWAVE
+				pass
 			elif DataHandler.tidalwave_ready == true:
-				print("TW Ready")
-				if DataHandler.piece_dict.has(self.slot_ID):
-					var player = GameLogic.check_player_of_piece(self.slot_ID)
-				# Loop through pearl_targets to check if the current slot is one of the targets
-				for target_info in DataHandler.pearl_targets:
-					# Check if the current slot is in any of the target lists
-					if self.slot_ID in target_info:
-						# Execute tidalwave on this target
-						DataHandler.tidalwave(self.slot_ID)
-						# Reset the tidalwave ability and clear targets
-						SignalBus.show_correct_icons.emit(null)
-						DataHandler.tidalwave_ready = false
-						SignalBus.reset_movement_options.emit()
-						break  # Exit loop once tidalwave is used
-					else:
-						DataHandler.tidalwave_ready = true
+				pass
 			elif DataHandler.sap_ready == true:
-				print("SAP Ready")
-				if DataHandler.piece_dict.has(self.slot_ID):
-					var player = GameLogic.check_player_of_piece(self.slot_ID)
+				pass
+			elif DataHandler.launch_ready_step_2 == true:
+				print("LAUNCH Step 2 Ready")
 				# Loop through sap_targets to check if the current slot is one of the targets
-				for target_info in DataHandler.amber_targets:
+				for movement_info in DataHandler.selected_launch_targets:
 					# Check if the current slot is in any of the target lists
-					if self.slot_ID in target_info:
+					if self.slot_ID == movement_info:
 						# Execute sap on this target
-						DataHandler.sap(self.slot_ID)
+						SignalBus.reset_movement_options.emit()
+						DataHandler.launch(self.slot_ID)
 						# Reset the sap ability and clear targets
 						SignalBus.show_correct_icons.emit(null)
-						DataHandler.sap_ready = false
-						SignalBus.reset_movement_options.emit()
+						DataHandler.launch_ready_step_2 = false
 						break  # Exit loop once sap is used
 					else:
-						DataHandler.sap_ready = true
+						DataHandler.launch_ready_step_2 = true
 			else:
 				DataHandler.change_pos()
 			

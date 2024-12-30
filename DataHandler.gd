@@ -225,7 +225,8 @@ var piece_dict := {}
 
 var clicked_piece = Vector2()
 var clicked_slot = Vector2()
-var icon_offset := Vector2(20, 20)
+var piece_offset := Vector2(20, 20)
+var arrow_offset := Vector2(20, 20)
 
 var indicators_active = false
 
@@ -235,14 +236,19 @@ var fireball_ready = false
 var tidalwave_ready = false
 var sap_ready = false
 var launch_ready = false
+var launch_ready_step_2 = false
 
 #Abilities
 var ruby_targets = []
 var pearl_targets = []
 var amber_targets = []
 var jade_targets = []
+var selected_launch_targets = null
 
-var piece_using_ability = Vector2()
+#used for where to place arrow indicators when selecting the ability
+var ruby_indicator_coord = []
+var pearl_indicator_coord = []
+var amber_indicator_coord = []
 
 var add_piece = null
 var remove = false
@@ -265,9 +271,10 @@ func _ready() -> void:
 	assets.append("res://Images/Pieces/Amalgam_Square.png") #11
 	assets.append("res://Images/Pieces/Portal_Square.png") #12
 	assets.append("res://Images/Pieces/Void_Square.png") #13
-	#Misc
-	assets.append("res://Images/Icons/Portal_Swap.png") #14
-	assets.append("res://Images/Icons/Portal_Swap_Toggle.png") #15
+	#Indicators
+	assets.append("res://Images/Misc/Green_Indicator.png") #14
+	assets.append("res://Images/Misc/Blue_Indicator.png") #15
+	assets.append("res://Images/Misc/Purple_Indicator.png") #16
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 
 #func _process(delta: float) -> void:
@@ -281,8 +288,8 @@ func swap_pos():
 	if piece_dict.has(clicked_slot) && piece_dict.has(clicked_piece) && piece_dict[swap_ready].type in [5,12]:
 		if GameLogic.move_is_valid(swap_ready, clicked_slot):
 			#Change Pieces positions'
-			piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + icon_offset
-			piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + icon_offset
+			piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + piece_offset
+			piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + piece_offset
 			#Update piece.slot_ID
 			SignalBus.changed_piece.emit(piece_dict[swap_ready], clicked_slot)
 			SignalBus.changed_piece.emit(piece_dict[clicked_slot], swap_ready)
@@ -296,18 +303,20 @@ func swap_pos():
 			clicked_piece = null
 			DataHandler.swap_ready = null
 			SignalBus.show_correct_icons.emit(null)
+			
 
 func change_pos():
 	if piece_dict.has(clicked_piece):
 		if !piece_dict.has(clicked_slot) and GameLogic.move_is_valid(clicked_piece, clicked_slot):
 			# Update piece position
-			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + icon_offset
+			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + piece_offset
 			SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
 			piece_dict[clicked_slot] = piece_dict[clicked_piece]
 			piece_dict.erase(clicked_piece)
 			SignalBus.reset_movement_options.emit()
 			indicators_active = false
-			
+			clicked_piece = null
+			SignalBus.show_correct_icons.emit(null)
 			# Attack phase
 			GameLogic.attack(clicked_slot)
 			
@@ -333,12 +342,14 @@ func check_ability(player: bool, moved_piece: Vector2):
 		check_fireball(player, moved_piece)
 		check_tidalwave(player, moved_piece)
 		check_sap(player, moved_piece)
+	check_launch(player, moved_piece)
 	
 	#DEBUG
-	debug_remove_pieces.append(ruby_targets)
-	debug_remove_pieces.append(pearl_targets)
-	debug_remove_pieces.append(amber_targets)
-	debug_remove(debug_remove_pieces)
+	#debug_remove_pieces.append(ruby_targets)
+	#debug_remove_pieces.append(pearl_targets)
+	#debug_remove_pieces.append(amber_targets)
+	#debug_remove_pieces.append(jade_targets)
+	#debug_remove(debug_remove_pieces)
 	#END DEBUG
 
 func check_fireball(player: bool, moved_piece: Vector2):
@@ -368,11 +379,10 @@ func check_fireball(player: bool, moved_piece: Vector2):
 					DataHandler.ruby_targets.append_array(targets)
 
 	# If valid targets exist, mark Fireball as ready and show indicator
-	if DataHandler.ruby_targets.size() > 0:
-		print(ruby_targets)
+	if DataHandler.ruby_targets.size() > 0 && (DataHandler.ruby_targets[0].size() > 0 || DataHandler.ruby_targets[1].size() > 0):
 		DataHandler.fireball_ready = false
-		# Highlight the first valid Ruby piece
-		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[moved_piece]) # Needs to be updated to catch amalgam movement. but still send ruby
+		# Show Ruby Icon
+		SignalBus.show_correct_icons.emit("Ruby")
 
 func check_tidalwave(player: bool, moved_piece: Vector2):
 	# Clear previous targets and ready state
@@ -380,7 +390,6 @@ func check_tidalwave(player: bool, moved_piece: Vector2):
 	DataHandler.tidalwave_ready = false
 
 	var pearls = []
-	var amalgam = []
 	# Collect Pearls and Amalgams based on the player's type (Circle or Square)
 	for piece_pos in DataHandler.piece_dict:
 		var piece = DataHandler.piece_dict[piece_pos]
@@ -393,7 +402,7 @@ func check_tidalwave(player: bool, moved_piece: Vector2):
 
 	# Check combinations for valid Tidalwave targets
 	for pearl_pos in pearls:
-		for secondary_piece in pearls + amalgam:
+		for secondary_piece in pearls:
 			if pearl_pos < secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece):
 				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece)
 				if targets.size() > 0:
@@ -401,18 +410,17 @@ func check_tidalwave(player: bool, moved_piece: Vector2):
 
 
 	# Update ready state and show indicator if targets exist
-	if DataHandler.pearl_targets.size() > 0:
-		print(pearl_targets)
+	if DataHandler.pearl_targets.size() > 0 && (DataHandler.pearl_targets[0].size() > 0 || DataHandler.pearl_targets[1].size() > 0):
 		DataHandler.tidalwave_ready = false
-		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[moved_piece])
+		SignalBus.show_correct_icons.emit("Pearl")
 
 func check_sap(player: bool, moved_piece: Vector2):
 	# Clear previous targets and ready state
 	DataHandler.amber_targets.clear()
 	DataHandler.sap_ready = false
+	DataHandler.amber_indicator_coord = []
 
 	var ambers = []
-	var amalgams = []
 
 	# Collect Amber and Amalgam pieces based on the player's type (Circle or Square)
 	for piece_pos in DataHandler.piece_dict:
@@ -425,53 +433,125 @@ func check_sap(player: bool, moved_piece: Vector2):
 				ambers.append(piece_pos)
 
 	# Check combinations for valid Sap targets
+	var temp_targets = []
 	for amber_pos in ambers:
-		for secondary_piece in ambers + amalgams:
+		for secondary_piece in ambers:
 			if amber_pos < secondary_piece and (moved_piece == amber_pos or moved_piece == secondary_piece):
 				var targets = GameLogic.amber_sap(amber_pos, secondary_piece)
 				if targets.size() > 0:
-					DataHandler.amber_targets.append_array(targets)
+					var amber1_data = [amber_pos, get_direction(amber_pos, secondary_piece)]
+					var amber2_data = [secondary_piece, get_direction(secondary_piece, amber_pos)]
+					DataHandler.amber_indicator_coord.append([amber1_data, amber2_data])
+					temp_targets.append(targets)
+	DataHandler.amber_targets.append_array(temp_targets)
+	
 
 	# Update ready state and show indicator if targets exist
 	if DataHandler.amber_targets.size() > 0:
-		print(amber_targets)
 		DataHandler.sap_ready = false
-		SignalBus.show_correct_icons.emit(DataHandler.piece_dict[moved_piece])
+		SignalBus.show_correct_icons.emit("Amber")
 
-func fireball(target_pos: Vector2):
-	# Validate the target exists before removing it
-	if DataHandler.piece_dict.has(target_pos):
-		DataHandler.piece_dict[target_pos].queue_free()
-		DataHandler.piece_dict.erase(target_pos)
-	else:
-		print("Error: Attempted to fireball a piece that doesn't exist.")
+func check_launch(player: bool, moved_piece: Vector2):
+	DataHandler.jade_targets.clear()
+	var jades = []
 
-func tidalwave(target_pos: Vector2):
+	# Collect Jade and Amalgam pieces
+	for piece_pos in DataHandler.piece_dict:
+		var piece = DataHandler.piece_dict[piece_pos]
+		if player:  # Circle player
+			if piece.type == 3 or piece.type == 4:  # Jade or Amalgam
+				jades.append(piece_pos)
+		else:  # Square player
+			if piece.type == 10 or piece.type == 11:  # Jade or Amalgam
+				jades.append(piece_pos)
+
+	# Check adjacent Jade pairs
+	for jade_pos in jades:
+		for secondary_piece in jades:
+			if jade_pos < secondary_piece:
+				var launch_pieces = GameLogic.jade_launch(jade_pos, secondary_piece)
+				if launch_pieces != []:
+					if launch_pieces[0] != null && (moved_piece == launch_pieces[0]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece):
+						DataHandler.jade_targets.append({launch_pieces[0]["Piece"] : launch_pieces[0]["launch"]})
+					if launch_pieces[1] != null && (moved_piece == launch_pieces[1]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece):
+						DataHandler.jade_targets.append({launch_pieces[1]["Piece"] : launch_pieces[1]["launch"]})
+
+
+	if DataHandler.jade_targets.size() > 0:
+		DataHandler.launch_ready = false
+		SignalBus.show_correct_icons.emit("Jade")
+
+func fireball(target_pos: Array):
 	# Validate the target exists before removing it
-	print(pearl_targets)
-	if DataHandler.piece_dict.has(target_pos):
-		DataHandler.piece_dict[target_pos].queue_free()
-		DataHandler.piece_dict.erase(target_pos)
-	else:
-		print("Error: Attempted to tidalwave a piece that doesn't exist.")
+	for i in target_pos:
+		if DataHandler.piece_dict.has(i):
+			DataHandler.piece_dict[i].queue_free()
+			DataHandler.piece_dict.erase(i)
+			DataHandler.ruby_indicator_coord = []
+		else:
+			print("Error: Attempted to fireball a piece that doesn't exist.")
+
+func tidalwave(target_pos: Array):
+	# Validate the target exists before removing it
+	for i in target_pos:
+		if DataHandler.piece_dict.has(i):
+			DataHandler.piece_dict[i].queue_free()
+			DataHandler.piece_dict.erase(i)
+			DataHandler.pearl_indicator_coord = []
+		else:
+			print("Error: Attempted to tidalwave a piece that doesn't exist.")
 
 # Function to execute the Sap ability
-func sap(target_pos: Vector2):
+func sap(target_pos: Array):
 	# Validate the target exists before removing it
-	if DataHandler.piece_dict.has(target_pos):
-		DataHandler.piece_dict[target_pos].queue_free()
-		DataHandler.piece_dict.erase(target_pos)
-	else:
-		print("Error: Attempted to sap a piece that doesn't exist.")
+	for i in target_pos:
+		if DataHandler.piece_dict.has(i):
+			DataHandler.piece_dict[i].queue_free()
+			DataHandler.piece_dict.erase(i)
+			DataHandler.amber_indicator_coord = []
+		else:
+			print("Error: Attempted to sap a piece that doesn't exist.")
+
+# Function to execute the Launch ability
+func launch(target_pos):
+	for i in jade_targets.size():
+		if launch_ready == true && launch_ready_step_2 == false:
+			if piece_dict.has(clicked_piece) && jade_targets[i].has(clicked_piece):
+				SignalBus.movement_options.emit(jade_targets[i][clicked_piece])
+				launch_ready = false
+				launch_ready_step_2 = true
+				selected_launch_targets = jade_targets[i][clicked_piece]
+				break
+		elif launch_ready == false && launch_ready_step_2 == true:
+			if jade_targets[i].has(clicked_piece) && jade_targets[i][clicked_piece].has(target_pos):
+				if target_pos in piece_dict:
+					
+					var player = GameLogic.check_player_of_piece(clicked_piece)
+					var player_target = GameLogic.check_player_of_piece(clicked_slot)
+					if player != player_target:
+						DataHandler.piece_dict[target_pos].queue_free()
+						DataHandler.piece_dict.erase(target_pos)
+				piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + piece_offset
+				SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
+				piece_dict[clicked_slot] = piece_dict[clicked_piece]
+				piece_dict.erase(clicked_piece)
+				SignalBus.reset_movement_options.emit()
+				indicators_active = false
+				
+				# Attack phase
+				GameLogic.attack(clicked_slot)
+				
+				# Abilities
+				var player = GameLogic.check_player_of_piece(clicked_slot)
+				check_ability(player, clicked_slot)
+				launch_ready_step_2 = false
+				selected_launch_targets = null
 
 func debug_remove(target_array):
-	print(target_array)
 	if typeof(target_array) == 5 && piece_dict.has(target_array):
 		piece_dict[target_array].queue_free()
 		piece_dict.erase(target_array)
 	for i in target_array:
-		print(typeof(i))
-		print(i)
 		if typeof(i) == 28:
 			for n in i:
 				if typeof(n) == 5 && piece_dict.has(n):
@@ -485,3 +565,46 @@ func debug_remove(target_array):
 		elif typeof(i) == 5 && piece_dict.has(i):
 			piece_dict[i].queue_free()
 			piece_dict.erase(i)
+
+func get_direction(coord1: Vector2, coord2: Vector2) -> Vector2:
+	# Calculate the raw direction vector
+	var dx = coord2.x - coord1.x
+	var dy = coord2.y - coord1.y
+
+	# Normalize the direction to the closest cardinal or diagonal direction
+	if dx > 0:
+		dx = 1
+	elif dx < 0:
+		dx = -1
+	else:
+		dx = 0
+
+	if dy > 0:
+		dy = 1
+	elif dy < 0:
+		dy = -1
+	else:
+		dy = 0
+
+	return Vector2(dx, dy)
+
+func convert_direction_to_rotation(direction: Vector2) -> float:
+	if direction == Vector2(1, 0):  # Right
+		return 90
+	elif direction == Vector2(1, -1):  # Down-Right
+		return 135
+	elif direction == Vector2(0, -1):  # Down
+		return 180
+	elif direction == Vector2(-1, -1):  # Down-Left
+		return 225
+	elif direction == Vector2(-1, 0):  # Left
+		return 270
+	elif direction == Vector2(-1, 1):  # Up-Left
+		return 315
+	elif direction == Vector2(0, 1):  # Up
+		return 0
+	elif direction == Vector2(1, 1):  # Up-Right
+		return 45
+	else:
+		# If the input direction does not match any expected value, return -1 or an appropriate default
+		return -1
