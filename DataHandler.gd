@@ -328,7 +328,6 @@ func check_ability(player: bool, moved_piece: Vector2):
 	var piece = DataHandler.piece_dict[moved_piece]
 	var debug_remove_pieces = []
 	if not piece:
-		print("Error: No piece found at moved position.")
 		return
 
 	# Check based on the piece type
@@ -364,7 +363,7 @@ func check_fireball(player: bool, moved_piece: Vector2):
 	# Clear previous ruby targets and fireball state
 	DataHandler.ruby_targets.clear()
 	DataHandler.fireball_ready = false
-
+	DataHandler.ruby_indicator_coord = []
 	var rubies = []
 	
 	# Collect Rubies and Amalgams based on the player's type (Circle or Square)
@@ -384,19 +383,19 @@ func check_fireball(player: bool, moved_piece: Vector2):
 				var targets = GameLogic.ruby_fireball(ruby_pos, secondary_piece, moved_piece)
 				if targets.size() > 0:
 					# Store the valid targets and involved pieces
-					DataHandler.ruby_targets.append_array(targets)
+					DataHandler.ruby_targets.append(targets)
 
 	# If valid targets exist, mark Fireball as ready and show indicator
-	if DataHandler.ruby_targets.size() > 0 && (DataHandler.ruby_targets[0].size() > 0 || DataHandler.ruby_targets[1].size() > 0):
+	if DataHandler.ruby_targets != [[[],[]]] && DataHandler.ruby_targets != []:
 		DataHandler.fireball_ready = false
-		# Show Ruby Icon
 		SignalBus.show_correct_icons.emit("Ruby")
 
 func check_tidalwave(player: bool, moved_piece: Vector2):
 	# Clear previous targets and ready state
 	DataHandler.pearl_targets.clear()
+	DataHandler.pearl_indicator_coord = []
 	DataHandler.tidalwave_ready = false
-
+	
 	var pearls = []
 	# Collect Pearls and Amalgams based on the player's type (Circle or Square)
 	for piece_pos in DataHandler.piece_dict:
@@ -414,11 +413,11 @@ func check_tidalwave(player: bool, moved_piece: Vector2):
 			if pearl_pos < secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece || void_adjacent(moved_piece, pearl_pos, secondary_piece)):
 				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece, moved_piece)
 				if targets.size() > 0:
-					DataHandler.pearl_targets.append_array(targets)
+					DataHandler.pearl_targets.append(targets)
 
 
 	# Update ready state and show indicator if targets exist
-	if DataHandler.pearl_targets.size() > 0 && (DataHandler.pearl_targets[0].size() > 0 || DataHandler.pearl_targets[1].size() > 0):
+	if DataHandler.pearl_targets != [[[],[]]] && DataHandler.pearl_targets != []:
 		DataHandler.tidalwave_ready = false
 		SignalBus.show_correct_icons.emit("Pearl")
 
@@ -496,8 +495,6 @@ func fireball(target_pos: Array):
 			DataHandler.piece_dict[i].queue_free()
 			DataHandler.piece_dict.erase(i)
 			DataHandler.ruby_indicator_coord = []
-		else:
-			print("Error: Attempted to fireball a piece that doesn't exist.")
 
 func tidalwave(target_pos: Array):
 	# Validate the target exists before removing it
@@ -506,8 +503,6 @@ func tidalwave(target_pos: Array):
 			DataHandler.piece_dict[i].queue_free()
 			DataHandler.piece_dict.erase(i)
 			DataHandler.pearl_indicator_coord = []
-		else:
-			print("Error: Attempted to tidalwave a piece that doesn't exist.")
 
 # Function to execute the Sap ability
 func sap(target_pos: Array):
@@ -517,8 +512,6 @@ func sap(target_pos: Array):
 			DataHandler.piece_dict[i].queue_free()
 			DataHandler.piece_dict.erase(i)
 			DataHandler.amber_indicator_coord = []
-		else:
-			print("Error: Attempted to sap a piece that doesn't exist.")
 
 # Function to execute the Launch ability
 func launch(target_pos):

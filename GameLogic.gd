@@ -197,20 +197,21 @@ func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2, moved_piece: Vector2)
 		# Forward direction (from ruby_pos2 outward)
 		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (ruby_pos2 + direction)):
 			fireball_targets_1.append_array(get_fireball_targets(ruby_pos2, direction, dir1_amplified))
+		else:
+			DataHandler.ruby_indicator_coord.append([ruby_pos2, direction])
 		# Backward direction (from ruby_pos1 outward in reverse direction)
 		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (ruby_pos1 - direction)):
 			fireball_targets_2.append_array(get_fireball_targets(ruby_pos1, -direction, dir2_amplified))
+		else:
+			DataHandler.ruby_indicator_coord.append([ruby_pos1, -direction])
 		# Return all possible target positions
-		DataHandler.ruby_indicator_coord = [[ruby_pos2, direction],[ruby_pos1, -direction]]
 		return [fireball_targets_1, fireball_targets_2]
 	else:
-		print("Fireball: The two Rubies are not aligned properly!")
 		return []  # Return an empty array if Rubies are not properly aligned
 
 # Function to calculate the potential fireball target positions
 func get_fireball_targets(start_pos: Vector2, direction: Vector2, amplified: bool) -> Array:
 	var targets = []
-	DataHandler.ruby_indicator_coord = []
 	# Determine step direction for both x and y axes separately
 	var step_x = sign(direction.x)
 	var step_y = sign(direction.y)
@@ -235,6 +236,7 @@ func get_fireball_targets(start_pos: Vector2, direction: Vector2, amplified: boo
 		# If the position is empty, skip it (Fireball continues)
 		if not DataHandler.piece_dict.has(target_pos):
 			continue
+	DataHandler.ruby_indicator_coord.append([start_pos, direction])
 	return targets
 
 func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2, moved_piece: Vector2) -> Array:
@@ -260,19 +262,21 @@ func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2, moved_piece: Vect
 		# Forward direction (from pearl_pos2 outward)
 		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (pearl_pos2 + direction)):
 			tidalwave_targets_1.append_array(get_tidalwave_targets(pearl_pos2, direction, dir1_amplified))
+		else:
+			DataHandler.pearl_indicator_coord.append([pearl_pos2, direction])
 		# Backward direction (from pearl_pos1 outward in reverse direction)
 		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (pearl_pos1 - direction)):
 			tidalwave_targets_2.append_array(get_tidalwave_targets(pearl_pos1, -direction, dir2_amplified))
+		else:
+			DataHandler.pearl_indicator_coord.append([pearl_pos1, -direction])
 		# Return all possible target positions
-		DataHandler.pearl_indicator_coord = [[pearl_pos2, direction],[pearl_pos1, -direction]]
+		#DataHandler.pearl_indicator_coord.append([[pearl_pos2, direction],[pearl_pos1, -direction]])
 		return [tidalwave_targets_1, tidalwave_targets_2]
 	else:
-		print("Tidalwave: The two Pearls are not aligned properly!")
 		return []  # Return an empty array if Pearls are not properly aligned
 
 func get_tidalwave_targets(start_pos: Vector2, direction: Vector2, amplified: bool) -> Array:
 	var targets = []
-	DataHandler.pearl_indicator_coord = []
 	
 	# Normalize the direction to ensure correct grid-based movement
 	if direction.x != 0:
@@ -320,8 +324,7 @@ func get_tidalwave_targets(start_pos: Vector2, direction: Vector2, amplified: bo
 				if _validate_target(start_pos, coords, amplified) and not seen_positions.has(coords):
 					seen_positions[coords] = true
 					targets.append(coords)
-	if targets != []:
-		DataHandler.pearl_indicator_coord.append([start_pos, direction])
+	DataHandler.pearl_indicator_coord.append([start_pos, direction])
 	return targets
 
 func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
@@ -373,7 +376,6 @@ func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
 		# Return all valid targets
 		return targets
 	else:
-		print("Amber Sap: The two pieces are not aligned!")
 		return []  # Return an empty array if not aligned
 
 func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2, moved_piece: Vector2) -> Array:
@@ -412,7 +414,6 @@ func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2, moved_piece: Vector2) -
 		# Return all possible target positions
 		return [launch_piece_1, launch_piece_2]
 	else:
-		print("Launch: The two Jades are not aligned properly!")
 		return []  # Return an empty array if Jades are not properly aligned
 
 func get_launch_targets(start_pos: Vector2, direction: Vector2, amplified: bool, thrown_piece: Vector2) -> Array:

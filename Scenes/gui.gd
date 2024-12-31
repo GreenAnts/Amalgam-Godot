@@ -135,17 +135,22 @@ func _on_fireball_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/Fireball.button_pressed = true
 		DataHandler.fireball_ready = true
+		var count = 0
 		if DataHandler.ruby_indicator_coord != null:
-			for i in DataHandler.ruby_targets.size():
-				if DataHandler.ruby_targets[i] != []:
-					var arrow = arrow_scene.instantiate()
-					get_node("../Indicators").add_child(arrow)
-					arrow.global_position = DataHandler.board_dict[DataHandler.ruby_indicator_coord[i][0]].global_position + DataHandler.arrow_offset
-					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(DataHandler.ruby_indicator_coord[i][1])
-					#Set Data for instance
-					arrow.pos = DataHandler.ruby_indicator_coord[i][0]
-					arrow.targets = DataHandler.ruby_targets[i]
-				
+			for arr_step in DataHandler.ruby_targets.size():
+				if DataHandler.ruby_targets[arr_step] != []:
+					for targets in DataHandler.ruby_targets[arr_step].size():
+						if DataHandler.ruby_targets[arr_step][targets] != []:
+							print(DataHandler.ruby_indicator_coord)
+							var ruby_data = DataHandler.ruby_indicator_coord[targets+count]
+							var arrow = arrow_scene.instantiate()
+							get_node("../Indicators").add_child(arrow)
+							arrow.global_position = DataHandler.board_dict[ruby_data[0]].global_position + DataHandler.arrow_offset
+							arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(ruby_data[1])
+							#Set Data for instance
+							arrow.pos = ruby_data[0]
+							arrow.targets = DataHandler.ruby_targets[arr_step][targets]
+					count += 2 
 	else:
 		$Background/Fireball.button_pressed = false
 		DataHandler.fireball_ready = false
@@ -156,16 +161,21 @@ func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		$Background/TidalWave.button_pressed = true
 		DataHandler.tidalwave_ready = true
+		var count = 0
 		if DataHandler.pearl_indicator_coord != null:
-			for i in DataHandler.pearl_targets.size():
-				if DataHandler.pearl_targets[i] != []:
-					var arrow = arrow_scene.instantiate()
-					get_node("../Indicators").add_child(arrow)
-					arrow.global_position = DataHandler.board_dict[DataHandler.pearl_indicator_coord[i][0]].global_position + DataHandler.arrow_offset
-					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(DataHandler.pearl_indicator_coord[i][1])
-					#Set Data for instance
-					arrow.pos = DataHandler.pearl_indicator_coord[i][0]
-					arrow.targets = DataHandler.pearl_targets[i]
+			for arr_step in DataHandler.pearl_targets.size():
+				if DataHandler.pearl_targets[arr_step] != []:
+					for targets in DataHandler.pearl_targets[arr_step].size():
+						if DataHandler.pearl_targets[arr_step][targets] != []:
+							var pearl_data = DataHandler.pearl_indicator_coord[targets+count]
+							var arrow = arrow_scene.instantiate()
+							get_node("../Indicators").add_child(arrow)
+							arrow.global_position = DataHandler.board_dict[pearl_data[0]].global_position + DataHandler.arrow_offset
+							arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(pearl_data[1])
+							#Set Data for instance
+							arrow.pos = pearl_data[0]
+							arrow.targets = DataHandler.pearl_targets[arr_step][targets]
+					count += 2 
 	else:
 		$Background/TidalWave.button_pressed = false
 		DataHandler.tidalwave_ready = false
@@ -180,6 +190,8 @@ func _on_sap_toggled(toggled_on: bool) -> void:
 				for amber_data in DataHandler.amber_indicator_coord[i]:
 					var arrow = arrow_scene.instantiate()
 					get_node("../Indicators").add_child(arrow)
+					print(DataHandler.amber_indicator_coord)
+					print(DataHandler.amber_targets)
 					arrow.global_position = DataHandler.board_dict[amber_data[0]].global_position + DataHandler.arrow_offset
 					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(amber_data[1])
 					#Set Data for instance
