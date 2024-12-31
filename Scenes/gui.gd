@@ -260,6 +260,14 @@ func show_correct_icons(piece):
 			$Background/Launch.visible = true
 			$Background/Launch.button_pressed = false
 			DataHandler.launch_ready = false
+		if  piece == "Ruby_Used":
+			$Background/Fireball.visible = false
+		if  piece == "Pearl_Used":
+			$Background/TidalWave.visible = false
+		if  piece == "Amber_Used":
+			$Background/Sap.visible = false
+		if  piece == "Jade_Used":
+			$Background/Launch.visible = false
 	else:
 		$Background/PortalSwap.visible = false
 		$Background/Fireball.visible = false

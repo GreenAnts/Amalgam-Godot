@@ -59,7 +59,7 @@ func _on_color_rect_gui_input(event: InputEvent) -> void:
 						SignalBus.reset_movement_options.emit()
 						DataHandler.launch(self.slot_ID)
 						# Reset the sap ability and clear targets
-						SignalBus.show_correct_icons.emit(null)
+						SignalBus.show_correct_icons.emit("Jade_Used")
 						DataHandler.launch_ready_step_2 = false
 						break  # Exit loop once sap is used
 					else:

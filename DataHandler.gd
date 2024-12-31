@@ -343,13 +343,7 @@ func check_ability(player: bool, moved_piece: Vector2):
 		check_sap(player, moved_piece)
 	check_launch(player, moved_piece)
 	
-	#DEBUG
-	#debug_remove_pieces.append(ruby_targets)
-	#debug_remove_pieces.append(pearl_targets)
-	#debug_remove_pieces.append(amber_targets)
-	#debug_remove_pieces.append(jade_targets)
-	#debug_remove(debug_remove_pieces)
-	#END DEBUG
+
 func void_adjacent(moved_piece, piece1, piece2):
 	if DataHandler.piece_dict[moved_piece].type in [6,13]:
 			if GameLogic.is_adjacent(moved_piece, piece1):
