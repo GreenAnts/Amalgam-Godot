@@ -7,17 +7,18 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if is_pixel_opaque(get_local_mouse_position()):
-				if DataHandler.launch_ready_step_2 == true:
+				#Emit Correct Icons for Pieces
+				if DataHandler.fireball_ready == true || DataHandler.tidalwave_ready == true || DataHandler.sap_ready == true || DataHandler.launch_ready == true:
+					return
+				elif DataHandler.launch_ready_step_2 == true:
 					SignalBus.bypass_piece_to_slot.emit(self.get_parent().slot_ID)
+					return
 				if DataHandler.clicked_piece != self.get_parent().slot_ID:
 					SignalBus.reset_movement_options.emit()
 				DataHandler.indicators_active = true
 				DataHandler.clicked_piece = self.get_parent().slot_ID
-				#Emit Correct Icons for Pieces
 				if DataHandler.piece_dict[DataHandler.clicked_piece].type in [5,12]:
 					SignalBus.show_correct_icons.emit("Portal")
-				elif DataHandler.fireball_ready == true:
-					return
 				else:
 					SignalBus.show_correct_icons.emit(null)
 				# Emit movement options based on the clicked piece

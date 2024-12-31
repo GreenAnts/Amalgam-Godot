@@ -338,7 +338,7 @@ func check_ability(player: bool, moved_piece: Vector2):
 		check_tidalwave(player, moved_piece)
 	elif piece.type in [2, 9]:  # Amber types (Circle and Square)
 		check_sap(player, moved_piece)
-	elif piece.type in [4, 11]:  # Amalgam types (Circle and Square)
+	elif piece.type in [4, 6, 11, 13]:  # Amalgam or Void types (Circle and Square)
 		check_fireball(player, moved_piece)
 		check_tidalwave(player, moved_piece)
 		check_sap(player, moved_piece)
@@ -351,6 +351,14 @@ func check_ability(player: bool, moved_piece: Vector2):
 	#debug_remove_pieces.append(jade_targets)
 	#debug_remove(debug_remove_pieces)
 	#END DEBUG
+func void_adjacent(moved_piece, piece1, piece2):
+	if DataHandler.piece_dict[moved_piece].type in [6,13]:
+			if GameLogic.is_adjacent(moved_piece, piece1):
+				return true
+			elif GameLogic.is_adjacent(moved_piece, piece2):
+				return true
+			else:
+				return false
 
 func check_fireball(player: bool, moved_piece: Vector2):
 	# Clear previous ruby targets and fireball state
@@ -372,8 +380,8 @@ func check_fireball(player: bool, moved_piece: Vector2):
 	# Check all combinations of Rubies and Amalgams for Fireball alignment
 	for ruby_pos in rubies:
 		for secondary_piece in rubies:
-			if ruby_pos < secondary_piece && (moved_piece == ruby_pos || moved_piece == secondary_piece):
-				var targets = GameLogic.ruby_fireball(ruby_pos, secondary_piece)
+			if ruby_pos < secondary_piece && (moved_piece == ruby_pos || moved_piece == secondary_piece || void_adjacent(moved_piece, ruby_pos, secondary_piece)):
+				var targets = GameLogic.ruby_fireball(ruby_pos, secondary_piece, moved_piece)
 				if targets.size() > 0:
 					# Store the valid targets and involved pieces
 					DataHandler.ruby_targets.append_array(targets)
@@ -403,8 +411,8 @@ func check_tidalwave(player: bool, moved_piece: Vector2):
 	# Check combinations for valid Tidalwave targets
 	for pearl_pos in pearls:
 		for secondary_piece in pearls:
-			if pearl_pos < secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece):
-				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece)
+			if pearl_pos < secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece || void_adjacent(moved_piece, pearl_pos, secondary_piece)):
+				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece, moved_piece)
 				if targets.size() > 0:
 					DataHandler.pearl_targets.append_array(targets)
 
@@ -436,7 +444,7 @@ func check_sap(player: bool, moved_piece: Vector2):
 	var temp_targets = []
 	for amber_pos in ambers:
 		for secondary_piece in ambers:
-			if amber_pos < secondary_piece and (moved_piece == amber_pos or moved_piece == secondary_piece):
+			if amber_pos < secondary_piece and (moved_piece == amber_pos or moved_piece == secondary_piece or (piece_dict[moved_piece].type in [6,13] && GameLogic.get_points_on_line(amber_pos.x, amber_pos.y, secondary_piece.x, secondary_piece.y).has(moved_piece))):
 				var targets = GameLogic.amber_sap(amber_pos, secondary_piece)
 				if targets.size() > 0:
 					var amber1_data = [amber_pos, get_direction(amber_pos, secondary_piece)]
@@ -469,11 +477,11 @@ func check_launch(player: bool, moved_piece: Vector2):
 	for jade_pos in jades:
 		for secondary_piece in jades:
 			if jade_pos < secondary_piece:
-				var launch_pieces = GameLogic.jade_launch(jade_pos, secondary_piece)
+				var launch_pieces = GameLogic.jade_launch(jade_pos, secondary_piece, moved_piece)
 				if launch_pieces != []:
-					if launch_pieces[0] != null && (moved_piece == launch_pieces[0]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece):
+					if launch_pieces[0] != null && (moved_piece == launch_pieces[0]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece or void_adjacent(moved_piece, jade_pos, secondary_piece)):
 						DataHandler.jade_targets.append({launch_pieces[0]["Piece"] : launch_pieces[0]["launch"]})
-					if launch_pieces[1] != null && (moved_piece == launch_pieces[1]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece):
+					if launch_pieces[1] != null && (moved_piece == launch_pieces[1]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece or void_adjacent(moved_piece, jade_pos, secondary_piece)):
 						DataHandler.jade_targets.append({launch_pieces[1]["Piece"] : launch_pieces[1]["launch"]})
 
 
@@ -585,7 +593,6 @@ func get_direction(coord1: Vector2, coord2: Vector2) -> Vector2:
 		dy = -1
 	else:
 		dy = 0
-
 	return Vector2(dx, dy)
 
 func convert_direction_to_rotation(direction: Vector2) -> float:
