@@ -15,6 +15,7 @@ func _ready() -> void:
 	SignalBus.movement_options.connect(show_movement_indicators)
 	SignalBus.reset_movement_options.connect(reset_movement_indicators)
 	SignalBus.reset_ability_indicators.connect(reset_arrows)
+	SignalBus.show_end_turn.connect(show_end_turn)
 	var ycor = 12
 	for i in range(25):
 		var xcor = -12
@@ -32,7 +33,8 @@ func _ready() -> void:
 	$Background/TidalWave.visible = false
 	$Background/Sap.visible = false
 	$Background/Launch.visible = false
-
+	$Background/End_Turn.visible = false
+	$Board/PlayerTurn.modulate = Color(0, 0, 1, 1)
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
@@ -141,7 +143,6 @@ func _on_fireball_toggled(toggled_on: bool) -> void:
 				if DataHandler.ruby_targets[arr_step] != []:
 					for targets in DataHandler.ruby_targets[arr_step].size():
 						if DataHandler.ruby_targets[arr_step][targets] != []:
-							print(DataHandler.ruby_indicator_coord)
 							var ruby_data = DataHandler.ruby_indicator_coord[targets+count]
 							var arrow = arrow_scene.instantiate()
 							get_node("../Indicators").add_child(arrow)
@@ -190,8 +191,6 @@ func _on_sap_toggled(toggled_on: bool) -> void:
 				for amber_data in DataHandler.amber_indicator_coord[i]:
 					var arrow = arrow_scene.instantiate()
 					get_node("../Indicators").add_child(arrow)
-					print(DataHandler.amber_indicator_coord)
-					print(DataHandler.amber_targets)
 					arrow.global_position = DataHandler.board_dict[amber_data[0]].global_position + DataHandler.arrow_offset
 					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(amber_data[1])
 					#Set Data for instance
@@ -238,6 +237,9 @@ func reset_movement_indicators():
 		for slot in movement_indicators:
 			slot.get_node("Sprite2D").visible = false
 
+func show_end_turn(bool_val):
+	$Background/End_Turn.visible = bool_val
+
 func show_correct_icons(piece):
 	if piece != null:
 		if  piece == "Portal":
@@ -278,3 +280,12 @@ func show_correct_icons(piece):
 func reset_arrows():
 	for n in get_node("../Indicators").get_children():
 			n.queue_free()
+
+func _on_end_turn_pressed() -> void:
+	PlayerHandler.end_turn()
+	$Board/PlayerTurn.text = PlayerHandler.player_turn
+	if $Board/PlayerTurn.text == "Squares":
+		$Board/PlayerTurn.modulate = Color(0, 0, 1, 1)
+	elif $Board/PlayerTurn.text == "Circles":
+		$Board/PlayerTurn.modulate = Color(1, 0, 0, 1)
+		

@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://b6ggjxwu3ebra"]
+[gd_scene load_steps=21 format=3 uid="uid://b6ggjxwu3ebra"]
 
 [ext_resource type="Script" path="res://Scenes/gui.gd" id="1_5w5l0"]
 [ext_resource type="Texture2D" uid="uid://3lqv5wiwuk83" path="res://Images/Pieces/Amalgam_Circle.png" id="2_tetl0"]
@@ -19,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://c0as66xf1tmms" path="res://Images/Icons/Sap_Toggle.png" id="16_rn627"]
 [ext_resource type="Texture2D" uid="uid://0kfthrudr4xk" path="res://Images/Icons/Launch.png" id="17_qvf40"]
 [ext_resource type="Texture2D" uid="uid://btp7w5ug5d77l" path="res://Images/Icons/Launch_Toggle.png" id="18_em35q"]
+[ext_resource type="Texture2D" uid="uid://c58usujtsmlso" path="res://Images/Icons/End_Turn.png" id="19_j4hto"]
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -181,6 +182,14 @@ toggle_mode = true
 texture_normal = ExtResource("17_qvf40")
 texture_pressed = ExtResource("18_em35q")
 
+[node name="End_Turn" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 1350.0
+offset_top = 900.0
+offset_right = 1450.0
+offset_bottom = 1000.0
+texture_normal = ExtResource("19_j4hto")
+
 [node name="Board" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 1040.0
@@ -207,6 +216,26 @@ theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
 columns = 25
 
+[node name="TurnLabel" type="Label" parent="Board"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 36.0
+offset_right = 188.0
+offset_bottom = 75.0
+theme_type_variation = &"HeaderLarge"
+text = "Player Turn:"
+
+[node name="PlayerTurn" type="Label" parent="Board"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 76.0
+offset_right = 188.0
+offset_bottom = 115.0
+theme_type_variation = &"HeaderLarge"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "Squares"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="Background/VBoxContainer/HBoxContainer/Ruby" to="." method="_on_ruby_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/HBoxContainer/Pearl" to="." method="_on_pearl_pressed"]
 [connection signal="pressed" from="Background/VBoxContainer/HBoxContainer/Amber" to="." method="_on_amber_pressed"]
@@ -221,3 +250,4 @@ columns = 25
 [connection signal="toggled" from="Background/TidalWave" to="." method="_on_tidal_wave_toggled"]
 [connection signal="toggled" from="Background/Sap" to="." method="_on_sap_toggled"]
 [connection signal="toggled" from="Background/Launch" to="." method="_on_launch_toggled"]
+[connection signal="pressed" from="Background/End_Turn" to="." method="_on_end_turn_pressed"]

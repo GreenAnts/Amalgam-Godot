@@ -280,11 +280,19 @@ func _ready() -> void:
 #func _process(delta: float) -> void:
 #	pass
 
+func turn_start(player):
+	check_fireball(player, false)
+	check_tidalwave(player, false)
+	check_sap(player, false)
+	check_launch(player, false)
+
 func slot_is_empty():
 	if !piece_dict.has(clicked_slot):
 		return true
 
 func swap_pos():
+	if PlayerHandler.turn_step != 1:
+		return
 	if piece_dict.has(clicked_slot) && piece_dict.has(clicked_piece) && piece_dict[swap_ready].type in [5,12]:
 		if GameLogic.move_is_valid(swap_ready, clicked_slot):
 			#Change Pieces positions'
@@ -297,15 +305,27 @@ func swap_pos():
 			var temp_piece_node = piece_dict[clicked_slot]
 			piece_dict[clicked_slot] = piece_dict[swap_ready]
 			piece_dict[swap_ready] = temp_piece_node
+			#Attack
+			GameLogic.attack(clicked_slot)
+			GameLogic.attack(swap_ready)
+			SignalBus.show_correct_icons.emit(null)
+			indicators_active = false
+			# Abilities
+			var player = GameLogic.check_player_of_piece(clicked_slot)
+			check_ability(player, swap_ready)
+			var temp_jade_targets = DataHandler.jade_targets.duplicate(true) # Deep copy
+			#Check ability again to allow for both the portal and the swapped piece to check for launch
+			check_ability(player, clicked_slot)
+			DataHandler.jade_targets.append_array(temp_jade_targets)
 			#Remove old entries into piece_dict
 			SignalBus.reset_movement_options.emit()
-			indicators_active = false
-			clicked_piece = null
+			#clicked_piece = null
 			DataHandler.swap_ready = null
-			SignalBus.show_correct_icons.emit(null)
-			
+			PlayerHandler.next_turn_step()
 
 func change_pos():
+	if PlayerHandler.turn_step != 1:
+		return
 	if piece_dict.has(clicked_piece):
 		if !piece_dict.has(clicked_slot) and GameLogic.move_is_valid(clicked_piece, clicked_slot):
 			# Update piece position
@@ -323,6 +343,7 @@ func change_pos():
 			# Abilities
 			var player = GameLogic.check_player_of_piece(clicked_slot)
 			check_ability(player, clicked_slot)
+			PlayerHandler.next_turn_step()
 
 func check_ability(player: bool, moved_piece: Vector2):
 	var piece = DataHandler.piece_dict[moved_piece]
@@ -353,7 +374,7 @@ func void_adjacent(moved_piece, piece1, piece2):
 			else:
 				return false
 
-func check_fireball(player: bool, moved_piece: Vector2):
+func check_fireball(player: bool, moved_piece):
 	# Clear previous ruby targets and fireball state
 	DataHandler.ruby_targets.clear()
 	DataHandler.fireball_ready = false
@@ -384,7 +405,7 @@ func check_fireball(player: bool, moved_piece: Vector2):
 		DataHandler.fireball_ready = false
 		SignalBus.show_correct_icons.emit("Ruby")
 
-func check_tidalwave(player: bool, moved_piece: Vector2):
+func check_tidalwave(player: bool, moved_piece):
 	# Clear previous targets and ready state
 	DataHandler.pearl_targets.clear()
 	DataHandler.pearl_indicator_coord = []
@@ -415,7 +436,7 @@ func check_tidalwave(player: bool, moved_piece: Vector2):
 		DataHandler.tidalwave_ready = false
 		SignalBus.show_correct_icons.emit("Pearl")
 
-func check_sap(player: bool, moved_piece: Vector2):
+func check_sap(player: bool, moved_piece):
 	# Clear previous targets and ready state
 	DataHandler.amber_targets.clear()
 	DataHandler.sap_ready = false
@@ -452,7 +473,7 @@ func check_sap(player: bool, moved_piece: Vector2):
 		DataHandler.sap_ready = false
 		SignalBus.show_correct_icons.emit("Amber")
 
-func check_launch(player: bool, moved_piece: Vector2):
+func check_launch(player: bool, moved_piece):
 	DataHandler.jade_targets.clear()
 	var jades = []
 
@@ -541,6 +562,7 @@ func launch(target_pos):
 				check_ability(player, clicked_slot)
 				launch_ready_step_2 = false
 				selected_launch_targets = null
+	PlayerHandler.next_turn_step()
 
 func debug_remove(target_array):
 	if typeof(target_array) == 5 && piece_dict.has(target_array):

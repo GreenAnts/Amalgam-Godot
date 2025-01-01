@@ -15,7 +15,6 @@ func bypass(passed_slot_id):
 	if passed_slot_id == self.slot_ID:
 		DataHandler.clicked_slot = slot_ID
 		if DataHandler.launch_ready_step_2 == true:
-			print("LAUNCH Step 2 Ready")
 			# Loop through sap_targets to check if the current slot is one of the targets
 			for movement_info in DataHandler.selected_launch_targets:
 				# Check if the current slot is in any of the target lists
@@ -50,7 +49,6 @@ func _on_color_rect_gui_input(event: InputEvent) -> void:
 			elif DataHandler.sap_ready == true:
 				pass
 			elif DataHandler.launch_ready_step_2 == true:
-				print("LAUNCH Step 2 Ready")
 				# Loop through sap_targets to check if the current slot is one of the targets
 				for movement_info in DataHandler.selected_launch_targets:
 					# Check if the current slot is in any of the target lists

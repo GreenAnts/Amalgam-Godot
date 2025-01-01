@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://bldtbjq81vd0x"]
+[gd_scene load_steps=6 format=3 uid="uid://bldtbjq81vd0x"]
 
+[ext_resource type="Script" path="res://PlayerHandler.gd" id="1_75vqk"]
 [ext_resource type="PackedScene" uid="uid://b6ggjxwu3ebra" path="res://Scenes/GUI.tscn" id="1_ssxwn"]
 [ext_resource type="Script" path="res://Scenes/player_squares.gd" id="1_urcla"]
 [ext_resource type="Script" path="res://Scenes/player_circles.gd" id="2_ycewj"]
@@ -7,12 +8,14 @@
 
 [node name="Main" type="Node"]
 
-[node name="Players" type="Node" parent="."]
+[node name="PlayerHandler" type="Node" parent="."]
+script = ExtResource("1_75vqk")
+player_turn = "Circles"
 
-[node name="Squares" type="Node" parent="Players"]
+[node name="PlayerSquares" type="Node" parent="PlayerHandler"]
 script = ExtResource("1_urcla")
 
-[node name="Circles" type="Node" parent="Players"]
+[node name="PlayerCircles" type="Node" parent="PlayerHandler"]
 script = ExtResource("2_ycewj")
 
 [node name="GUI" parent="." instance=ExtResource("1_ssxwn")]
