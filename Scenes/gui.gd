@@ -138,12 +138,14 @@ func add_piece(piece_type, location)->void:
 				elif piece_type in circle_piece_counter:
 					circle_piece_counter[piece_type] += 1
 				add.call()
+				$Background/AutoSetup.visible = false
 			elif piece_type in square_piece_counter && DataHandler.square_starting_pos_dict.has(location):
 				if square_piece_counter[piece_type] == 1:
 					hide_piece(piece_type)
 				elif piece_type in square_piece_counter:
 					square_piece_counter[piece_type] += 1
 				add.call()
+				$Background/AutoSetup.visible = false
 			else:
 				#DataHandler.clicked_piece = null
 				#SignalBus.toggle_add_piece.emit(piece_type)
