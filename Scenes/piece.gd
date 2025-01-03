@@ -8,10 +8,6 @@ var type: int #piece color - see DataHandler.gd and gui.gd
 func _ready() -> void:
 	SignalBus.changed_piece.connect(change_ID)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
 func load_icon(piece_name) -> void:
 	icon_path.texture = load(DataHandler.assets[piece_name])
 

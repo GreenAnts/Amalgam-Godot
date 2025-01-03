@@ -6,6 +6,9 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			#setup in progress
+			if PlayerHandler.setup_turn < 16:
+				return
 			# Player of piece --> circle = true | square = false
 			if PlayerHandler.player_turn == "Squares" && GameLogic.check_player_of_piece(self.get_parent().slot_ID) == true:
 				return 
@@ -29,12 +32,6 @@ func _input(event):
 						SignalBus.show_correct_icons.emit("Portal")
 				else:
 					SignalBus.show_correct_icons.emit(null)
-				if DataHandler.remove == true:
-					DataHandler.remove = false
-					DataHandler.piece_dict.erase(get_parent().slot_ID)
-					get_parent().queue_free()
-					SignalBus.reset_movement_options.emit()
-					DataHandler.clicked_piece = null
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			SignalBus.reset_movement_options.emit()
 			DataHandler.indicators_active = false

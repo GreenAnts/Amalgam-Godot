@@ -174,7 +174,7 @@ func attack(coord):
 				DataHandler.piece_dict[coord + i].queue_free()
 				DataHandler.piece_dict.erase(coord + i)
 
-func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2, moved_piece: Vector2) -> Array:
+func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2, moved_piece) -> Array:
 	var dir1_amplified = false
 	var dir2_amplified = false
 	# Ensure the two Ruby pieces are adjacent (horizontally, vertically, or diagonally)
@@ -195,12 +195,12 @@ func ruby_fireball(ruby_pos1: Vector2, ruby_pos2: Vector2, moved_piece: Vector2)
 		var fireball_targets_1 = []
 		var fireball_targets_2 = []
 		# Forward direction (from ruby_pos2 outward)
-		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (ruby_pos2 + direction)):
+		if typeof(moved_piece) == 1 || DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (ruby_pos2 + direction)):
 			fireball_targets_1.append_array(get_fireball_targets(ruby_pos2, direction, dir1_amplified))
 		else:
 			DataHandler.ruby_indicator_coord.append([ruby_pos2, direction])
 		# Backward direction (from ruby_pos1 outward in reverse direction)
-		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (ruby_pos1 - direction)):
+		if typeof(moved_piece) == 1 || DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (ruby_pos1 - direction)):
 			fireball_targets_2.append_array(get_fireball_targets(ruby_pos1, -direction, dir2_amplified))
 		else:
 			DataHandler.ruby_indicator_coord.append([ruby_pos1, -direction])
@@ -239,7 +239,7 @@ func get_fireball_targets(start_pos: Vector2, direction: Vector2, amplified: boo
 	DataHandler.ruby_indicator_coord.append([start_pos, direction])
 	return targets
 
-func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2, moved_piece: Vector2) -> Array:
+func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2, moved_piece) -> Array:
 	var dir1_amplified = false
 	var dir2_amplified = false
 	# Ensure the two Pearl pieces are adjacent (horizontally, vertically, or diagonally)
@@ -260,12 +260,12 @@ func pearl_tidalwave(pearl_pos1: Vector2, pearl_pos2: Vector2, moved_piece: Vect
 		var tidalwave_targets_1 = []
 		var tidalwave_targets_2 = []
 		# Forward direction (from pearl_pos2 outward)
-		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (pearl_pos2 + direction)):
+		if typeof(moved_piece) == 1 || DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (pearl_pos2 + direction)):
 			tidalwave_targets_1.append_array(get_tidalwave_targets(pearl_pos2, direction, dir1_amplified))
 		else:
 			DataHandler.pearl_indicator_coord.append([pearl_pos2, direction])
 		# Backward direction (from pearl_pos1 outward in reverse direction)
-		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (pearl_pos1 - direction)):
+		if typeof(moved_piece) == 1 || DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && moved_piece == (pearl_pos1 - direction)):
 			tidalwave_targets_2.append_array(get_tidalwave_targets(pearl_pos1, -direction, dir2_amplified))
 		else:
 			DataHandler.pearl_indicator_coord.append([pearl_pos1, -direction])
@@ -378,7 +378,7 @@ func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
 	else:
 		return []  # Return an empty array if not aligned
 
-func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2, moved_piece: Vector2) -> Array:
+func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2, moved_piece) -> Array:
 	# Ensure the two Jade pieces are adjacent (horizontally, vertically, or diagonally)
 	if not is_adjacent(jade_pos1, jade_pos2):
 		return []  # Return an empty array if Jades are not adjacent
@@ -394,7 +394,7 @@ func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2, moved_piece: Vector2) -
 		var amplified1 = false
 		var amplified2 = false
 		# Forward direction (from jade_pos2 outward)
-		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && (moved_piece == (jade_pos1 - direction) or moved_piece == (jade_pos2 + direction))):
+		if typeof(moved_piece) == 1 || DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && (moved_piece == (jade_pos1 - direction) or moved_piece == (jade_pos2 + direction))):
 			if DataHandler.piece_dict.has(jade_pos2 + direction):
 				if DataHandler.piece_dict.has(jade_pos1 -direction) && DataHandler.piece_dict[(jade_pos1 -direction)].type in [6,13]:
 					amplified1 = true
@@ -403,7 +403,7 @@ func jade_launch(jade_pos1: Vector2, jade_pos2: Vector2, moved_piece: Vector2) -
 									"launch": get_launch_targets(jade_pos1, -direction, amplified1, thrown_piece)
 					}
 		# Backward direction (from jade_pos1 outward in reverse direction)
-		if DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && (moved_piece == (jade_pos2 + direction) or moved_piece == (jade_pos1 - direction))):
+		if typeof(moved_piece) == 1 || DataHandler.piece_dict[moved_piece].type not in [6,13] || (DataHandler.piece_dict[moved_piece].type in [6,13] && (moved_piece == (jade_pos2 + direction) or moved_piece == (jade_pos1 - direction))):
 			if DataHandler.piece_dict.has(jade_pos1 - direction):
 				if DataHandler.piece_dict.has(jade_pos2 +direction) && DataHandler.piece_dict[(jade_pos2 +direction)].type in [6,13]:
 					amplified2 = true

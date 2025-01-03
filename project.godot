@@ -21,6 +21,7 @@ DataHandler="*res://DataHandler.gd"
 SignalBus="*res://SignalBus.gd"
 GameLogic="*res://GameLogic.gd"
 PlayerHandler="*res://PlayerHandler.gd"
+SavedData="*res://SavedData.gd"
 
 [display]
 

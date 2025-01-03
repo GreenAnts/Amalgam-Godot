@@ -6,8 +6,13 @@ extends Control
 @onready var arrow_scene = preload("res://Scenes/arrows.tscn")
 @onready var indicator_scene = preload("res://Scenes/indicators.tscn")
 
+var circle_piece_counter = {0: 0, 1: 0, 2: 0, 3: 0}
+var square_piece_counter = {7: 0, 8: 0, 9: 0, 10: 0}
+
 var grid_array := []
 var movement_indicators = []
+var auto_setup = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	SignalBus.ready_to_add_piece.connect(add_piece)
@@ -34,11 +39,10 @@ func _ready() -> void:
 	$Background/Sap.visible = false
 	$Background/Launch.visible = false
 	$Background/End_Turn.visible = false
-	$Board/PlayerTurn.modulate = Color(0, 0, 1, 1)
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
+	#Squares Start first
+	$Board/CirclesTurn.visible = false
+	$Board/SquaresTurn.visible = false
+	
 func board_setup():
 	#C:CIRCLES #S:SQUARES
 	#Void
@@ -52,6 +56,11 @@ func board_setup():
 	add_piece(12, Vector2(6,-6)) #Portal-S1
 	add_piece(5, Vector2(-6,6)) #Portal-C2
 	add_piece(12, Vector2(-6,-6)) #Portal-S2
+	
+	$Board/SquaresTurn.visible = true
+	PlayerHandler.setup_ready = true
+
+func board_auto_setup():
 	#Ruby
 	add_piece(0, Vector2(1,10)) #Ruby-C1
 	add_piece(7, Vector2(1,-10)) #Ruby-S1
@@ -72,14 +81,48 @@ func board_setup():
 	add_piece(10, Vector2(1,-8)) #Jade-S1
 	add_piece(3, Vector2(1,9)) #Jade-C2
 	add_piece(10, Vector2(1,-9)) #Jade-S2
-	
+	$Background/CirclePiecesContainer.visible = false
+	$Background/SquarePiecesContainer.visible = false
+	# Set everything as needed to start the game with squares going first when turn is ended
+	$Background/AutoSetup.visible = false
+	PlayerHandler.setup_turn = 16
+	PlayerHandler.player_turn = "Circles"
+
+
+
+func _on_auto_setup_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		auto_setup = true
+		show_end_turn(true)
+	else:
+		auto_setup = false
+		show_end_turn(false)
+
 func create_slot():
 	var new_slot = slot_scene.instantiate()
 	board_grid.add_child(new_slot)
 	grid_array.append(new_slot)
 
+func hide_piece(piece_type):
+	if piece_type == 0:
+		$Background/CirclePiecesContainer/RubyCircle.visible = false
+	if piece_type == 1:
+		$Background/CirclePiecesContainer/PearlCircle.visible = false
+	if piece_type == 2:
+		$Background/CirclePiecesContainer/AmberCircle.visible = false
+	if piece_type == 3:
+		$Background/CirclePiecesContainer/JadeCircle.visible = false
+	if piece_type == 7:
+		$Background/SquarePiecesContainer/RubySquare.visible = false
+	if piece_type == 8:
+		$Background/SquarePiecesContainer/PearlSquare.visible = false
+	if piece_type == 9:
+		$Background/SquarePiecesContainer/AmberSquare.visible = false
+	if piece_type == 10:
+		$Background/SquarePiecesContainer/JadeSquare.visible = false
+	
 func add_piece(piece_type, location)->void:
-	if DataHandler.slot_is_empty() && piece_type not in [5,12]:
+	var add = func add():
 		var new_piece = piece_scene.instantiate()
 		get_node("../Gameplay").add_child(new_piece)
 		new_piece.type = piece_type
@@ -87,42 +130,81 @@ func add_piece(piece_type, location)->void:
 		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.piece_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
-	elif DataHandler.slot_is_empty() && piece_type in [5,12] && DataHandler.golden_lines_dict.has(location):
-		var new_piece = piece_scene.instantiate()
-		get_node("../Gameplay").add_child(new_piece)
-		new_piece.type = piece_type
-		new_piece.load_icon(piece_type)
-		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.piece_offset
-		new_piece.slot_ID = location
-		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
-	else:
-		SignalBus.toggle_add_piece.emit(piece_type)
+	if (DataHandler.slot_is_empty() && piece_type not in [5,12]) || (DataHandler.slot_is_empty() && piece_type in [5,12] && DataHandler.golden_lines_dict.has(location)):
+		if PlayerHandler.setup_ready == true && !auto_setup:
+			if piece_type in circle_piece_counter && DataHandler.circle_starting_pos_dict.has(location):
+				if circle_piece_counter[piece_type] == 1:
+					hide_piece(piece_type)
+				elif piece_type in circle_piece_counter:
+					circle_piece_counter[piece_type] += 1
+				add.call()
+			elif piece_type in square_piece_counter && DataHandler.square_starting_pos_dict.has(location):
+				if square_piece_counter[piece_type] == 1:
+					hide_piece(piece_type)
+				elif piece_type in square_piece_counter:
+					square_piece_counter[piece_type] += 1
+				add.call()
+			else:
+				#DataHandler.clicked_piece = null
+				#SignalBus.toggle_add_piece.emit(piece_type)
+				return
+		add.call()
+		if PlayerHandler.setup_ready == true:
+				PlayerHandler.next_turn_step()
+				reset_setup_toggle()
 	DataHandler.clicked_piece = null
-		
-func _on_ruby_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(0)
 
-func _on_pearl_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(1)
-	
-func _on_amber_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(2)
-	
-func _on_jade_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(3)
+func add_circle(num):
+	if $Background/End_Turn.visible == false && PlayerHandler.setup_turn % 2 == 0 && PlayerHandler.player_turn == "Circles":
+		SignalBus.toggle_add_piece.emit(num)
 
-func _on_amalgam_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(4)
+func add_square(num):
+	if $Background/End_Turn.visible == false && PlayerHandler.setup_turn % 2 == 1 && PlayerHandler.player_turn == "Squares":
+		SignalBus.toggle_add_piece.emit(num)
 
-func _on_portal_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(5)
+# SETUP CIRCLE PIECES
+func _on_ruby_circle_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_circle(0)
 
-func _on_void_pressed() -> void:
-	SignalBus.toggle_add_piece.emit(6)
+func _on_pearl_circle_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_circle(1)
 
-func _on_remove_piece_pressed() -> void:
-	DataHandler.remove = true
+func _on_amber_circle_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_circle(2)
 
+func _on_jade_circle_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_circle(3)
+
+# SETUP SQUARE PIECES
+func _on_ruby_square_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_square(7)
+
+func _on_pearl_square_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_square(8)
+
+func _on_amber_square_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_square(9)
+
+func _on_jade_square_toggled(toggled_on: bool) -> void:
+	if toggled_on == true:
+		add_square(10)
+
+func reset_setup_toggle():
+	$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
+	$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
+	$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
+	$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
+	$Background/SquarePiecesContainer/RubySquare.button_pressed = false
+	$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
+	$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
+	$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
 #Portal Swap
 func _on_portal_swap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
@@ -218,13 +300,7 @@ func _on_launch_toggled(toggled_on: bool) -> void:
 		$Background/Launch.button_pressed = false
 		DataHandler.launch_ready = false
 		reset_arrows()
-	
-func _on_setup_pressed() -> void:
-	for n in get_node("../Gameplay").get_children():
-			n.queue_free()
-	DataHandler.piece_dict = {}
-	board_setup()
-	
+
 func show_movement_indicators(coord_arr):
 	for i in coord_arr:
 		for child in $Board/BoardGrid.get_children():
@@ -282,10 +358,14 @@ func reset_arrows():
 			n.queue_free()
 
 func _on_end_turn_pressed() -> void:
+	if auto_setup == true:
+		board_auto_setup()
+	if PlayerHandler.player_turn == "Squares":
+		$Board/CirclesTurn.visible = true
+		$Board/SquaresTurn.visible = false
+	elif PlayerHandler.player_turn == "Circles":
+		$Board/SquaresTurn.visible = true
+		$Board/CirclesTurn.visible = false
 	PlayerHandler.end_turn()
-	$Board/PlayerTurn.text = PlayerHandler.player_turn
-	if $Board/PlayerTurn.text == "Squares":
-		$Board/PlayerTurn.modulate = Color(0, 0, 1, 1)
-	elif $Board/PlayerTurn.text == "Circles":
-		$Board/PlayerTurn.modulate = Color(1, 0, 0, 1)
-		
+	auto_setup = false
+	

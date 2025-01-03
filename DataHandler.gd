@@ -214,6 +214,42 @@ var golden_lines_dict := {
 	Vector2(1,-7): true, Vector2(2,-8): true, Vector2(3,-9): true, Vector2(4,-10): true,
 	Vector2(-1,-7): true, Vector2(-2,-8): true, Vector2(-3,-9): true, Vector2(-4,-10): true,
 }
+var circle_starting_pos_dict := {
+#Top Right
+	Vector2(1,8): true, Vector2(1,9): true, Vector2(1,10): true, Vector2(1,11): true,
+	Vector2(2,7): true, Vector2(2,9): true, Vector2(2,10): true, Vector2(2,11): true,
+	Vector2(3,7): true, Vector2(3,8): true, Vector2(3,10): true, Vector2(3,11): true,
+	Vector2(4,7): true, Vector2(4,8): true, Vector2(4,9): true, Vector2(4,11): true,
+	Vector2(5,7): true, Vector2(5,8): true, Vector2(5,9): true, Vector2(5,10): true,
+	Vector2(6,7): true, Vector2(6,8): true, Vector2(6,9): true, Vector2(6,10): true,
+	Vector2(7,8): true, Vector2(7,9): true,
+#Top Left
+	Vector2(-1,8): true, Vector2(-1,9): true, Vector2(-1,10): true, Vector2(-1,11): true,
+	Vector2(-2,7): true, Vector2(-2,9): true, Vector2(-2,10): true, Vector2(-2,11): true,
+	Vector2(-3,7): true, Vector2(-3,8): true, Vector2(-3,10): true, Vector2(-3,11): true,
+	Vector2(-4,7): true, Vector2(-4,8): true, Vector2(-4,9): true, Vector2(-4,11): true,
+	Vector2(-5,7): true, Vector2(-5,8): true, Vector2(-5,9): true, Vector2(-5,10): true,
+	Vector2(-6,7): true, Vector2(-6,8): true, Vector2(-6,9): true, Vector2(-6,10): true,
+	Vector2(-7,8): true, Vector2(-7,9): true
+}
+var square_starting_pos_dict := {
+#Bottom Left
+	Vector2(-1,-8): true, Vector2(-1,-9): true, Vector2(-1,-10): true, Vector2(-1,-11): true,
+	Vector2(-2,-7): true, Vector2(-2,-9): true, Vector2(-2,-10): true, Vector2(-2,-11): true,
+	Vector2(-3,-7): true, Vector2(-3,-8): true, Vector2(-3,-10): true, Vector2(-3,-11): true,
+	Vector2(-4,-7): true, Vector2(-4,-8): true, Vector2(-4,-9): true, Vector2(-4,-11): true,
+	Vector2(-5,-7): true, Vector2(-5,-8): true, Vector2(-5,-9): true, Vector2(-5,-10): true,
+	Vector2(-6,-7): true, Vector2(-6,-8): true, Vector2(-6,-9): true, Vector2(-6,-10): true,
+	Vector2(-7,-8): true, Vector2(-7,-9): true,
+#Bottom Right
+	Vector2(1,-8): true, Vector2(1,-9): true, Vector2(1,-10): true, Vector2(1,-11): true,
+	Vector2(2,-7): true, Vector2(2,-9): true, Vector2(2,-10): true, Vector2(2,-11): true,
+	Vector2(3,-7): true, Vector2(3,-8): true, Vector2(3,-10): true, Vector2(3,-11): true,
+	Vector2(4,-7): true, Vector2(4,-8): true, Vector2(4,-9): true, Vector2(4,-11): true,
+	Vector2(5,-7): true, Vector2(5,-8): true, Vector2(5,-9): true, Vector2(5,-10): true,
+	Vector2(6,-7): true, Vector2(6,-8): true, Vector2(6,-9): true, Vector2(6,-10): true,
+	Vector2(7,-8): true, Vector2(7,-9): true
+}
 
 #For DEBUG
 var use_indicators = false
@@ -251,7 +287,6 @@ var pearl_indicator_coord = []
 var amber_indicator_coord = []
 
 var add_piece = null
-var remove = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -276,9 +311,6 @@ func _ready() -> void:
 	assets.append("res://Images/Misc/Blue_Indicator.png") #15
 	assets.append("res://Images/Misc/Purple_Indicator.png") #16
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-
-#func _process(delta: float) -> void:
-#	pass
 
 func turn_start(player):
 	check_fireball(player, false)
@@ -394,16 +426,19 @@ func check_fireball(player: bool, moved_piece):
 	# Check all combinations of Rubies and Amalgams for Fireball alignment
 	for ruby_pos in rubies:
 		for secondary_piece in rubies:
-			if ruby_pos < secondary_piece && (moved_piece == ruby_pos || moved_piece == secondary_piece || void_adjacent(moved_piece, ruby_pos, secondary_piece)):
-				var targets = GameLogic.ruby_fireball(ruby_pos, secondary_piece, moved_piece)
-				if targets.size() > 0:
-					# Store the valid targets and involved pieces
-					DataHandler.ruby_targets.append(targets)
+			if ruby_pos < secondary_piece:
+				if typeof(moved_piece) == 1 || (moved_piece == ruby_pos || moved_piece == secondary_piece || void_adjacent(moved_piece, ruby_pos, secondary_piece)):
+					var targets = GameLogic.ruby_fireball(ruby_pos, secondary_piece, moved_piece)
+					if targets.size() > 0:
+						# Store the valid targets and involved pieces
+						DataHandler.ruby_targets.append(targets)
 
 	# If valid targets exist, mark Fireball as ready and show indicator
-	if DataHandler.ruby_targets != [[[],[]]] && DataHandler.ruby_targets != []:
-		DataHandler.fireball_ready = false
-		SignalBus.show_correct_icons.emit("Ruby")
+	if DataHandler.ruby_targets != []:
+		for arr in DataHandler.ruby_targets:
+			if arr != [[],[]]:
+				DataHandler.fireball_ready = false
+				SignalBus.show_correct_icons.emit("Ruby")
 
 func check_tidalwave(player: bool, moved_piece):
 	# Clear previous targets and ready state
@@ -425,16 +460,19 @@ func check_tidalwave(player: bool, moved_piece):
 	# Check combinations for valid Tidalwave targets
 	for pearl_pos in pearls:
 		for secondary_piece in pearls:
-			if pearl_pos < secondary_piece and (moved_piece == pearl_pos or moved_piece == secondary_piece || void_adjacent(moved_piece, pearl_pos, secondary_piece)):
-				var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece, moved_piece)
-				if targets.size() > 0:
-					DataHandler.pearl_targets.append(targets)
+			if pearl_pos < secondary_piece:
+				if typeof(moved_piece) == 1 || (moved_piece == pearl_pos or moved_piece == secondary_piece || void_adjacent(moved_piece, pearl_pos, secondary_piece)):
+					var targets = GameLogic.pearl_tidalwave(pearl_pos, secondary_piece, moved_piece)
+					if targets.size() > 0:
+						DataHandler.pearl_targets.append(targets)
 
 
 	# Update ready state and show indicator if targets exist
-	if DataHandler.pearl_targets != [[[],[]]] && DataHandler.pearl_targets != []:
-		DataHandler.tidalwave_ready = false
-		SignalBus.show_correct_icons.emit("Pearl")
+	if DataHandler.pearl_targets != []:
+		for arr in DataHandler.pearl_targets:
+			if arr != [[],[]]:
+				DataHandler.tidalwave_ready = false
+				SignalBus.show_correct_icons.emit("Pearl")
 
 func check_sap(player: bool, moved_piece):
 	# Clear previous targets and ready state
@@ -458,13 +496,14 @@ func check_sap(player: bool, moved_piece):
 	var temp_targets = []
 	for amber_pos in ambers:
 		for secondary_piece in ambers:
-			if amber_pos < secondary_piece and (moved_piece == amber_pos or moved_piece == secondary_piece or (piece_dict[moved_piece].type in [6,13] && GameLogic.get_points_on_line(amber_pos.x, amber_pos.y, secondary_piece.x, secondary_piece.y).has(moved_piece))):
-				var targets = GameLogic.amber_sap(amber_pos, secondary_piece)
-				if targets.size() > 0:
-					var amber1_data = [amber_pos, get_direction(amber_pos, secondary_piece)]
-					var amber2_data = [secondary_piece, get_direction(secondary_piece, amber_pos)]
-					DataHandler.amber_indicator_coord.append([amber1_data, amber2_data])
-					temp_targets.append(targets)
+			if amber_pos < secondary_piece:
+				if typeof(moved_piece) == 1 || (moved_piece == amber_pos or moved_piece == secondary_piece or (piece_dict[moved_piece].type in [6,13] && GameLogic.get_points_on_line(amber_pos.x, amber_pos.y, secondary_piece.x, secondary_piece.y).has(moved_piece))):
+					var targets = GameLogic.amber_sap(amber_pos, secondary_piece)
+					if targets.size() > 0:
+						var amber1_data = [amber_pos, get_direction(amber_pos, secondary_piece)]
+						var amber2_data = [secondary_piece, get_direction(secondary_piece, amber_pos)]
+						DataHandler.amber_indicator_coord.append([amber1_data, amber2_data])
+						temp_targets.append(targets)
 	DataHandler.amber_targets.append_array(temp_targets)
 	
 
@@ -493,10 +532,12 @@ func check_launch(player: bool, moved_piece):
 			if jade_pos < secondary_piece:
 				var launch_pieces = GameLogic.jade_launch(jade_pos, secondary_piece, moved_piece)
 				if launch_pieces != []:
-					if launch_pieces[0] != null && (moved_piece == launch_pieces[0]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece or void_adjacent(moved_piece, jade_pos, secondary_piece)):
-						DataHandler.jade_targets.append({launch_pieces[0]["Piece"] : launch_pieces[0]["launch"]})
-					if launch_pieces[1] != null && (moved_piece == launch_pieces[1]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece or void_adjacent(moved_piece, jade_pos, secondary_piece)):
-						DataHandler.jade_targets.append({launch_pieces[1]["Piece"] : launch_pieces[1]["launch"]})
+					if launch_pieces[0] != null:
+						if typeof(moved_piece) == 1 || (moved_piece == launch_pieces[0]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece or void_adjacent(moved_piece, jade_pos, secondary_piece)):
+							DataHandler.jade_targets.append({launch_pieces[0]["Piece"] : launch_pieces[0]["launch"]})
+					if launch_pieces[1] != null:
+						if typeof(moved_piece) == 1 || (moved_piece == launch_pieces[1]["Piece"] or moved_piece == jade_pos or moved_piece == secondary_piece or void_adjacent(moved_piece, jade_pos, secondary_piece)):
+							DataHandler.jade_targets.append({launch_pieces[1]["Piece"] : launch_pieces[1]["launch"]})
 
 
 	if DataHandler.jade_targets.size() > 0:
@@ -510,7 +551,8 @@ func fireball(target_pos: Array):
 			DataHandler.piece_dict[i].queue_free()
 			DataHandler.piece_dict.erase(i)
 			DataHandler.ruby_indicator_coord = []
-
+			PlayerHandler.next_turn_step()
+	
 func tidalwave(target_pos: Array):
 	# Validate the target exists before removing it
 	for i in target_pos:
@@ -518,7 +560,8 @@ func tidalwave(target_pos: Array):
 			DataHandler.piece_dict[i].queue_free()
 			DataHandler.piece_dict.erase(i)
 			DataHandler.pearl_indicator_coord = []
-
+			PlayerHandler.next_turn_step()
+	
 # Function to execute the Sap ability
 func sap(target_pos: Array):
 	# Validate the target exists before removing it
@@ -527,7 +570,8 @@ func sap(target_pos: Array):
 			DataHandler.piece_dict[i].queue_free()
 			DataHandler.piece_dict.erase(i)
 			DataHandler.amber_indicator_coord = []
-
+			PlayerHandler.next_turn_step()
+	
 # Function to execute the Launch ability
 func launch(target_pos):
 	for i in jade_targets.size():
@@ -562,26 +606,7 @@ func launch(target_pos):
 				check_ability(player, clicked_slot)
 				launch_ready_step_2 = false
 				selected_launch_targets = null
-	PlayerHandler.next_turn_step()
-
-func debug_remove(target_array):
-	if typeof(target_array) == 5 && piece_dict.has(target_array):
-		piece_dict[target_array].queue_free()
-		piece_dict.erase(target_array)
-	for i in target_array:
-		if typeof(i) == 28:
-			for n in i:
-				if typeof(n) == 5 && piece_dict.has(n):
-					piece_dict[n].queue_free()
-					piece_dict.erase(n)
-				else:
-					for u in n:
-						if typeof(u) != 28 && piece_dict.has(u):
-							piece_dict[u].queue_free()
-							piece_dict.erase(u)
-		elif typeof(i) == 5 && piece_dict.has(i):
-			piece_dict[i].queue_free()
-			piece_dict.erase(i)
+				PlayerHandler.next_turn_step()
 
 func get_direction(coord1: Vector2, coord2: Vector2) -> Vector2:
 	# Calculate the raw direction vector
