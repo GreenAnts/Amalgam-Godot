@@ -48,6 +48,8 @@ func _on_color_rect_gui_input(event: InputEvent) -> void:
 				pass
 			elif DataHandler.sap_ready == true:
 				pass
+			elif DataHandler.launch_ready == true:
+				pass
 			elif DataHandler.launch_ready_step_2 == true:
 				# Loop through sap_targets to check if the current slot is one of the targets
 				for movement_info in DataHandler.selected_launch_targets:

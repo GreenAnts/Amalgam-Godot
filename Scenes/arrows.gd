@@ -15,7 +15,7 @@ func _on_area_2d_input_event(viewport: Node, event: InputEvent, shape_idx: int) 
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			if DataHandler.fireball_ready == true:
-				DataHandler.fireball(self.targets)
+				SignalBus.fireball_animation.emit(self.pos, self.targets[0])
 				# Reset the fireball ability and clear targets
 				SignalBus.show_correct_icons.emit("Ruby_Used")
 				DataHandler.fireball_ready = false

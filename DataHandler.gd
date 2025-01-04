@@ -140,6 +140,7 @@ var board_dict := {
 	Vector2(11,-1): true, Vector2(11,-2): true, Vector2(11,-3): true, Vector2(11,-4): true,
 	Vector2(11,-5): true
 }
+
 var golden_lines_dict := {
 	Vector2(-12, 0): [Vector2(-11, 5), Vector2(-11, -5), Vector2(-8, 3), Vector2(-8, -3)],
 	Vector2(-11, 5): [Vector2(-12, 0), Vector2(-9, 8)],
@@ -214,6 +215,7 @@ var golden_lines_dict := {
 	Vector2(1,-7): true, Vector2(2,-8): true, Vector2(3,-9): true, Vector2(4,-10): true,
 	Vector2(-1,-7): true, Vector2(-2,-8): true, Vector2(-3,-9): true, Vector2(-4,-10): true,
 }
+
 var circle_starting_pos_dict := {
 #Top Right
 	Vector2(1,8): true, Vector2(1,9): true, Vector2(1,10): true, Vector2(1,11): true,
@@ -232,6 +234,7 @@ var circle_starting_pos_dict := {
 	Vector2(-6,7): true, Vector2(-6,8): true, Vector2(-6,9): true, Vector2(-6,10): true,
 	Vector2(-7,8): true, Vector2(-7,9): true
 }
+
 var square_starting_pos_dict := {
 #Bottom Left
 	Vector2(-1,-8): true, Vector2(-1,-9): true, Vector2(-1,-10): true, Vector2(-1,-11): true,
@@ -261,8 +264,7 @@ var piece_dict := {}
 
 var clicked_piece = Vector2()
 var clicked_slot = Vector2()
-var piece_offset := Vector2(20, 20)
-var arrow_offset := Vector2(20, 20)
+var slot_offset := Vector2(20, 20)
 
 var indicators_active = false
 
@@ -328,8 +330,8 @@ func swap_pos():
 	if piece_dict.has(clicked_slot) && piece_dict.has(clicked_piece) && piece_dict[swap_ready].type in [5,12]:
 		if GameLogic.move_is_valid(swap_ready, clicked_slot):
 			#Change Pieces positions'
-			piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + piece_offset
-			piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + piece_offset
+			piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + slot_offset
+			piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + slot_offset
 			#Update piece.slot_ID
 			SignalBus.changed_piece.emit(piece_dict[swap_ready], clicked_slot)
 			SignalBus.changed_piece.emit(piece_dict[clicked_slot], swap_ready)
@@ -361,7 +363,7 @@ func change_pos():
 	if piece_dict.has(clicked_piece):
 		if !piece_dict.has(clicked_slot) and GameLogic.move_is_valid(clicked_piece, clicked_slot):
 			# Update piece position
-			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + piece_offset
+			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + slot_offset
 			SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
 			piece_dict[clicked_slot] = piece_dict[clicked_piece]
 			piece_dict.erase(clicked_piece)
@@ -591,7 +593,7 @@ func launch(target_pos):
 					if player != player_target:
 						DataHandler.piece_dict[target_pos].queue_free()
 						DataHandler.piece_dict.erase(target_pos)
-				piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + piece_offset
+				piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + slot_offset
 				SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
 				piece_dict[clicked_slot] = piece_dict[clicked_piece]
 				piece_dict.erase(clicked_piece)

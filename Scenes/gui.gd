@@ -62,10 +62,10 @@ func board_setup():
 
 func board_auto_setup():
 	#Ruby
-	add_piece(0, Vector2(1,10)) #Ruby-C1
-	add_piece(7, Vector2(1,-10)) #Ruby-S1
-	add_piece(0, Vector2(1,11)) #Ruby-C2
-	add_piece(7, Vector2(1,-11)) #Ruby-S2
+	add_piece(0, Vector2(5,9)) #Ruby-C1
+	add_piece(7, Vector2(5,-9)) #Ruby-S1
+	add_piece(0, Vector2(6,9)) #Ruby-C2
+	add_piece(7, Vector2(6,-9)) #Ruby-S2
 	#Pearl
 	add_piece(1, Vector2(2,10)) #Pearl-C1
 	add_piece(8, Vector2(2,-10)) #Pearl-S1
@@ -77,10 +77,10 @@ func board_auto_setup():
 	add_piece(2, Vector2(3,11)) #Amber-C2
 	add_piece(9, Vector2(3,-11)) #Amber-S2
 	#Jade
-	add_piece(3, Vector2(1,8)) #Jade-C1
-	add_piece(10, Vector2(1,-8)) #Jade-S1
-	add_piece(3, Vector2(1,9)) #Jade-C2
-	add_piece(10, Vector2(1,-9)) #Jade-S2
+	add_piece(3, Vector2(5,7)) #Jade-C1
+	add_piece(10, Vector2(5,-7)) #Jade-S1
+	add_piece(3, Vector2(5,8)) #Jade-C2
+	add_piece(10, Vector2(5,-8)) #Jade-S2
 	$Background/CirclePiecesContainer.visible = false
 	$Background/SquarePiecesContainer.visible = false
 	# Set everything as needed to start the game with squares going first when turn is ended
@@ -127,7 +127,7 @@ func add_piece(piece_type, location)->void:
 		get_node("../Gameplay").add_child(new_piece)
 		new_piece.type = piece_type
 		new_piece.load_icon(piece_type)
-		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.piece_offset
+		new_piece.global_position = DataHandler.board_dict[location].global_position + DataHandler.slot_offset
 		new_piece.slot_ID = location
 		DataHandler.piece_dict[new_piece.slot_ID] = new_piece
 	if (DataHandler.slot_is_empty() && piece_type not in [5,12]) || (DataHandler.slot_is_empty() && piece_type in [5,12] && DataHandler.golden_lines_dict.has(location)):
@@ -219,6 +219,7 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 #Fireball
 func _on_fireball_toggled(toggled_on: bool) -> void:
 	if toggled_on:
+		reset_movement_indicators()
 		$Background/Fireball.button_pressed = true
 		DataHandler.fireball_ready = true
 		var count = 0
@@ -230,7 +231,7 @@ func _on_fireball_toggled(toggled_on: bool) -> void:
 							var ruby_data = DataHandler.ruby_indicator_coord[targets+count]
 							var arrow = arrow_scene.instantiate()
 							get_node("../Indicators").add_child(arrow)
-							arrow.global_position = DataHandler.board_dict[ruby_data[0]].global_position + DataHandler.arrow_offset
+							arrow.global_position = DataHandler.board_dict[ruby_data[0]].global_position + DataHandler.slot_offset
 							arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(ruby_data[1])
 							#Set Data for instance
 							arrow.pos = ruby_data[0]
@@ -244,6 +245,7 @@ func _on_fireball_toggled(toggled_on: bool) -> void:
 #Tidalwave
 func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 	if toggled_on:
+		reset_movement_indicators()
 		$Background/TidalWave.button_pressed = true
 		DataHandler.tidalwave_ready = true
 		var count = 0
@@ -255,7 +257,7 @@ func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 							var pearl_data = DataHandler.pearl_indicator_coord[targets+count]
 							var arrow = arrow_scene.instantiate()
 							get_node("../Indicators").add_child(arrow)
-							arrow.global_position = DataHandler.board_dict[pearl_data[0]].global_position + DataHandler.arrow_offset
+							arrow.global_position = DataHandler.board_dict[pearl_data[0]].global_position + DataHandler.slot_offset
 							arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(pearl_data[1])
 							#Set Data for instance
 							arrow.pos = pearl_data[0]
@@ -268,6 +270,7 @@ func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 #Sap
 func _on_sap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
+		reset_movement_indicators()
 		$Background/Sap.button_pressed = true
 		DataHandler.sap_ready = true
 		if DataHandler.amber_indicator_coord != null:
@@ -275,7 +278,7 @@ func _on_sap_toggled(toggled_on: bool) -> void:
 				for amber_data in DataHandler.amber_indicator_coord[i]:
 					var arrow = arrow_scene.instantiate()
 					get_node("../Indicators").add_child(arrow)
-					arrow.global_position = DataHandler.board_dict[amber_data[0]].global_position + DataHandler.arrow_offset
+					arrow.global_position = DataHandler.board_dict[amber_data[0]].global_position + DataHandler.slot_offset
 					arrow.rotation_degrees = DataHandler.convert_direction_to_rotation(amber_data[1])
 					#Set Data for instance
 					arrow.pos = amber_data[0]
@@ -288,13 +291,14 @@ func _on_sap_toggled(toggled_on: bool) -> void:
 #Launch
 func _on_launch_toggled(toggled_on: bool) -> void:
 	if toggled_on:
+		reset_movement_indicators()
 		$Background/Launch.button_pressed = true
 		DataHandler.launch_ready = true
 		for i in DataHandler.jade_targets.size():
 			for n in DataHandler.jade_targets[i]:
 				var indicator = indicator_scene.instantiate()
 				get_node("../Indicators").add_child(indicator)
-				indicator.global_position = DataHandler.board_dict[n].global_position + DataHandler.arrow_offset
+				indicator.global_position = DataHandler.board_dict[n].global_position + DataHandler.slot_offset
 				#Set Data for instance
 				indicator.pos = n
 				indicator.targets = DataHandler.jade_targets[i]
@@ -368,6 +372,7 @@ func _on_end_turn_pressed() -> void:
 	elif PlayerHandler.player_turn == "Circles":
 		$Board/SquaresTurn.visible = true
 		$Board/CirclesTurn.visible = false
+	show_correct_icons(null)
 	PlayerHandler.end_turn()
 	auto_setup = false
 	
