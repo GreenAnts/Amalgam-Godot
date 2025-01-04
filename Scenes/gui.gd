@@ -61,6 +61,8 @@ func board_setup():
 	PlayerHandler.setup_ready = true
 
 func board_auto_setup():
+	DataHandler.clicked_slot = null
+	DataHandler.clicked_piece = null
 	#Ruby
 	add_piece(0, Vector2(5,9)) #Ruby-C1
 	add_piece(7, Vector2(5,-9)) #Ruby-S1
@@ -207,9 +209,11 @@ func reset_setup_toggle():
 	$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
 	$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
 	$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
+
 #Portal Swap
 func _on_portal_swap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
+		reset_movement_indicators()
 		$Background/PortalSwap.button_pressed = true
 		DataHandler.swap_ready = DataHandler.clicked_piece
 	else:
@@ -309,10 +313,10 @@ func _on_launch_toggled(toggled_on: bool) -> void:
 
 func show_movement_indicators(coord_arr):
 	for i in coord_arr:
-		for child in $Board/BoardGrid.get_children():
-			if child.slot_ID == i:
-				movement_indicators.append(child)
-				child.get_node("Sprite2D").visible = true
+		for slot in $Board/BoardGrid.get_children():
+			if slot.slot_ID == i:
+				movement_indicators.append(slot)
+				slot.get_node("Sprite2D").visible = true
 
 func reset_movement_indicators():
 	for i in DataHandler.board_dict:
@@ -352,6 +356,10 @@ func show_correct_icons(piece):
 			$Background/Sap.visible = false
 		if  piece == "Jade_Used":
 			$Background/Launch.visible = false
+		if  piece == "Portal_Off":
+			$Background/PortalSwap.visible = false
+			$Background/PortalSwap.button_pressed = false
+			DataHandler.swap_ready = null
 	else:
 		$Background/PortalSwap.visible = false
 		$Background/Fireball.visible = false
@@ -364,6 +372,12 @@ func reset_arrows():
 			n.queue_free()
 
 func _on_end_turn_pressed() -> void:
+	if GameLogic.check_win() == "Squares":
+		$Winner/Squares.visible = true
+		return
+	elif GameLogic.check_win() == "Circles":
+		$Winner/Circles.visible = true
+		return
 	if auto_setup == true:
 		board_auto_setup()
 	if PlayerHandler.player_turn == "Squares":

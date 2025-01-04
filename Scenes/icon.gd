@@ -25,13 +25,17 @@ func _input(event):
 					SignalBus.reset_movement_options.emit()
 				DataHandler.indicators_active = true
 				DataHandler.clicked_piece = self.get_parent().slot_ID
-				# Emit movement options based on the clicked piece
+				# Emit movement options based on the clicked piece`
 				if PlayerHandler.turn_step == 1:
 					SignalBus.movement_options.emit(GameLogic.get_all_valid_moves_for_piece(self.get_parent().slot_ID))
-					if DataHandler.piece_dict[DataHandler.clicked_piece].type in [5,12] :
+					if DataHandler.piece_dict[DataHandler.clicked_piece].type in [5,12]:
 						SignalBus.show_correct_icons.emit("Portal")
+					elif DataHandler.swap_ready == null:
+						SignalBus.show_correct_icons.emit("Portal_Off")
+					else:
+						SignalBus.reset_movement_options.emit()
 				else:
-					SignalBus.show_correct_icons.emit(null)
+					pass
 		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			SignalBus.reset_movement_options.emit()
 			DataHandler.indicators_active = false

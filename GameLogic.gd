@@ -549,3 +549,25 @@ func _validate_target(start_pos: Vector2, target_pos: Vector2, amplified: bool) 
 		return true  # Valid opponent target
 
 	return false  # Not valid if empty or not an opponent
+
+func check_win():
+	var win
+	if DataHandler.piece_dict.has(Vector2(0,6)) && DataHandler.piece_dict[Vector2(0,6)].type == 13:
+		win = "Squares"
+		return(win)
+	elif DataHandler.piece_dict.has(Vector2(0,-6)) && DataHandler.piece_dict[Vector2(0,-6)].type == 6:
+		win = "Circles"
+		return(win)
+	var circle_not_winner = false
+	var square_not_winner = false
+	for i in DataHandler.piece_dict:
+		if DataHandler.piece_dict[i].type in [0,1,2,3,4,6]:
+			square_not_winner = true
+		elif DataHandler.piece_dict[i].type in [7,8,9,10,11,13]:
+			circle_not_winner = true
+	if square_not_winner == false:
+		win = "Squares"
+		return(win)
+	elif circle_not_winner == false:
+		win = "Circles"
+		return(win)
