@@ -1,20 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bldtbjq81vd0x"]
+[gd_scene load_steps=4 format=3 uid="uid://bldtbjq81vd0x"]
 
 [ext_resource type="PackedScene" uid="uid://b6ggjxwu3ebra" path="res://Scenes/GUI.tscn" id="1_ssxwn"]
-[ext_resource type="Script" path="res://Scenes/player_squares.gd" id="1_urcla"]
-[ext_resource type="Script" path="res://Scenes/player_circles.gd" id="2_ycewj"]
 [ext_resource type="PackedScene" uid="uid://b635h0n873lb7" path="res://Scenes/Gameplay.tscn" id="3_50ct4"]
 [ext_resource type="Script" path="res://animations.gd" id="5_54m0l"]
 
 [node name="Main" type="Node"]
-
-[node name="Players" type="Node" parent="."]
-
-[node name="Squares" type="Node" parent="Players"]
-script = ExtResource("1_urcla")
-
-[node name="Circles" type="Node" parent="Players"]
-script = ExtResource("2_ycewj")
 
 [node name="GUI" parent="." instance=ExtResource("1_ssxwn")]
 

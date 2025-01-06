@@ -33,7 +33,7 @@ func play_fireball_animation(start_pos: Vector2, target_pos: Vector2):
 	
 	var total_distance = start_global.distance_to(target_global)
 	var total_slots = int(ceil(total_distance / slot_distance))
-	print(total_slots)
+	var acceleration_factor: float = .8
 	var slot_travel_time = slot_distance / fireball_speed  # Time to travel one slot
 	
 	# Rotate fireball to face the target
@@ -62,7 +62,8 @@ func play_fireball_animation(start_pos: Vector2, target_pos: Vector2):
 			tween.tween_callback(Callable(self, "_on_fireball_transition_to_impact").bind(fireball))
 
 		current_pos = next_pos
-	
+		
+		slot_travel_time *= acceleration_factor  # Faster for subsequent slots
 	# Cleanup after animation
 	tween.tween_callback(Callable(self, "_on_fireball_cleanup").bind(fireball, target_pos))
 	await tween.finished

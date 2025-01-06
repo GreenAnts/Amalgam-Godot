@@ -371,10 +371,11 @@ func change_pos():
 			indicators_active = false
 			clicked_piece = null
 			SignalBus.show_correct_icons.emit(null)
-			# Attack phase
+			
+			# Attack Step
 			GameLogic.attack(clicked_slot)
 			
-			# Abilities
+			# Ability Step
 			var player = GameLogic.check_player_of_piece(clicked_slot)
 			check_ability(player, clicked_slot)
 			PlayerHandler.next_turn_step()

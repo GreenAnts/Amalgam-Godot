@@ -4,16 +4,11 @@ var slot_ID := Vector2(0, 0)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	SignalBus.toggle_add_piece.connect(adding_piece)
 	SignalBus.bypass_piece_to_slot.connect(bypass)
-
-
-func adding_piece(piece):
-	DataHandler.add_piece = piece
 
 func bypass(passed_slot_id):
 	if passed_slot_id == self.slot_ID:
-		DataHandler.clicked_slot = slot_ID
+		DataHandler.clicked_slot = self.slot_ID
 		if DataHandler.launch_ready_step_2 == true:
 			# Loop through sap_targets to check if the current slot is one of the targets
 			for movement_info in DataHandler.selected_launch_targets:
@@ -34,9 +29,9 @@ func bypass(passed_slot_id):
 func _on_color_rect_gui_input(event: InputEvent) -> void:
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed and DataHandler.board_dict.has(slot_ID):
-			DataHandler.clicked_slot = slot_ID
+			DataHandler.clicked_slot = self.slot_ID
 			if DataHandler.add_piece != null:
-				SignalBus.ready_to_add_piece.emit(DataHandler.add_piece, slot_ID)
+				SignalBus.ready_to_add_piece.emit(DataHandler.add_piece, self.slot_ID)
 				DataHandler.add_piece = null
 			#SWAP
 			elif DataHandler.swap_ready != null:

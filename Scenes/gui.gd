@@ -140,6 +140,8 @@ func add_piece(piece_type, location)->void:
 				elif piece_type in circle_piece_counter:
 					circle_piece_counter[piece_type] += 1
 				add.call()
+				print(DataHandler.piece_dict)
+				reset_movement_indicators()
 				$Background/AutoSetup.visible = false
 			elif piece_type in square_piece_counter && DataHandler.square_starting_pos_dict.has(location):
 				if square_piece_counter[piece_type] == 1:
@@ -147,12 +149,22 @@ func add_piece(piece_type, location)->void:
 				elif piece_type in square_piece_counter:
 					square_piece_counter[piece_type] += 1
 				add.call()
+				print(DataHandler.piece_dict)
+				reset_movement_indicators()
 				$Background/AutoSetup.visible = false
 			else:
-				#DataHandler.clicked_piece = null
-				#SignalBus.toggle_add_piece.emit(piece_type)
+				$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
+				$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
+				$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
+				$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
+				$Background/SquarePiecesContainer/RubySquare.button_pressed = false
+				$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
+				$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
+				$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
+				reset_movement_indicators()
 				return
-		add.call()
+		else:
+			add.call()
 		if PlayerHandler.setup_ready == true:
 				PlayerHandler.next_turn_step()
 				reset_setup_toggle()
@@ -160,45 +172,90 @@ func add_piece(piece_type, location)->void:
 
 func add_circle(num):
 	if $Background/End_Turn.visible == false && PlayerHandler.setup_turn % 2 == 0 && PlayerHandler.player_turn == "Circles":
-		SignalBus.toggle_add_piece.emit(num)
+		DataHandler.add_piece = num
 
 func add_square(num):
 	if $Background/End_Turn.visible == false && PlayerHandler.setup_turn % 2 == 1 && PlayerHandler.player_turn == "Squares":
-		SignalBus.toggle_add_piece.emit(num)
+		DataHandler.add_piece = num
 
+func show_setup_indicators(player):
+	var setup_array = []
+	if player == "Circles":
+		for key in DataHandler.circle_starting_pos_dict.keys():
+			if not DataHandler.piece_dict.has(key):
+				setup_array.append(key)
+		show_movement_indicators(setup_array, "Green")
+	else:
+		for key in DataHandler.square_starting_pos_dict.keys():
+			if not DataHandler.piece_dict.has(key):
+				setup_array.append(key)
+		show_movement_indicators(setup_array, "Green")
+
+
+	
 # SETUP CIRCLE PIECES
 func _on_ruby_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(0)
-
+		show_setup_indicators("Circles")
+		$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
+		$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
+		$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
 func _on_pearl_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(1)
+		show_setup_indicators("Circles")
+		$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
+		$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
+		$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
 
 func _on_amber_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(2)
+		show_setup_indicators("Circles")
+		$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
+		$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
+		$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
 
 func _on_jade_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(3)
+		show_setup_indicators("Circles")
+		$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
+		$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
+		$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
 
 # SETUP SQUARE PIECES
 func _on_ruby_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(7)
-
+		show_setup_indicators("Squares")
+		$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
+		$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
+		$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
 func _on_pearl_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(8)
+		show_setup_indicators("Squares")
+		$Background/SquarePiecesContainer/RubySquare.button_pressed = false
+		$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
+		$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
 
 func _on_amber_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(9)
+		show_setup_indicators("Squares")
+		$Background/SquarePiecesContainer/RubySquare.button_pressed = false
+		$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
+		$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
 
 func _on_jade_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(10)
+		show_setup_indicators("Squares")
+		$Background/SquarePiecesContainer/RubySquare.button_pressed = false
+		$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
+		$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
 
 func reset_setup_toggle():
 	$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
@@ -216,9 +273,15 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 		reset_movement_indicators()
 		$Background/PortalSwap.button_pressed = true
 		DataHandler.swap_ready = DataHandler.clicked_piece
+		var golden_lines_pieces = []
+		for piece in DataHandler.piece_dict.keys():
+			if GameLogic.check_player_of_piece(piece) == GameLogic.check_player_of_piece(DataHandler.swap_ready) && DataHandler.golden_lines_dict.has(piece) && DataHandler.piece_dict[piece].type not in [5,12]:
+				golden_lines_pieces.append(piece)
+		show_movement_indicators(golden_lines_pieces, "Purple")
 	else:
 		$Background/PortalSwap.button_pressed = false
 		DataHandler.swap_ready = null
+		reset_movement_indicators()
 
 #Fireball
 func _on_fireball_toggled(toggled_on: bool) -> void:
@@ -311,17 +374,21 @@ func _on_launch_toggled(toggled_on: bool) -> void:
 		DataHandler.launch_ready = false
 		reset_arrows()
 
-func show_movement_indicators(coord_arr):
+func show_movement_indicators(coord_arr, color = null):
 	for i in coord_arr:
 		for slot in $Board/BoardGrid.get_children():
 			if slot.slot_ID == i:
 				movement_indicators.append(slot)
-				slot.get_node("Sprite2D").visible = true
+				if color == null || color == "Green":
+					slot.get_node("Green").visible = true
+				elif color == "Purple":
+					slot.get_node("Purple").visible = true
 
 func reset_movement_indicators():
 	for i in DataHandler.board_dict:
 		for slot in movement_indicators:
-			slot.get_node("Sprite2D").visible = false
+			slot.get_node("Green").visible = false
+			slot.get_node("Purple").visible = false
 
 func show_end_turn(bool_val):
 	$Background/End_Turn.visible = bool_val

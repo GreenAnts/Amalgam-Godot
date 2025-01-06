@@ -27,4 +27,4 @@ SavedData="*res://SavedData.gd"
 
 window/size/viewport_width=1500
 window/size/viewport_height=1040
-window/size/resizable=false
+window/stretch/mode="viewport"
