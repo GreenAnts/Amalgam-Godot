@@ -330,11 +330,11 @@ func swap_pos():
 	if piece_dict.has(clicked_slot) && piece_dict.has(clicked_piece) && piece_dict[swap_ready].type in [5,12]:
 		if GameLogic.move_is_valid(swap_ready, clicked_slot):
 			#Change Pieces positions'
-			piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + slot_offset
-			piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + slot_offset
+			#piece_dict[swap_ready].global_position = board_dict[clicked_slot].global_position + slot_offset
+			#piece_dict[clicked_slot].global_position = board_dict[swap_ready].global_position + slot_offset
 			#Update piece.slot_ID
-			SignalBus.changed_piece.emit(piece_dict[swap_ready], clicked_slot)
-			SignalBus.changed_piece.emit(piece_dict[clicked_slot], swap_ready)
+			SignalBus.changed_piece.emit(piece_dict[swap_ready], clicked_slot, "swap")
+			SignalBus.changed_piece.emit(piece_dict[clicked_slot], swap_ready, "swap")
 			#update piece_dict
 			var temp_piece_node = piece_dict[clicked_slot]
 			piece_dict[clicked_slot] = piece_dict[swap_ready]
@@ -363,8 +363,8 @@ func change_pos():
 	if piece_dict.has(clicked_piece):
 		if !piece_dict.has(clicked_slot) and GameLogic.move_is_valid(clicked_piece, clicked_slot):
 			# Update piece position
-			piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + slot_offset
-			SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
+			#piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + slot_offset
+			SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot, "move")
 			piece_dict[clicked_slot] = piece_dict[clicked_piece]
 			piece_dict.erase(clicked_piece)
 			SignalBus.reset_movement_options.emit()
@@ -382,7 +382,6 @@ func change_pos():
 
 func check_ability(player: bool, moved_piece: Vector2):
 	var piece = DataHandler.piece_dict[moved_piece]
-	var debug_remove_pieces = []
 	if not piece:
 		return
 
@@ -577,6 +576,7 @@ func sap(target_pos: Array):
 	
 # Function to execute the Launch ability
 func launch(target_pos):
+	var player
 	for i in jade_targets.size():
 		if launch_ready == true && launch_ready_step_2 == false:
 			if piece_dict.has(clicked_piece) && jade_targets[i].has(clicked_piece):
@@ -589,13 +589,12 @@ func launch(target_pos):
 			if jade_targets[i].has(clicked_piece) && jade_targets[i][clicked_piece].has(target_pos):
 				if target_pos in piece_dict:
 					
-					var player = GameLogic.check_player_of_piece(clicked_piece)
+					player = GameLogic.check_player_of_piece(clicked_piece)
 					var player_target = GameLogic.check_player_of_piece(clicked_slot)
 					if player != player_target:
 						DataHandler.piece_dict[target_pos].queue_free()
 						DataHandler.piece_dict.erase(target_pos)
-				piece_dict[clicked_piece].global_position = board_dict[clicked_slot].global_position + slot_offset
-				SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot)
+				SignalBus.changed_piece.emit(piece_dict[clicked_piece], clicked_slot, "launch")
 				piece_dict[clicked_slot] = piece_dict[clicked_piece]
 				piece_dict.erase(clicked_piece)
 				SignalBus.reset_movement_options.emit()
@@ -605,7 +604,7 @@ func launch(target_pos):
 				GameLogic.attack(clicked_slot)
 				
 				# Abilities
-				var player = GameLogic.check_player_of_piece(clicked_slot)
+				player = GameLogic.check_player_of_piece(clicked_slot)
 				check_ability(player, clicked_slot)
 				launch_ready_step_2 = false
 				selected_launch_targets = null

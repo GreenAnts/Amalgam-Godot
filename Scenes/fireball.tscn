@@ -1,7 +1,6 @@
-[gd_scene load_steps=27 format=3 uid="uid://buucmwpv7cjl0"]
+[gd_scene load_steps=26 format=3 uid="uid://buucmwpv7cjl0"]
 
 [ext_resource type="Texture2D" uid="uid://djxyi8i6e6n87" path="res://Images/Misc/fire.png" id="1_lctmt"]
-[ext_resource type="Script" path="res://Scenes/fireball.gd" id="2_6cp08"]
 [ext_resource type="Texture2D" uid="uid://ccprbsj5jmrxc" path="res://Images/Misc/fire1.png" id="2_83ij1"]
 [ext_resource type="Texture2D" uid="uid://bd855c3krjwrk" path="res://Images/Misc/ruby_travel_sprite.png" id="3_4l811"]
 
@@ -175,4 +174,3 @@ position = Vector2(1, 0)
 scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_wnbmf")
 animation = &"start"
-script = ExtResource("2_6cp08")

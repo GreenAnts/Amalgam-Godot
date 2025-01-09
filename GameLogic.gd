@@ -215,11 +215,11 @@ func get_fireball_targets(start_pos: Vector2, direction: Vector2, amplified: boo
 	# Determine step direction for both x and y axes separately
 	var step_x = sign(direction.x)
 	var step_y = sign(direction.y)
-	var range = 7
+	var targ_range = 7
 	if amplified == true:
-		range = 10
+		targ_range = 10
 
-	for step in range(1, range):  # Fireball can move up to 6 spaces
+	for step in range(1, targ_range):  # Fireball can move up to 6 spaces
 		# Calculate target position by adding steps in the x and y direction separately
 		var target_pos = start_pos + Vector2(step_x * step, step_y * step)
 		# Check if the target position is on the board
@@ -361,7 +361,6 @@ func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
 				if !DataHandler.board_dict.has(point):
 					continue  # Skip if out of bounds
 				if DataHandler.piece_dict.has(point):
-					var piece = DataHandler.piece_dict[point]
 					# Add opponent pieces to the targets
 					if GameLogic.check_player_of_piece(point) != GameLogic.check_player_of_piece(amber_pos1):
 						targets.append(point)
@@ -369,7 +368,6 @@ func amber_sap(amber_pos1: Vector2, amber_pos2: Vector2) -> Array:
 				if !DataHandler.board_dict.has(point):
 					continue  # Skip if out of bounds
 				if DataHandler.piece_dict.has(point):
-					var piece = DataHandler.piece_dict[point]
 					# Add opponent pieces to the targets
 					if GameLogic.check_player_of_piece(point) != GameLogic.check_player_of_piece(amber_pos1):
 						targets.append(point)
@@ -422,10 +420,10 @@ func get_launch_targets(start_pos: Vector2, direction: Vector2, amplified: bool,
 	# Determine step direction for both x and y axes separately
 	var step_x = sign(direction.x)
 	var step_y = sign(direction.y)
-	var range = 5
+	var targ_range = 5
 	if amplified == true:
-		range = 7
-	for step in range(1, range):  # Launch can move up to 4 spaces or 6
+		targ_range = 7
+	for step in range(1, targ_range):  # Launch can move up to 4 spaces or 6
 		# Calculate target position by adding steps in the x and y direction separately
 		var target_pos = start_pos + Vector2(step_x * step, step_y * step)
 		# Check if the target position is on the board
