@@ -31,7 +31,13 @@ func change_ID(piece, coordinates, anim):
 			anim_speed = 1.5
 			tween.set_ease(Tween.EaseType.EASE_IN_OUT)
 			tween.set_trans(Tween.TransitionType.TRANS_QUAD)
+			print(self.get_index())
+			self.z_index += 1
+			print(self.get_index())
 			var tween_2 = get_tree().create_tween()
 			tween_2.tween_property(piece, "scale", Vector2(2,2), anim_speed / 2).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
 			tween_2.tween_property(piece, "scale", Vector2(1,1), anim_speed / 2).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 		tween.tween_property(piece, "global_position", DataHandler.board_dict[coordinates].global_position + DataHandler.slot_offset, anim_speed)
+		if anim == "launch":
+			await tween.finished
+			self.z_index -= 1

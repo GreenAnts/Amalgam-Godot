@@ -1,12 +1,17 @@
 extends Node
 
 @export var fireball_scene: PackedScene = preload("res://Scenes/fireball.tscn")
-@export var fireball_speed: float = 150.0  # Pixels per second
+@export var fireball_speed: float = 200.0  # Pixels per second
+@export var fireball_curve : Curve
 
 func _ready() -> void:
 	SignalBus.fireball_animation.connect(play_fireball_animation)
 
 func play_fireball_animation(start_pos: Vector2, target_pos: Vector2):
+	
+	
+	
+	
 	# Instance the fireball scene
 	var fireball = fireball_scene.instantiate()
 	
@@ -44,41 +49,25 @@ func play_fireball_animation(start_pos: Vector2, target_pos: Vector2):
 	
 	
 	var travel_time = total_distance / fireball_speed  # Time to travel one slot
-	var final_pos = current_pos + direction * total_distance
+	var final_pos = current_pos + direction * (total_distance - slot_distance / 2)
+	var new_start = current_pos + direction * slot_distance
 	
-	var tween = fireball.create_tween()
-	tween.set_ease(Tween.EaseType.EASE_IN)
-	tween.set_trans(Tween.TransitionType.TRANS_CUBIC)
-	tween.tween_property(fireball, "global_position", final_pos, travel_time)
+	var tween := create_tween()
+	tween.set_trans(Tween.TransitionType.TRANS_QUINT)
+	tween.tween_method(
+		func (progress):
+			var curve_progress := fireball_curve.sample(progress)
+			fireball.global_position = lerp(new_start, final_pos, curve_progress), 0.0, 1.0, travel_time)
+			
+	#var tween = fireball.create_tween()
+	#tween.set_ease(Tween.EaseType.EASE_IN)
+	#tween.tween_property(fireball, "global_position", final_pos, travel_time)
+	
 	#await get_tree().create_timer(0.5).timeout
 	await tween.finished
 	fireball.queue_free()
 	DataHandler.fireball([target_pos])
-	#
-	#for i in range(total_slots):
-		## Calculate the next position, ensuring the fireball reaches the target
-		#
-		## Correct the final position to exactly match the target
-		#if i == total_slots - 1:
-			#next_pos = target_global
-		#
-		## Add tween for the next slot
-		#tween.tween_property(fireball, "global_position", next_pos, slot_travel_time)
-		#
-		## Transition animation based on position
-		#if i == 0:
-			#tween.tween_callback(Callable(self, "_on_fireball_transition_to_travel").bind(fireball))
-		#elif i == total_slots - 1:
-			## Ensure impact animation plays at the last step
-			#tween.tween_callback(Callable(self, "_on_fireball_transition_to_impact").bind(fireball))
-#
-		#current_pos = next_pos
-		#
-		#slot_travel_time *= acceleration_factor  # Faster for subsequent slots
-	## Cleanup after animation
-	#tween.tween_callback(Callable(self, "_on_fireball_cleanup").bind(fireball, target_pos))
-	#await tween.finished
-
+	
 func _on_fireball_transition_to_travel(fireball):
 	print("Transitioning to travel animation")
 	fireball.play("travel")

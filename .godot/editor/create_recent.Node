@@ -1,8 +1,9 @@
+AnimationPlayer
+Node2D
 Button
 Label
 MultiplayerSynchronizer
 MultiplayerSpawner
-Node2D
 Control
 AnimatedSprite2D
 TextureButton
