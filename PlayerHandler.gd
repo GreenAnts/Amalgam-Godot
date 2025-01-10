@@ -32,12 +32,16 @@ func end_turn():
 		change_player()
 		turn_step = 1
 	SignalBus.show_end_turn.emit(false)
+	
 
 func change_player():
 	if player_turn == "Squares":
 			player_turn = "Circles"
 	elif player_turn == "Circles":
 			player_turn = "Squares"
+	DataHandler.temp_piece_dict = {}
+	for piece in DataHandler.piece_dict:
+		DataHandler.temp_piece_dict[piece] = DataHandler.piece_dict[piece].type
 
 func check_abilities():
 	if player_turn == "Squares":

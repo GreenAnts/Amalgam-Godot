@@ -268,6 +268,9 @@ var slot_offset := Vector2(20, 20)
 
 var indicators_active = false
 
+#For ResetTurn
+var temp_piece_dict = {}
+
 #icons
 var swap_ready = null
 var fireball_ready = false

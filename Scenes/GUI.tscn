@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://b6ggjxwu3ebra"]
+[gd_scene load_steps=33 format=3 uid="uid://b6ggjxwu3ebra"]
 
 [ext_resource type="Script" path="res://Scenes/gui.gd" id="1_5w5l0"]
 [ext_resource type="Texture2D" uid="uid://brmo41u4b8fdm" path="res://Images/Pieces/Ruby_Circle.png" id="2_x5vtr"]
@@ -31,6 +31,7 @@
 [ext_resource type="Texture2D" uid="uid://c58usujtsmlso" path="res://Images/Icons/End_Turn.png" id="19_j4hto"]
 [ext_resource type="Texture2D" uid="uid://sogupwpp3aof" path="res://Images/Misc/Gradient_yellow.png" id="21_gwgu1"]
 [ext_resource type="Texture2D" uid="uid://cjo4fg8rliuaf" path="res://Images/Misc/AutoSetup.png" id="29_6kjxn"]
+[ext_resource type="Texture2D" uid="uid://c78rt1mak56c" path="res://Images/Misc/symbol previous.svg" id="30_7u2a4"]
 
 [node name="GUI" type="Control"]
 layout_mode = 3
@@ -181,6 +182,16 @@ offset_bottom = 535.0
 toggle_mode = true
 texture_normal = ExtResource("29_6kjxn")
 
+[node name="ResetTurn" type="TextureButton" parent="Background"]
+layout_mode = 0
+offset_left = 1375.0
+offset_top = 957.0
+offset_right = 1583.0
+offset_bottom = 1077.0
+scale = Vector2(0.5, 0.5)
+toggle_mode = true
+texture_normal = ExtResource("30_7u2a4")
+
 [node name="Board" type="ColorRect" parent="."]
 layout_mode = 0
 offset_right = 1040.0
@@ -298,3 +309,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="Background/End_Turn" to="." method="_on_end_turn_pressed"]
 [connection signal="pressed" from="Background/AutoSetup" to="." method="_on_auto_setup_pressed"]
 [connection signal="toggled" from="Background/AutoSetup" to="." method="_on_auto_setup_toggled"]
+[connection signal="pressed" from="Background/ResetTurn" to="." method="_on_reset_turn_pressed"]

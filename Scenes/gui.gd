@@ -140,7 +140,6 @@ func add_piece(piece_type, location)->void:
 				elif piece_type in circle_piece_counter:
 					circle_piece_counter[piece_type] += 1
 				add.call()
-				print(DataHandler.piece_dict)
 				reset_movement_indicators()
 				$Background/AutoSetup.visible = false
 			elif piece_type in square_piece_counter && DataHandler.square_starting_pos_dict.has(location):
@@ -149,7 +148,6 @@ func add_piece(piece_type, location)->void:
 				elif piece_type in square_piece_counter:
 					square_piece_counter[piece_type] += 1
 				add.call()
-				print(DataHandler.piece_dict)
 				reset_movement_indicators()
 				$Background/AutoSetup.visible = false
 			else:
@@ -165,6 +163,7 @@ func add_piece(piece_type, location)->void:
 				return
 		else:
 			add.call()
+			print("PIECE ADDED")
 		if PlayerHandler.setup_ready == true:
 				PlayerHandler.next_turn_step()
 				reset_setup_toggle()
@@ -456,4 +455,33 @@ func _on_end_turn_pressed() -> void:
 	show_correct_icons(null)
 	PlayerHandler.end_turn()
 	auto_setup = false
-	
+
+
+func _on_reset_turn_pressed() -> void:
+	#Remove all Nodes from scene
+	print(DataHandler.temp_piece_dict)
+	if DataHandler.temp_piece_dict != {}:
+		# Clear dictionary and reset GUI
+		DataHandler.piece_dict = {}
+		reset_arrows()
+		reset_movement_indicators()
+		show_correct_icons(null)
+		DataHandler.swap_ready = null
+		DataHandler.fireball_ready = false
+		DataHandler.tidalwave_ready = false
+		DataHandler.sap_ready = false
+		DataHandler.launch_ready = false
+		DataHandler.launch_ready_step_2 = false
+		DataHandler.clicked_slot = null
+		for n in get_node("../Gameplay").get_children():
+			n.queue_free()
+		# Add Pieces as they were at start on round (on change_player - PlayerHandler)
+		for piece in DataHandler.temp_piece_dict:
+			print("TESTING")
+			add_piece(DataHandler.temp_piece_dict[piece], piece)
+		if PlayerHandler.player_turn == "Squares":
+			DataHandler.turn_start(false) #Squares Player
+		elif PlayerHandler.player_turn == "Circles":
+			DataHandler.turn_start(true) #Circles Player
+		PlayerHandler.turn_step = 1
+		show_end_turn(false)
