@@ -6,6 +6,19 @@ extends Control
 @onready var arrow_scene = preload("res://Scenes/arrows.tscn")
 @onready var indicator_scene = preload("res://Scenes/indicators.tscn")
 
+@onready var fireball_icon = $Controls/Fireball
+@onready var tidalwave_icon = $Controls/TidalWave
+@onready var sap_icon = $Controls/Sap
+@onready var launch_icon = $Controls/Launch
+@onready var swap_icon = $Controls/PortalSwap
+
+@onready var end_turn_btn = $Controls/End_Turn
+@onready var reset_turn_btn = $Controls/ResetTurn
+@onready var auto_setup_btn = $Controls/AutoSetup
+
+@onready var circle_container = $Controls/CirclePiecesContainer
+@onready var square_container = $Controls/SquarePiecesContainer
+
 var circle_piece_counter = {0: 0, 1: 0, 2: 0, 3: 0}
 var square_piece_counter = {7: 0, 8: 0, 9: 0, 10: 0}
 
@@ -33,15 +46,18 @@ func _ready() -> void:
 		ycor -= 1
 	board_setup.call_deferred()
 	#Hide Icons
-	$Background/PortalSwap.visible = false
-	$Background/Fireball.visible = false
-	$Background/TidalWave.visible = false
-	$Background/Sap.visible = false
-	$Background/Launch.visible = false
-	$Background/End_Turn.visible = false
+	swap_icon.visible = false
+	fireball_icon.visible = false
+	tidalwave_icon.visible = false
+	sap_icon.visible = false
+	launch_icon.visible = false
+	end_turn_btn.visible = false
+	reset_turn_btn.visible = false
 	#Squares Start first
-	$Board/CirclesTurn.visible = false
-	$Board/SquaresTurn.visible = false
+	$CirclesTurn.visible = false
+	circle_container.visible = false
+	$SquaresTurn.visible = false
+	square_container.visible = false
 	
 func board_setup():
 	#C:CIRCLES #S:SQUARES
@@ -57,7 +73,8 @@ func board_setup():
 	add_piece(5, Vector2(-6,6)) #Portal-C2
 	add_piece(12, Vector2(-6,-6)) #Portal-S2
 	
-	$Board/SquaresTurn.visible = true
+	$SquaresTurn.visible = true
+	square_container.visible = true
 	PlayerHandler.setup_ready = true
 
 func board_auto_setup():
@@ -83,10 +100,10 @@ func board_auto_setup():
 	add_piece(10, Vector2(5,-7)) #Jade-S1
 	add_piece(3, Vector2(5,8)) #Jade-C2
 	add_piece(10, Vector2(5,-8)) #Jade-S2
-	$Background/CirclePiecesContainer.visible = false
-	$Background/SquarePiecesContainer.visible = false
+	circle_container.visible = false
+	square_container.visible = false
 	# Set everything as needed to start the game with squares going first when turn is ended
-	$Background/AutoSetup.visible = false
+	auto_setup_btn.visible = false
 	PlayerHandler.setup_turn = 16
 	PlayerHandler.player_turn = "Circles"
 
@@ -107,21 +124,21 @@ func create_slot():
 
 func hide_piece(piece_type):
 	if piece_type == 0:
-		$Background/CirclePiecesContainer/RubyCircle.visible = false
+		circle_container.get_node("RubyCircle").visible = false
 	if piece_type == 1:
-		$Background/CirclePiecesContainer/PearlCircle.visible = false
+		circle_container.get_node("PearlCircle").visible = false
 	if piece_type == 2:
-		$Background/CirclePiecesContainer/AmberCircle.visible = false
+		circle_container.get_node("AmberCircle").visible = false
 	if piece_type == 3:
-		$Background/CirclePiecesContainer/JadeCircle.visible = false
+		circle_container.get_node("JadeCircle").visible = false
 	if piece_type == 7:
-		$Background/SquarePiecesContainer/RubySquare.visible = false
+		square_container.get_node("RubySquare").visible = false
 	if piece_type == 8:
-		$Background/SquarePiecesContainer/PearlSquare.visible = false
+		square_container.get_node("PearlSquare").visible = false
 	if piece_type == 9:
-		$Background/SquarePiecesContainer/AmberSquare.visible = false
+		square_container.get_node("AmberSquare").visible = false
 	if piece_type == 10:
-		$Background/SquarePiecesContainer/JadeSquare.visible = false
+		square_container.get_node("JadeSquare").visible = false
 	
 func add_piece(piece_type, location)->void:
 	var add = func add():
@@ -140,41 +157,47 @@ func add_piece(piece_type, location)->void:
 				elif piece_type in circle_piece_counter:
 					circle_piece_counter[piece_type] += 1
 				add.call()
+				square_container.visible = true
+				circle_container.visible = false
 				reset_movement_indicators()
-				$Background/AutoSetup.visible = false
+				auto_setup_btn.visible = false
 			elif piece_type in square_piece_counter && DataHandler.square_starting_pos_dict.has(location):
 				if square_piece_counter[piece_type] == 1:
 					hide_piece(piece_type)
 				elif piece_type in square_piece_counter:
 					square_piece_counter[piece_type] += 1
 				add.call()
+				circle_container.visible = true
+				square_container.visible = false
 				reset_movement_indicators()
-				$Background/AutoSetup.visible = false
+				auto_setup_btn.visible = false
 			else:
-				$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
-				$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
-				$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
-				$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
-				$Background/SquarePiecesContainer/RubySquare.button_pressed = false
-				$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
-				$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
-				$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
+				circle_container.get_node("JadeCircle").button_pressed = false
+				circle_container.get_node("AmberCircle").button_pressed = false
+				circle_container.get_node("PearlCircle").button_pressed = false
+				circle_container.get_node("RubyCircle").button_pressed = false
+				square_container.get_node("RubySquare").button_pressed = false
+				square_container.get_node("PearlSquare").button_pressed = false
+				square_container.get_node("AmberSquare").button_pressed = false
+				square_container.get_node("JadeSquare").button_pressed = false
 				reset_movement_indicators()
 				return
 		else:
 			add.call()
-			print("PIECE ADDED")
 		if PlayerHandler.setup_ready == true:
-				PlayerHandler.next_turn_step()
+				#PlayerHandler.next_turn_step()
+				PlayerHandler.turn_step += 1
 				reset_setup_toggle()
+				if auto_setup == false:
+					end_turn()
 	DataHandler.clicked_piece = null
 
 func add_circle(num):
-	if $Background/End_Turn.visible == false && PlayerHandler.setup_turn % 2 == 0 && PlayerHandler.player_turn == "Circles":
+	if end_turn_btn.visible == false && PlayerHandler.setup_turn % 2 == 0 && PlayerHandler.player_turn == "Circles":
 		DataHandler.add_piece = num
 
 func add_square(num):
-	if $Background/End_Turn.visible == false && PlayerHandler.setup_turn % 2 == 1 && PlayerHandler.player_turn == "Squares":
+	if end_turn_btn.visible == false && PlayerHandler.setup_turn % 2 == 1 && PlayerHandler.player_turn == "Squares":
 		DataHandler.add_piece = num
 
 func show_setup_indicators(player):
@@ -197,80 +220,106 @@ func _on_ruby_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(0)
 		show_setup_indicators("Circles")
-		$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
-		$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
-		$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
+		circle_container.get_node("JadeCircle").button_pressed = false
+		circle_container.get_node("AmberCircle").button_pressed = false
+		circle_container.get_node("PearlCircle").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func _on_pearl_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(1)
 		show_setup_indicators("Circles")
-		$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
-		$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
-		$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
-
+		circle_container.get_node("JadeCircle").button_pressed = false
+		circle_container.get_node("AmberCircle").button_pressed = false
+		circle_container.get_node("RubyCircle").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func _on_amber_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(2)
 		show_setup_indicators("Circles")
-		$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
-		$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
-		$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
-
+		circle_container.get_node("JadeCircle").button_pressed = false
+		circle_container.get_node("PearlCircle").button_pressed = false
+		circle_container.get_node("RubyCircle").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func _on_jade_circle_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_circle(3)
 		show_setup_indicators("Circles")
-		$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
-		$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
-		$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
-
+		circle_container.get_node("AmberCircle").button_pressed = false
+		circle_container.get_node("PearlCircle").button_pressed = false
+		circle_container.get_node("RubyCircle").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 # SETUP SQUARE PIECES
 func _on_ruby_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(7)
 		show_setup_indicators("Squares")
-		$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
-		$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
-		$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
+		square_container.get_node("PearlSquare").button_pressed = false
+		square_container.get_node("AmberSquare").button_pressed = false
+		square_container.get_node("JadeSquare").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func _on_pearl_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(8)
 		show_setup_indicators("Squares")
-		$Background/SquarePiecesContainer/RubySquare.button_pressed = false
-		$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
-		$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
-
+		square_container.get_node("RubySquare").button_pressed = false
+		square_container.get_node("AmberSquare").button_pressed = false
+		square_container.get_node("JadeSquare").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func _on_amber_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(9)
 		show_setup_indicators("Squares")
-		$Background/SquarePiecesContainer/RubySquare.button_pressed = false
-		$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
-		$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
-
+		square_container.get_node("RubySquare").button_pressed = false
+		square_container.get_node("PearlSquare").button_pressed = false
+		square_container.get_node("JadeSquare").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func _on_jade_square_toggled(toggled_on: bool) -> void:
 	if toggled_on == true:
 		add_square(10)
 		show_setup_indicators("Squares")
-		$Background/SquarePiecesContainer/RubySquare.button_pressed = false
-		$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
-		$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
-
+		square_container.get_node("RubySquare").button_pressed = false
+		square_container.get_node("PearlSquare").button_pressed = false
+		square_container.get_node("AmberSquare").button_pressed = false
+	elif toggled_on == false:
+		DataHandler.add_piece = null
+		reset_movement_indicators()
+		
 func reset_setup_toggle():
-	$Background/CirclePiecesContainer/RubyCircle.button_pressed = false
-	$Background/CirclePiecesContainer/PearlCircle.button_pressed = false
-	$Background/CirclePiecesContainer/AmberCircle.button_pressed = false
-	$Background/CirclePiecesContainer/JadeCircle.button_pressed = false
-	$Background/SquarePiecesContainer/RubySquare.button_pressed = false
-	$Background/SquarePiecesContainer/PearlSquare.button_pressed = false
-	$Background/SquarePiecesContainer/AmberSquare.button_pressed = false
-	$Background/SquarePiecesContainer/JadeSquare.button_pressed = false
+	circle_container.get_node("RubyCircle").button_pressed = false
+	circle_container.get_node("PearlCircle").button_pressed = false
+	circle_container.get_node("AmberCircle").button_pressed = false
+	circle_container.get_node("JadeCircle").button_pressed = false
+	square_container.get_node("RubySquare").button_pressed = false
+	square_container.get_node("PearlSquare").button_pressed = false
+	square_container.get_node("AmberSquare").button_pressed = false
+	square_container.get_node("JadeSquare").button_pressed = false
 
 #Portal Swap
 func _on_portal_swap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		reset_movement_indicators()
-		$Background/PortalSwap.button_pressed = true
+		swap_icon.button_pressed = true
 		DataHandler.swap_ready = DataHandler.clicked_piece
 		var golden_lines_pieces = []
 		for piece in DataHandler.piece_dict.keys():
@@ -278,7 +327,7 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 				golden_lines_pieces.append(piece)
 		show_movement_indicators(golden_lines_pieces, "Purple")
 	else:
-		$Background/PortalSwap.button_pressed = false
+		swap_icon.button_pressed = false
 		DataHandler.swap_ready = null
 		reset_movement_indicators()
 
@@ -286,7 +335,7 @@ func _on_portal_swap_toggled(toggled_on: bool) -> void:
 func _on_fireball_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		reset_movement_indicators()
-		$Background/Fireball.button_pressed = true
+		fireball_icon.button_pressed = true
 		DataHandler.fireball_ready = true
 		var count = 0
 		if DataHandler.ruby_indicator_coord != null:
@@ -304,7 +353,7 @@ func _on_fireball_toggled(toggled_on: bool) -> void:
 							arrow.targets = DataHandler.ruby_targets[arr_step][targets]
 					count += 2 
 	else:
-		$Background/Fireball.button_pressed = false
+		fireball_icon.button_pressed = false
 		DataHandler.fireball_ready = false
 		reset_arrows()
 
@@ -312,7 +361,7 @@ func _on_fireball_toggled(toggled_on: bool) -> void:
 func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		reset_movement_indicators()
-		$Background/TidalWave.button_pressed = true
+		tidalwave_icon.button_pressed = true
 		DataHandler.tidalwave_ready = true
 		var count = 0
 		if DataHandler.pearl_indicator_coord != null:
@@ -330,14 +379,14 @@ func _on_tidal_wave_toggled(toggled_on: bool) -> void:
 							arrow.targets = DataHandler.pearl_targets[arr_step][targets]
 					count += 2 
 	else:
-		$Background/TidalWave.button_pressed = false
+		tidalwave_icon.button_pressed = false
 		DataHandler.tidalwave_ready = false
 		reset_arrows()
 #Sap
 func _on_sap_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		reset_movement_indicators()
-		$Background/Sap.button_pressed = true
+		sap_icon.button_pressed = true
 		DataHandler.sap_ready = true
 		if DataHandler.amber_indicator_coord != null:
 			for i in DataHandler.amber_targets.size():
@@ -350,7 +399,7 @@ func _on_sap_toggled(toggled_on: bool) -> void:
 					arrow.pos = amber_data[0]
 					arrow.targets = DataHandler.amber_targets[i]
 	else:
-		$Background/Sap.button_pressed = false
+		sap_icon.button_pressed = false
 		DataHandler.sap_ready = false
 		reset_arrows()
 
@@ -358,7 +407,7 @@ func _on_sap_toggled(toggled_on: bool) -> void:
 func _on_launch_toggled(toggled_on: bool) -> void:
 	if toggled_on:
 		reset_movement_indicators()
-		$Background/Launch.button_pressed = true
+		launch_icon.button_pressed = true
 		DataHandler.launch_ready = true
 		for i in DataHandler.jade_targets.size():
 			for n in DataHandler.jade_targets[i]:
@@ -369,13 +418,13 @@ func _on_launch_toggled(toggled_on: bool) -> void:
 				indicator.pos = n
 				indicator.targets = DataHandler.jade_targets[i]
 	else:
-		$Background/Launch.button_pressed = false
+		launch_icon.button_pressed = false
 		DataHandler.launch_ready = false
 		reset_arrows()
 
 func show_movement_indicators(coord_arr, color = null):
 	for i in coord_arr:
-		for slot in $Board/BoardGrid.get_children():
+		for slot in board_grid.get_children():
 			if slot.slot_ID == i:
 				movement_indicators.append(slot)
 				if color == null || color == "Green":
@@ -390,54 +439,59 @@ func reset_movement_indicators():
 			slot.get_node("Purple").visible = false
 
 func show_end_turn(bool_val):
-	$Background/End_Turn.visible = bool_val
+	end_turn_btn.visible = bool_val
+	if auto_setup == false:
+		reset_turn_btn.visible = bool_val
 
 func show_correct_icons(piece):
 	if piece != null:
 		if  piece == "Portal":
-			$Background/PortalSwap.visible = true
-			$Background/PortalSwap.button_pressed = false
+			swap_icon.visible = true
+			swap_icon.button_pressed = false
 			DataHandler.swap_ready = null
 		if  piece == "Ruby":
-			$Background/Fireball.visible = true
-			$Background/Fireball.button_pressed = false
+			fireball_icon.visible = true
+			fireball_icon.button_pressed = false
 			DataHandler.fireball_ready = false
 		if  piece == "Pearl":
-			$Background/TidalWave.visible = true
-			$Background/TidalWave.button_pressed = false
+			tidalwave_icon.visible = true
+			tidalwave_icon.button_pressed = false
 			DataHandler.tidalwave_ready = false
 		if  piece == "Amber":
-			$Background/Sap.visible = true
-			$Background/Sap.button_pressed = false
+			sap_icon.visible = true
+			sap_icon.button_pressed = false
 			DataHandler.sap_ready = false
 		if  piece == "Jade":
-			$Background/Launch.visible = true
-			$Background/Launch.button_pressed = false
+			launch_icon.visible = true
+			launch_icon.button_pressed = false
 			DataHandler.launch_ready = false
 		if  piece == "Ruby_Used":
-			$Background/Fireball.visible = false
+			fireball_icon.visible = false
 		if  piece == "Pearl_Used":
-			$Background/TidalWave.visible = false
+			tidalwave_icon.visible = false
 		if  piece == "Amber_Used":
-			$Background/Sap.visible = false
+			sap_icon.visible = false
 		if  piece == "Jade_Used":
-			$Background/Launch.visible = false
+			launch_icon.visible = false
 		if  piece == "Portal_Off":
-			$Background/PortalSwap.visible = false
-			$Background/PortalSwap.button_pressed = false
+			swap_icon.visible = false
+			swap_icon.button_pressed = false
 			DataHandler.swap_ready = null
 	else:
-		$Background/PortalSwap.visible = false
-		$Background/Fireball.visible = false
-		$Background/TidalWave.visible = false
-		$Background/Sap.visible = false
-		$Background/Launch.visible = false
+		swap_icon.visible = false
+		fireball_icon.visible = false
+		tidalwave_icon.visible = false
+		sap_icon.visible = false
+		launch_icon.visible = false
 
 func reset_arrows():
 	for n in get_node("../Indicators").get_children():
 			n.queue_free()
 
 func _on_end_turn_pressed() -> void:
+	end_turn()
+
+func end_turn():
 	if GameLogic.check_win() == "Squares":
 		$Winner/Squares.visible = true
 		return
@@ -447,19 +501,21 @@ func _on_end_turn_pressed() -> void:
 	if auto_setup == true:
 		board_auto_setup()
 	if PlayerHandler.player_turn == "Squares":
-		$Board/CirclesTurn.visible = true
-		$Board/SquaresTurn.visible = false
+		$CirclesTurn.visible = true
+		$SquaresTurn.visible = false
 	elif PlayerHandler.player_turn == "Circles":
-		$Board/SquaresTurn.visible = true
-		$Board/CirclesTurn.visible = false
+		$SquaresTurn.visible = true
+		$CirclesTurn.visible = false
 	show_correct_icons(null)
 	PlayerHandler.end_turn()
+	show_end_turn(false)
 	auto_setup = false
 
-
 func _on_reset_turn_pressed() -> void:
+	# 
+	# Used to undo actions during their turn
+	# 
 	#Remove all Nodes from scene
-	print(DataHandler.temp_piece_dict)
 	if DataHandler.temp_piece_dict != {}:
 		# Clear dictionary and reset GUI
 		DataHandler.piece_dict = {}
@@ -477,7 +533,6 @@ func _on_reset_turn_pressed() -> void:
 			n.queue_free()
 		# Add Pieces as they were at start on round (on change_player - PlayerHandler)
 		for piece in DataHandler.temp_piece_dict:
-			print("TESTING")
 			add_piece(DataHandler.temp_piece_dict[piece], piece)
 		if PlayerHandler.player_turn == "Squares":
 			DataHandler.turn_start(false) #Squares Player

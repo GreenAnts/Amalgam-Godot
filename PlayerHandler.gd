@@ -31,7 +31,7 @@ func end_turn():
 			setup_next()
 		change_player()
 		turn_step = 1
-	SignalBus.show_end_turn.emit(false)
+	#SignalBus.show_end_turn.emit(false)
 	
 
 func change_player():

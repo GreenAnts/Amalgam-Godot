@@ -1,10 +1,10 @@
+Control
 AnimationPlayer
 Node2D
 Button
 Label
 MultiplayerSynchronizer
 MultiplayerSpawner
-Control
 AnimatedSprite2D
 TextureButton
 TextureRect
@@ -12,4 +12,3 @@ Node
 Sprite2D
 CollisionShape2D
 Area2D
-ColorRect
